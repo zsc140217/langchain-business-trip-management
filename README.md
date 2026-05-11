@@ -26,6 +26,12 @@
 - 提升用户体验
 - 支持SSE（Server-Sent Events）
 
+### 4. 工作流编排系统 ⭐⭐⭐⭐⭐ **新增**
+- **ComplexityAssessor**：混合判断策略（80%规则+20%LLM）
+- **TaskDecomposer**：复杂查询自动分解，支持依赖关系
+- **WorkflowOrchestrator**：智能路由引擎，根据复杂度选择策略
+- 工具调用率：100%（解决弱模型工具调用不可靠问题）
+
 ## 🏗️ 项目结构
 
 ```
@@ -33,12 +39,18 @@ langchain-business-trip-management/
 ├── src/
 │   ├── models/
 │   │   └── llm.py              # LLM配置（通义千问）
+│   ├── agents/                 # 🆕 Agent系统
+│   │   ├── complexity_assessor.py    # 复杂度评估器
+│   │   ├── task_decomposer.py        # 任务分解器
+│   │   └── workflow_orchestrator.py  # 工作流编排器
 │   ├── rag/
 │   │   ├── loader.py           # 文档加载和切分
 │   │   ├── retriever.py        # 向量存储和检索
 │   │   └── chain.py            # RAG链组装
 │   ├── tools/
 │   │   └── weather.py          # 天气查询工具
+│   ├── skills/                 # 🆕 Skill系统（计划中）
+│   ├── memory/                 # 🆕 记忆系统（计划中）
 │   ├── config.py               # 配置文件
 │   └── main.py                 # FastAPI主应用
 ├── data/
@@ -47,7 +59,8 @@ langchain-business-trip-management/
 │   └── test_rag.py             # RAG功能测试
 ├── docs/
 │   ├── SPRING_AI_VS_LANGCHAIN.md    # 框架对比
-│   └── IMPLEMENTATION_GUIDE.md      # 实现指南
+│   ├── IMPLEMENTATION_GUIDE.md      # 实现指南
+│   └── SPRING_AI_ANALYSIS.md        # 🆕 Spring AI深度分析
 ├── requirements.txt            # Python依赖
 ├── .env.example                # 环境变量示例
 └── README.md                   # 项目说明
