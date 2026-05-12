@@ -1,6 +1,6 @@
 {
   "chat_id": "conv_003",
-  "updated_at": "2026-05-12T09:52:17.551286",
+  "updated_at": "2026-05-12T20:46:35.078836",
   "messages": [
     {
       "role": "user",
@@ -12,6 +12,18 @@
       "role": "user",
       "content": "查询上海的天气",
       "timestamp": "2026-05-12T09:52:17.551286",
+      "metadata": {}
+    },
+    {
+      "role": "user",
+      "content": "查询上海的天气",
+      "timestamp": "2026-05-12T10:11:10.492899",
+      "metadata": {}
+    },
+    {
+      "role": "user",
+      "content": "查询上海的天气",
+      "timestamp": "2026-05-12T20:46:35.078836",
       "metadata": {}
     }
   ]

@@ -1,6 +1,6 @@
 {
   "chat_id": "conv_3",
-  "updated_at": "2026-05-12T09:52:17.568305",
+  "updated_at": "2026-05-12T20:46:35.093234",
   "messages": [
     {
       "role": "user",
@@ -18,6 +18,30 @@
       "role": "user",
       "content": "测试消息 3",
       "timestamp": "2026-05-12T09:52:17.568305",
+      "metadata": {}
+    },
+    {
+      "role": "user",
+      "content": "去北京出差 3",
+      "timestamp": "2026-05-12T10:11:10.504682",
+      "metadata": {}
+    },
+    {
+      "role": "user",
+      "content": "推荐希尔顿酒店",
+      "timestamp": "2026-05-12T10:11:10.505685",
+      "metadata": {}
+    },
+    {
+      "role": "user",
+      "content": "去北京出差 3",
+      "timestamp": "2026-05-12T20:46:35.092237",
+      "metadata": {}
+    },
+    {
+      "role": "user",
+      "content": "推荐希尔顿酒店",
+      "timestamp": "2026-05-12T20:46:35.093234",
       "metadata": {}
     }
   ]

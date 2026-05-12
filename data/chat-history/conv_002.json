@@ -1,6 +1,6 @@
 {
   "chat_id": "conv_002",
-  "updated_at": "2026-05-12T09:52:17.549287",
+  "updated_at": "2026-05-12T20:46:35.077838",
   "messages": [
     {
       "role": "user",
@@ -12,6 +12,18 @@
       "role": "user",
       "content": "我又要去上海了",
       "timestamp": "2026-05-12T09:52:17.549287",
+      "metadata": {}
+    },
+    {
+      "role": "user",
+      "content": "我又要去上海了",
+      "timestamp": "2026-05-12T10:11:10.491900",
+      "metadata": {}
+    },
+    {
+      "role": "user",
+      "content": "我又要去上海了",
+      "timestamp": "2026-05-12T20:46:35.077838",
       "metadata": {}
     }
   ]
