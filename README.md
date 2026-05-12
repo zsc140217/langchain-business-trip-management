@@ -180,6 +180,46 @@ service.end_conversation(user_id, conv_id)
 - 长期记忆：学习用户偏好，提供个性化推荐
 - 个性化提示："您已经第3次查询北京的信息了，推荐希尔顿酒店"
 
+### 6. LangSmith可观测性集成 ⭐⭐⭐⭐⭐
+
+**核心价值**：
+- **零代码侵入**：3行配置，自动追踪所有LangChain调用
+- **可视化调用链**：树状结构展示RAG流程（检索→Prompt→LLM→解析）
+- **快速定位问题**：5分钟定位检索器返回文档不相关的问题
+- **性能优化**：发现Prompt构建耗时长，优化后快24%
+- **成本控制**：监控Token消耗，优化后成本降低50%
+
+**配置方式**：
+```bash
+# .env文件中添加3行
+LANGCHAIN_TRACING_V2=true
+LANGCHAIN_API_KEY=你的LangSmith API Key
+LANGCHAIN_PROJECT=travel-agent-demo
+```
+
+**使用示例**：
+```python
+# 运行任意LangChain代码
+from langsmith import traceable
+
+@traceable(name="RAG Chain")
+def rag_query(query: str):
+    # 你的RAG代码
+    docs = retriever.retrieve(query)
+    response = llm.invoke(prompt)
+    return response
+
+# 自动追踪到LangSmith，访问 https://smith.langchain.com/ 查看
+```
+
+**与Spring AI的核心区别**：
+- **Spring AI**：只能靠日志（`logger.info`）+ 断点 + 手动埋点，看不到调用链
+- **LangSmith**：自动追踪 + 可视化树状调用链 + 历史记录 + 性能分析
+
+**实际案例**：
+- 用户反馈"回答不准确" → 打开LangSmith → 点击那次调用 → 发现检索器返回了错误文档 → 5分钟定位问题
+- 如果用Spring AI：加日志 → 重新部署 → 复现问题 → 分析日志 → 可能需要半天
+
 ---
 
 ## 📊 Spring AI vs LangChain对比
@@ -210,6 +250,31 @@ service.end_conversation(user_id, conv_id)
 
 ---
 
+---
+
+## 📸 项目展示
+
+### 前端页面展示
+
+![前端页面](images/52361823e761bd7c90258c662deedc78.png)
+
+### LangSmith可观测性平台
+
+![LangSmith追踪](images/c38ab1b58f3cf0d747aaf52e34af6220.png)
+
+**LangSmith核心功能**：
+- ✅ 零代码侵入：3行配置自动追踪所有调用
+- ✅ 可视化调用链：树状结构展示RAG流程
+- ✅ 性能分析：每个环节的输入输出和耗时
+- ✅ 成本统计：Token使用量和API调用成本
+- ✅ 历史记录：所有调用可追溯，快速定位问题
+
+**与Spring AI的核心区别**：
+- Spring AI：只能靠日志 + 断点 + 手动埋点
+- LangSmith：自动追踪 + 可视化 + 历史记录
+
+---
+
 ## 🚀 快速开始
 
 ### 1. 安装依赖
@@ -222,7 +287,14 @@ pip install -r requirements.txt
 
 ```bash
 cp .env.example .env
-# 编辑.env，填入DASHSCOPE_API_KEY
+# 编辑.env，填入以下配置：
+# DASHSCOPE_API_KEY=你的通义千问API Key
+# QWEATHER_API_KEY=你的和风天气API Key（可选）
+# 
+# LangSmith配置（可选，用于可观测性）：
+# LANGCHAIN_TRACING_V2=true
+# LANGCHAIN_API_KEY=你的LangSmith API Key
+# LANGCHAIN_PROJECT=travel-agent-demo
 ```
 
 ### 3. 运行测试
@@ -242,6 +314,10 @@ python src/rag/hybrid_retriever.py
 
 # 运行记忆系统示例
 python examples/memory_usage_example.py
+
+# 运行LangSmith演示（生成可视化调用链）
+python examples/langsmith_demo_local.py
+# 然后访问 https://smith.langchain.com/ 查看追踪记录
 ```
 
 ### 4. 启动服务
@@ -364,12 +440,19 @@ A：
 
 ## 📚 相关文档
 
+### 核心文档
 - [Spring AI vs LangChain对比](docs/SPRING_AI_VS_LANGCHAIN.md)
 - [实现指南](docs/IMPLEMENTATION_GUIDE.md)
 - [Spring AI深度分析](docs/SPRING_AI_ANALYSIS.md)
 - [三层记忆系统设计](docs/MEMORY_SYSTEM.md)
 - [API文档](docs/API_DOCS.md)
 - [项目总结](PROJECT_SUMMARY.md)
+
+### 面试准备文档
+- [Spring AI vs LangChain面试指南](docs/SPRING_AI_VS_LANGCHAIN_INTERVIEW_GUIDE.md)
+- [面试速查卡](docs/INTERVIEW_CHEAT_SHEET.md)
+- [LangSmith实战指南](docs/LANGSMITH_PRACTICAL_GUIDE.md)
+- [LangSmith快速开始](LANGSMITH_QUICKSTART.md)
 
 ---
 
