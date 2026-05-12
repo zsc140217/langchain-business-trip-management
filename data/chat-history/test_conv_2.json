@@ -1,0 +1,12 @@
+{
+  "chat_id": "test_conv_2",
+  "updated_at": "2026-05-12T09:59:59.409705",
+  "messages": [
+    {
+      "role": "user",
+      "content": "又要去北京了",
+      "timestamp": "2026-05-12T09:59:59.409705",
+      "metadata": {}
+    }
+  ]
+}

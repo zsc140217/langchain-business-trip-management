@@ -1,0 +1,30 @@
+{
+  "chat_id": "test_conv",
+  "updated_at": "2026-05-12T09:59:59.407705",
+  "messages": [
+    {
+      "role": "user",
+      "content": "我要去北京出差，拜访华为公司",
+      "timestamp": "2026-05-12T09:59:10.582871",
+      "metadata": {}
+    },
+    {
+      "role": "assistant",
+      "content": "好的，请问您需要什么帮助？",
+      "timestamp": "2026-05-12T09:59:10.583853",
+      "metadata": {}
+    },
+    {
+      "role": "user",
+      "content": "我要去北京出差，拜访华为公司",
+      "timestamp": "2026-05-12T09:59:59.406705",
+      "metadata": {}
+    },
+    {
+      "role": "assistant",
+      "content": "好的，请问您需要什么帮助？",
+      "timestamp": "2026-05-12T09:59:59.407705",
+      "metadata": {}
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "chat_id": "conv_b1",
+  "updated_at": "2026-05-12T09:52:17.563312",
+  "messages": [
+    {
+      "role": "user",
+      "content": "我要去上海",
+      "timestamp": "2026-05-12T09:52:17.562292",
+      "metadata": {}
+    },
+    {
+      "role": "user",
+      "content": "推荐万豪酒店",
+      "timestamp": "2026-05-12T09:52:17.563312",
+      "metadata": {}
+    }
+  ]
+}

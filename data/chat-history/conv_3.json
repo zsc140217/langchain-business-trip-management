@@ -1,0 +1,24 @@
+{
+  "chat_id": "conv_3",
+  "updated_at": "2026-05-12T09:52:17.568305",
+  "messages": [
+    {
+      "role": "user",
+      "content": "去北京出差 3",
+      "timestamp": "2026-05-12T09:50:37.409445",
+      "metadata": {}
+    },
+    {
+      "role": "user",
+      "content": "推荐希尔顿酒店",
+      "timestamp": "2026-05-12T09:50:37.409445",
+      "metadata": {}
+    },
+    {
+      "role": "user",
+      "content": "测试消息 3",
+      "timestamp": "2026-05-12T09:52:17.568305",
+      "metadata": {}
+    }
+  ]
+}

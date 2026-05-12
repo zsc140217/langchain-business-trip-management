@@ -1,0 +1,17 @@
+{
+  "user_id": "user_001",
+  "created_at": "2026-05-12T09:49:57.992743",
+  "updated_at": "2026-05-12T09:50:37.393445",
+  "preferred_cities": {
+    "北京": 2
+  },
+  "preferred_hotels": {
+    "还要推荐希尔顿酒店": 2
+  },
+  "frequent_customers": {},
+  "common_intents": [
+    "查询天气"
+  ],
+  "conversation_count": 2,
+  "preferences": {}
+}

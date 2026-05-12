@@ -1,0 +1,42 @@
+{
+  "chat_id": "conv_001",
+  "updated_at": "2026-05-12T09:52:17.570408",
+  "messages": [
+    {
+      "role": "user",
+      "content": "消息 6",
+      "timestamp": "2026-05-12T09:52:17.558289",
+      "metadata": {}
+    },
+    {
+      "role": "user",
+      "content": "消息 7",
+      "timestamp": "2026-05-12T09:52:17.558289",
+      "metadata": {}
+    },
+    {
+      "role": "user",
+      "content": "消息 8",
+      "timestamp": "2026-05-12T09:52:17.558289",
+      "metadata": {}
+    },
+    {
+      "role": "user",
+      "content": "消息 9",
+      "timestamp": "2026-05-12T09:52:17.559289",
+      "metadata": {}
+    },
+    {
+      "role": "user",
+      "content": "消息 10",
+      "timestamp": "2026-05-12T09:52:17.559289",
+      "metadata": {}
+    },
+    {
+      "role": "user",
+      "content": "我要去北京",
+      "timestamp": "2026-05-12T09:52:17.570408",
+      "metadata": {}
+    }
+  ]
+}
