@@ -180,7 +180,7 @@ python examples/langsmith_demo.py
 如果看到：
 ```
 ✓ LangSmith已启用
-✓ API Key: lsv2_pt_6008aaa6ec3f...
+✓ API Key: your-langsmith-api-key-here
 ✓ 项目名称: travel-agent-demo
 ✓ 调用成功！
 ```
