@@ -145,9 +145,9 @@ if __name__ == "__main__":
     """
     print("测试RAG链模块...\n")
 
-    from src.models.llm import get_llm
-    from src.rag.loader import load_documents_from_text
-    from src.rag.retriever import create_vectorstore, get_retriever
+    from models.llm import get_llm
+    from rag.loader import load_documents_from_text
+    from rag.retriever import create_vectorstore, get_retriever
 
     # 准备测试数据
     test_text = """

@@ -1,0 +1,117 @@
+# Docker Compose配置 - LangServe API部署
+# 用于快速启动整个应用栈
+
+version: '3.8'
+
+services:
+  # ============================================================================
+  # LangServe API服务
+  # ============================================================================
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: langchain-api
+    ports:
+      - "${PORT:-8000}:8000"
+    environment:
+      # LLM配置
+      - DASHSCOPE_API_KEY=${DASHSCOPE_API_KEY}
+
+      # LangSmith追踪（可选）
+      - LANGCHAIN_TRACING_V2=${LANGCHAIN_TRACING_V2:-false}
+      - LANGCHAIN_API_KEY=${LANGCHAIN_API_KEY:-}
+      - LANGCHAIN_PROJECT=${LANGCHAIN_PROJECT:-business-trip-management}
+
+      # 服务配置
+      - PORT=8000
+      - HOST=0.0.0.0
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+
+    volumes:
+      # 开发模式：挂载代码目录（生产环境移除此配置）
+      - ./:/app
+
+    restart: unless-stopped
+
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+
+    networks:
+      - langchain-network
+
+  # ============================================================================
+  # Redis缓存（可选 - Module 7需要）
+  # ============================================================================
+  redis:
+    image: redis:7-alpine
+    container_name: langchain-redis
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    networks:
+      - langchain-network
+
+  # ============================================================================
+  # Prometheus监控（可选）
+  # ============================================================================
+  # prometheus:
+  #   image: prom/prometheus:latest
+  #   container_name: langchain-prometheus
+  #   ports:
+  #     - "9090:9090"
+  #   volumes:
+  #     - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+  #     - prometheus-data:/prometheus
+  #   command:
+  #     - '--config.file=/etc/prometheus/prometheus.yml'
+  #     - '--storage.tsdb.path=/prometheus'
+  #   restart: unless-stopped
+  #   networks:
+  #     - langchain-network
+
+  # ============================================================================
+  # Grafana可视化（可选）
+  # ============================================================================
+  # grafana:
+  #   image: grafana/grafana:latest
+  #   container_name: langchain-grafana
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     - GF_SECURITY_ADMIN_PASSWORD=admin
+  #   volumes:
+  #     - grafana-data:/var/lib/grafana
+  #   restart: unless-stopped
+  #   networks:
+  #     - langchain-network
+
+# ============================================================================
+# 网络配置
+# ============================================================================
+networks:
+  langchain-network:
+    driver: bridge
+
+# ============================================================================
+# 数据卷
+# ============================================================================
+volumes:
+  redis-data:
+    driver: local
+  # prometheus-data:
+  #   driver: local
+  # grafana-data:
+  #   driver: local

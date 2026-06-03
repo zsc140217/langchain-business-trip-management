@@ -5,8 +5,8 @@
 对应Spring AI的：
 src/main/java/com/jblmj/aiagent/skill/business/WeatherQuerySkill.java
 """
-from src.skills.base import Skill
-from src.tools.weather import query_weather
+from skills.base import Skill
+from tools.weather import query_weather
 from typing import List
 import re
 
@@ -221,7 +221,7 @@ if __name__ == "__main__":
     """
     print("测试WeatherQuerySkill...\n")
 
-    from src.skills.base import SkillRegistry
+    from skills.base import SkillRegistry
 
     # 创建注册中心
     registry = SkillRegistry()

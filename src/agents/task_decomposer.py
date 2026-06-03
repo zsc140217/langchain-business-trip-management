@@ -356,7 +356,7 @@ if __name__ == "__main__":
     """
     print("测试任务分解器...\n")
 
-    from src.models.llm import get_llm
+    from models.llm import get_llm
 
     try:
         llm = get_llm(temperature=0.3)

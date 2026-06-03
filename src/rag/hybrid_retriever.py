@@ -6,7 +6,7 @@
 src/main/java/com/jblmj/aiagent/rag/EnterpriseHybridRetriever.java
 """
 from langchain.retrievers import BM25Retriever
-from langchain.schema import Document
+from langchain_core.messages import Document
 from langchain_community.embeddings import DashScopeEmbeddings
 from typing import List, Dict
 import jieba
@@ -393,9 +393,9 @@ if __name__ == "__main__":
     """
     print("测试混合检索器...\n")
 
-    from src.models.llm import get_llm
-    from src.rag.loader import load_documents
-    from src.rag.retriever import create_vectorstore
+    from models.llm import get_llm
+    from rag.loader import load_documents
+    from rag.retriever import create_vectorstore
 
     try:
         # 1. 初始化LLM

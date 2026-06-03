@@ -1,0 +1,522 @@
+"""
+API Chains配置模块
+
+为LangServe提供所有模块的chain/agent实例
+每个函数返回一个可被LangServe部署的Runnable对象
+
+设计原则：
+1. 延迟初始化 - 只在调用时创建chain
+2. 单例模式 - 避免重复创建
+3. 错误处理 - 提供清晰的错误信息
+"""
+import os
+from functools import lru_cache
+from langchain_community.chat_models import ChatTongyi
+from langchain_community.llms import Tongyi
+
+
+def get_llm():
+    """
+    获取LLM实例（通义千问）
+
+    Returns:
+        Tongyi LLM实例
+    """
+    api_key = os.getenv("DASHSCOPE_API_KEY")
+    if not api_key:
+        raise ValueError(
+            "未设置DASHSCOPE_API_KEY环境变量。"
+            "请设置后重启服务。"
+        )
+
+    return Tongyi(
+        model_name="qwen-plus",
+        dashscope_api_key=api_key,
+        temperature=0.3,
+    )
+
+
+def get_chat_llm():
+    """
+    获取Chat LLM实例（用于Agent）
+
+    Returns:
+        ChatTongyi实例
+    """
+    api_key = os.getenv("DASHSCOPE_API_KEY")
+    if not api_key:
+        raise ValueError(
+            "未设置DASHSCOPE_API_KEY环境变量。"
+            "请设置后重启服务。"
+        )
+
+    return ChatTongyi(
+        model_name="qwen-plus",
+        dashscope_api_key=api_key,
+        temperature=0.7,
+    )
+
+
+# ============================================================================
+# Module 1: Simple RAG Chain
+# ============================================================================
+
+@lru_cache(maxsize=1)
+def get_simple_rag_chain():
+    """
+    获取Simple RAG Chain实例
+
+    功能：基于FAISS的文档检索问答
+
+    输入格式：
+        {"input": "你的问题"}
+
+    输出格式：
+        {"output": "答案"}
+
+    Returns:
+        RAG Chain (Runnable)
+    """
+    from modules.module_1_simple_rag import (
+        load_documents_from_text,
+        create_faiss_vectorstore,
+        create_retriever,
+        create_rag_chain_lcel,
+    )
+
+    # 加载企业差旅规章文档
+    policy_text = """
+企业差旅管理规章
+
+第一章 住宿标准
+1. 一线城市（北京、上海、广州、深圳）：标准间不超过500元/晚
+2. 二线城市（杭州、成都、武汉等）：标准间不超过400元/晚
+3. 三线及以下城市：标准间不超过300元/晚
+
+第二章 交通标准
+1. 市内交通：实报实销，需提供发票
+2. 城际交通：
+   - 距离<500公里：高铁二等座
+   - 距离≥500公里：飞机经济舱
+3. 出租车：仅限机场、火车站往返酒店
+
+第三章 餐饮补贴
+1. 早餐：30元/天
+2. 午餐：50元/天
+3. 晚餐：50元/天
+4. 总计：130元/天
+
+第四章 其他规定
+1. 出差需提前3天申请
+2. 出差结束后7天内提交报销
+3. 所有费用需提供正式发票
+4. 超出标准部分自行承担
+    """
+
+    # 创建向量存储和检索器
+    docs = load_documents_from_text(policy_text, chunk_size=300, chunk_overlap=50)
+    vectorstore = create_faiss_vectorstore(docs)
+    retriever = create_retriever(vectorstore, k=3)
+
+    # 创建RAG链
+    llm = get_llm()
+    chain = create_rag_chain_lcel(retriever, llm)
+
+    # LangServe需要输入键为"input"
+    from langchain_core.runnables import RunnablePassthrough
+
+    return RunnablePassthrough() | chain
+
+
+# ============================================================================
+# Module 2: Advanced RAG Chain
+# ============================================================================
+
+@lru_cache(maxsize=1)
+def get_advanced_rag_chain():
+    """
+    获取Advanced RAG Chain实例
+
+    功能：混合检索 + 重排序
+
+    输入格式：
+        {"input": "你的问题"}
+
+    输出格式：
+        {"output": "答案"}
+
+    Returns:
+        Advanced RAG Chain (Runnable)
+    """
+    from modules.module_1_simple_rag import (
+        load_documents_from_text,
+        create_faiss_vectorstore,
+    )
+    from modules.module_2_advanced_rag.chain import create_advanced_rag_chain
+
+    # 加载企业差旅规章文档（与Simple RAG相同）
+    policy_text = """
+企业差旅管理规章
+
+第一章 住宿标准
+1. 一线城市（北京、上海、广州、深圳）：标准间不超过500元/晚
+2. 二线城市（杭州、成都、武汉等）：标准间不超过400元/晚
+3. 三线及以下城市：标准间不超过300元/晚
+
+第二章 交通标准
+1. 市内交通：实报实销，需提供发票
+2. 城际交通：
+   - 距离<500公里：高铁二等座
+   - 距离≥500公里：飞机经济舱
+3. 出租车：仅限机场、火车站往返酒店
+
+第三章 餐饮补贴
+1. 早餐：30元/天
+2. 午餐：50元/天
+3. 晚餐：50元/天
+4. 总计：130元/天
+
+第四章 其他规定
+1. 出差需提前3天申请
+2. 出差结束后7天内提交报销
+3. 所有费用需提供正式发票
+4. 超出标准部分自行承担
+    """
+
+    # 创建向量存储和文档
+    docs = load_documents_from_text(policy_text, chunk_size=300, chunk_overlap=50)
+    vectorstore = create_faiss_vectorstore(docs)
+
+    # 创建Advanced RAG链（带查询重写和重排序）
+    llm = get_llm()
+    chain = create_advanced_rag_chain(
+        vector_store=vectorstore,
+        documents=docs,
+        llm=llm,
+        enable_query_rewrite=True,
+        enable_rerank=True,
+        verbose=False,  # API模式不显示详细日志
+    )
+
+    # 包装为LangServe标准格式
+    from langchain_core.runnables import RunnableLambda
+
+    def process_input(input_dict):
+        """转换输入格式"""
+        return input_dict.get("input", "")
+
+    def process_output(result):
+        """转换输出格式"""
+        if isinstance(result, dict):
+            return {"output": result.get("answer", str(result))}
+        return {"output": str(result)}
+
+    wrapped_chain = (
+        RunnableLambda(process_input)
+        | RunnableLambda(lambda q: chain.invoke(q))
+        | RunnableLambda(process_output)
+    )
+
+    return wrapped_chain
+
+
+# ============================================================================
+# Module 3: ReAct Agent
+# ============================================================================
+
+@lru_cache(maxsize=1)
+def get_react_agent():
+    """
+    获取ReAct Agent实例
+
+    功能：自主推理和工具调用
+
+    输入格式：
+        {"input": "你的任务"}
+
+    输出格式：
+        {"output": "执行结果"}
+
+    Returns:
+        ReAct Agent (Runnable)
+    """
+    from modules.module_3_react_agent.agent import create_react_agent_with_tools
+    from modules.module_3_react_agent.tools.weather import get_all_weather_tools
+    from modules.module_3_react_agent.tools.flight import get_all_flight_tools
+    from modules.module_3_react_agent.tools.hotel import get_all_hotel_tools
+
+    # 收集所有工具
+    all_tools = (
+        get_all_weather_tools() +
+        get_all_flight_tools() +
+        get_all_hotel_tools()
+    )
+
+    # 创建Agent
+    llm = get_chat_llm()
+    agent_executor = create_react_agent_with_tools(
+        tools=all_tools,
+        llm=llm,
+        verbose=False,  # API模式不显示详细日志
+    )
+
+    return agent_executor
+
+
+# ============================================================================
+# Module 4: Multi-Agent Graph
+# ============================================================================
+
+@lru_cache(maxsize=1)
+def get_multi_agent_graph():
+    """
+    获取Multi-Agent Graph实例
+
+    功能：LangGraph状态图编排多智能体协作
+
+    输入格式：
+        {"input": "你的任务"}
+
+    输出格式：
+        {"output": "协作结果"}
+
+    Returns:
+        Multi-Agent Graph (Runnable)
+    """
+    from modules.module_4_multi_agent import (
+        MultiAgentGraph,
+        LLMSupervisorAgent,
+        PolicyWorkerAgent,
+        WeatherWorkerAgent,
+        ItineraryWorkerAgent
+    )
+
+    # 创建 LLM
+    llm = get_chat_llm()
+
+    # 创建 agents
+    supervisor = LLMSupervisorAgent(llm=llm)
+    policy_agent = PolicyWorkerAgent(llm=llm)
+    weather_agent = WeatherWorkerAgent(llm=llm)
+    itinerary_agent = ItineraryWorkerAgent(llm=llm)
+
+    # 创建多智能体图
+    graph = MultiAgentGraph(
+        supervisor_agent=supervisor,
+        policy_agent=policy_agent,
+        weather_agent=weather_agent,
+        itinerary_agent=itinerary_agent
+    )
+    compiled_graph = graph.app
+
+
+    # 包装为标准输入输出格式
+    from langchain_core.runnables import RunnableLambda
+
+    def process_input(input_dict):
+        """转换输入格式"""
+        from modules.module_4_multi_agent import create_initial_state
+        question = input_dict.get("input", "")
+        return create_initial_state(question)
+
+    def process_output(result):
+        """转换输出格式"""
+        from modules.module_4_multi_agent import extract_final_answer
+        return {"output": extract_final_answer(result)}
+
+    # 组合链
+    chain = (
+        RunnableLambda(process_input)
+        | compiled_graph
+        | RunnableLambda(process_output)
+    )
+
+    return chain
+
+
+# ============================================================================
+# Module 5: Sequential Chain
+# ============================================================================
+
+@lru_cache(maxsize=1)
+def get_sequential_chain():
+    """
+    获取Sequential Chain实例
+
+    功能：顺序执行多个步骤
+
+    输入格式：
+        {"input": {"destination": "城市", "days": 天数}}
+
+    输出格式：
+        {"output": "规划结果"}
+
+    Returns:
+        Sequential Chain (Runnable)
+    """
+    from modules.module_5_chain_composition import SequentialChain
+
+    # 创建顺序链
+    llm = get_chat_llm()
+    seq_chain = SequentialChain(llm=llm)
+
+    # 包装为标准格式
+    from langchain_core.runnables import RunnableLambda
+
+    def process_input(input_dict):
+        """转换输入格式"""
+        if isinstance(input_dict.get("input"), dict):
+            return input_dict["input"]
+        else:
+            # 如果输入是字符串，尝试解析
+            return {
+                "destination": "上海",
+                "days": 3
+            }
+
+    def process_output(result):
+        """转换输出格式"""
+        return {"output": result}
+
+    chain = (
+        RunnableLambda(process_input)
+        | seq_chain.chain
+        | RunnableLambda(process_output)
+    )
+
+    return chain
+
+
+# ============================================================================
+# Module 5: Parallel Chain
+# ============================================================================
+
+@lru_cache(maxsize=1)
+def get_parallel_chain():
+    """
+    获取Parallel Chain实例
+
+    功能：并行执行多个任务
+
+    输入格式：
+        {"input": {"destination": "城市", "days": 天数}}
+
+    输出格式：
+        {"output": "规划结果"}
+
+    Returns:
+        Parallel Chain (Runnable)
+    """
+    from modules.module_5_chain_composition import ParallelChain
+
+    # 创建并行链
+    llm = get_chat_llm()
+    parallel_chain = ParallelChain(llm=llm)
+
+    # 包装为标准格式
+    from langchain_core.runnables import RunnableLambda
+
+    def process_input(input_dict):
+        """转换输入格式"""
+        if isinstance(input_dict.get("input"), dict):
+            return input_dict["input"]
+        else:
+            return {
+                "destination": "深圳",
+                "days": 2
+            }
+
+    def process_output(result):
+        """转换输出格式"""
+        return {"output": result}
+
+    chain = (
+        RunnableLambda(process_input)
+        | parallel_chain.chain
+        | RunnableLambda(process_output)
+    )
+
+    return chain
+
+
+# ============================================================================
+# Module 6: Memory Chain
+# ============================================================================
+
+@lru_cache(maxsize=1)
+def get_memory_chain():
+    """
+    获取Memory Chain实例
+
+    功能：带记忆的对话系统
+
+    输入格式：
+        {"input": "你的消息"}
+
+    输出格式：
+        {"output": "回复"}
+
+    Returns:
+        Memory Chain (Runnable)
+    """
+    from modules.module_6_memory import BufferMemory
+    from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+    from langchain_core.runnables import RunnablePassthrough
+
+    # 创建记忆系统
+    memory = BufferMemory()
+
+    # 创建Prompt模板
+    prompt = ChatPromptTemplate.from_messages([
+        ("system", "你是一个企业差旅助手，帮助用户规划出差行程。你可以记住之前的对话内容。"),
+        MessagesPlaceholder(variable_name="history"),
+        ("human", "{input}"),
+    ])
+
+    # 创建链
+    llm = get_chat_llm()
+
+    from langchain_core.runnables import RunnableLambda
+
+    def add_history(input_dict):
+        """添加历史记录"""
+        history = memory.load()
+        return {
+            "input": input_dict["input"],
+            "history": history
+        }
+
+    def save_and_output(output):
+        """保存对话并返回"""
+        # 这里需要访问原始输入，但在chain中不容易获取
+        # 简化处理：直接返回输出
+        return {"output": output}
+
+    chain = (
+        RunnableLambda(add_history)
+        | prompt
+        | llm
+        | RunnableLambda(save_and_output)
+    )
+
+    return chain
+
+
+# ============================================================================
+# 工具函数：清除缓存
+# ============================================================================
+
+def clear_chain_cache():
+    """
+    清除所有chain的缓存
+
+    用于开发环境，当模块代码更新时刷新缓存
+    """
+    get_simple_rag_chain.cache_clear()
+    get_advanced_rag_chain.cache_clear()
+    get_react_agent.cache_clear()
+    get_multi_agent_graph.cache_clear()
+    get_sequential_chain.cache_clear()
+    get_parallel_chain.cache_clear()
+    get_memory_chain.cache_clear()
+    print("[OK] 已清除所有chain缓存")

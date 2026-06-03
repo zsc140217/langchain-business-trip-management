@@ -17,11 +17,11 @@ import os
 # 添加项目根目录到Python路径
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from src.models.llm import get_llm
-from src.rag.loader import load_documents
-from src.rag.retriever import create_vectorstore, get_retriever
-from src.rag.chain import create_rag_chain
-from src.tools.weather import query_weather, compare_weather
+from models.llm import get_llm
+from rag.loader import load_documents
+from rag.retriever import create_vectorstore, get_retriever
+from rag.chain import create_rag_chain
+from tools.weather import query_weather, compare_weather
 
 # ==================== 数据模型 ====================
 

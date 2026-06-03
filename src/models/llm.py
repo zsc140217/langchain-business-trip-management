@@ -7,7 +7,7 @@ LLM配置模块
 private ChatClient chatClient;
 """
 from langchain_community.chat_models import ChatTongyi
-from langchain.schema import HumanMessage, SystemMessage
+from langchain_core.messages import HumanMessage, SystemMessage
 import os
 
 

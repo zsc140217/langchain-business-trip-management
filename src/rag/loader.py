@@ -9,7 +9,7 @@ List<Document> documents = textSplitter.split(resource);
 from langchain_community.document_loaders import TextLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from typing import List
-from langchain.schema import Document
+from langchain_core.messages import Document
 
 
 def load_documents(file_path: str) -> List[Document]:

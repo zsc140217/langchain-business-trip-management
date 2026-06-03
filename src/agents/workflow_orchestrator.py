@@ -5,8 +5,8 @@
 对应Spring AI的：
 src/main/java/com/jblmj/aiagent/app/WorkflowOrchestrator.java
 """
-from src.agents.complexity_assessor import ComplexityAssessor, QueryComplexity
-from src.agents.task_decomposer import TaskDecomposer, SubTask
+from agents.complexity_assessor import ComplexityAssessor, QueryComplexity
+from agents.task_decomposer import TaskDecomposer, SubTask
 from typing import Optional, Dict
 import asyncio
 
@@ -344,7 +344,7 @@ if __name__ == "__main__":
     """
     print("测试工作流编排器...\n")
 
-    from src.models.llm import get_llm
+    from models.llm import get_llm
 
     try:
         llm = get_llm(temperature=0.3)

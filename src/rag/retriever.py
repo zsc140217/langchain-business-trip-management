@@ -10,7 +10,7 @@ public VectorStore vectorStore(EmbeddingModel embeddingModel) {
 """
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import DashScopeEmbeddings
-from langchain.schema import Document
+from langchain_core.messages import Document
 from typing import List
 import os
 
@@ -161,7 +161,7 @@ if __name__ == "__main__":
     """
     print("测试向量检索模块...\n")
 
-    from src.rag.loader import load_documents_from_text
+    from rag.loader import load_documents_from_text
 
     # 准备测试文档
     test_text = """

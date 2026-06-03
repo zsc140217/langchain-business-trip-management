@@ -330,7 +330,7 @@ if __name__ == "__main__":
     """
     print("测试复杂度评估器...\n")
 
-    from src.models.llm import get_llm
+    from models.llm import get_llm
 
     try:
         llm = get_llm(temperature=0.0)

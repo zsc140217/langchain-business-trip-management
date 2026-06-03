@@ -1,0 +1,224 @@
+"""
+ReAct Agent 配置模块
+
+ReAct = Reasoning + Acting
+核心思想：通过推理-行动循环来解决问题
+
+工作流程：
+1. Thought（思考）- Agent分析当前问题，决定下一步做什么
+2. Action（行动）- Agent选择一个工具并提供参数
+3. Observation（观察）- 工具返回结果
+4. 重复1-3步骤，直到得出最终答案
+
+对应Spring AI的：
+- FunctionCallingAdvisor：自动管理工具调用
+- ChatClient.builder().defaultAdvisors()：配置Advisor
+
+LangChain的优势：
+- 更灵活的Agent类型选择
+- 更好的中间步骤可观测性
+- 内置的ReAct prompt模板
+"""
+from langchain.agents import AgentExecutor
+from langchain.agents import create_tool_calling_agent
+from langchain_core.prompts import PromptTemplate
+from langchain_community.chat_models import ChatTongyi
+from typing import List
+import os
+
+
+# ReAct Prompt模板（中文优化版）
+REACT_PROMPT_TEMPLATE = """你是一个企业差旅助手，帮助用户规划出差行程。
+
+你可以使用以下工具来回答用户问题：
+
+{tools}
+
+使用以下格式回答：
+
+Question: 用户的问题
+Thought: 思考需要做什么来回答这个问题
+Action: 选择要使用的工具，必须是以下之一：[{tool_names}]
+Action Input: 工具的输入参数（JSON格式）
+Observation: 工具返回的结果
+... (重复 Thought/Action/Action Input/Observation 多次)
+Thought: 现在我知道最终答案了
+Final Answer: 对用户问题的最终回答
+
+重要规则：
+1. 每次只能执行一个Action
+2. Action Input必须是有效的JSON格式
+3. 如果工具返回错误，尝试用不同的参数重新调用
+4. 优先使用已有信息，避免重复调用相同工具
+5. 最终回答要友好、专业，包含所有相关信息
+
+开始！
+
+Question: {input}
+Thought: {agent_scratchpad}"""
+
+
+def create_react_agent_with_tools(tools: List, llm=None, verbose: bool = True):
+    """
+    创建ReAct Agent实例
+
+    什么是ReAct Agent？
+    - ReAct = Reasoning（推理）+ Acting（行动）
+    - Agent会"思考"应该采取什么行动
+    - 然后调用相应的工具
+    - 观察结果后继续思考下一步
+    - 直到得出最终答案
+
+    对比Spring AI：
+    - Spring AI用FunctionCallingAdvisor自动处理工具调用
+    - LangChain的ReAct Agent提供更细粒度的控制
+    - ReAct Agent可以看到中间的推理过程
+
+    Args:
+        tools: 工具列表（@tool装饰器创建的工具）
+        llm: 大语言模型实例，默认使用通义千问
+        verbose: 是否显示详细日志（显示推理过程）
+
+    Returns:
+        AgentExecutor实例
+    """
+    # 如果没有提供LLM，使用默认配置
+    if llm is None:
+        api_key = os.getenv("DASHSCOPE_API_KEY")
+        if not api_key:
+            raise ValueError("未找到DASHSCOPE_API_KEY环境变量")
+
+        llm = ChatTongyi(
+            model_name="qwen-plus",
+            dashscope_api_key=api_key,
+            temperature=0.7,
+        )
+
+    # 创建Prompt模板
+    prompt = PromptTemplate.from_template(REACT_PROMPT_TEMPLATE)
+
+    # 创建ReAct Agent
+    agent = create_tool_calling_agent(
+        llm=llm,
+        tools=tools,
+        prompt=prompt,
+    )
+
+    # 创建AgentExecutor（负责执行Agent）
+    agent_executor = AgentExecutor(
+        agent=agent,
+        tools=tools,
+        verbose=verbose,  # 显示推理过程
+        max_iterations=10,  # 最多10次推理-行动循环
+        max_execution_time=60,  # 最多执行60秒
+        handle_parsing_errors=True,  # 自动处理解析错误
+        return_intermediate_steps=True,  # 返回中间步骤
+    )
+
+    return agent_executor
+
+
+def run_react_agent(query: str, tools: List, llm=None, verbose: bool = True) -> dict:
+    """
+    运行ReAct Agent处理用户查询
+
+    这是一个便捷函数，封装了Agent的创建和执行
+
+    工作流程：
+    1. 创建Agent
+    2. 执行查询
+    3. 返回结果和中间步骤
+
+    Args:
+        query: 用户查询
+        tools: 工具列表
+        llm: 大语言模型实例
+        verbose: 是否显示详细日志
+
+    Returns:
+        包含output（最终答案）和intermediate_steps（中间步骤）的字典
+    """
+    agent_executor = create_react_agent_with_tools(tools, llm, verbose)
+    result = agent_executor.invoke({"input": query})
+    return result
+
+
+# 测试代码
+if __name__ == "__main__":
+    """
+    测试ReAct Agent
+
+    这个例子展示了Agent如何：
+    1. 理解用户问题
+    2. 决定调用哪个工具
+    3. 处理工具返回结果
+    4. 生成最终答案
+    """
+    print("=" * 70)
+    print("测试 ReAct Agent")
+    print("=" * 70)
+
+    # 导入工具
+    from tools.weather import get_all_weather_tools
+    from tools.flight import get_all_flight_tools
+    from tools.hotel import get_all_hotel_tools
+
+    # 收集所有工具
+    all_tools = (
+        get_all_weather_tools() +
+        get_all_flight_tools() +
+        get_all_hotel_tools()
+    )
+
+    print(f"\n📦 已加载 {len(all_tools)} 个工具：")
+    for tool in all_tools:
+        print(f"  • {tool.name}: {tool.description[:50]}...")
+
+    # 测试案例
+    test_queries = [
+        "北京明天天气怎么样？",
+        "帮我查询北京到上海的航班",
+        "我要去深圳出差，帮我找一个500-1000元的4星级酒店",
+        "我下周要去杭州出差3天，帮我规划一下：查天气、订机票和酒店",
+    ]
+
+    for idx, query in enumerate(test_queries, 1):
+        print(f"\n{'=' * 70}")
+        print(f"【测试案例 {idx}】")
+        print(f"{'=' * 70}")
+        print(f"❓ 问题：{query}\n")
+
+        try:
+            result = run_react_agent(
+                query=query,
+                tools=all_tools,
+                verbose=True  # 显示推理过程
+            )
+
+            print(f"\n{'─' * 70}")
+            print(f"✅ 最终答案：")
+            print(f"{'─' * 70}")
+            print(result["output"])
+
+            print(f"\n{'─' * 70}")
+            print(f"🔍 推理步骤数：{len(result.get('intermediate_steps', []))}")
+            print(f"{'─' * 70}")
+
+        except Exception as e:
+            print(f"\n❌ 执行失败：{str(e)}")
+
+        # 只运行第一个测试案例，避免输出太长
+        if idx == 1:
+            print(f"\n💡 提示：修改代码中的 'if idx == 1' 可以运行所有测试案例")
+            break
+
+    print(f"\n{'=' * 70}")
+    print("✅ ReAct Agent 测试完成")
+    print("=" * 70)
+
+    print("\n📚 学习要点：")
+    print("  1. ReAct = Reasoning（推理）+ Acting（行动）")
+    print("  2. Agent会自动选择合适的工具")
+    print("  3. 工具描述越清晰，Agent的选择越准确")
+    print("  4. verbose=True可以看到完整的推理过程")
+    print("  5. 对比Spring AI的FunctionCallingAdvisor，更透明、更可控")
