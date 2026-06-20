@@ -44,10 +44,27 @@
 - ✅ 使用logging替代print()
 - ✅ 提取魔法数字为命名常量
 
-### T1.2 条件分支 + ReAct循环
+### T1.2 条件分支 + ReAct循环 ✅ **已完成** (2026-06-20)
 
 **任务**：
-- [ ] 实现`add_conditional_edges`
+- [x] 实现`add_conditional_edges`
+- [x] 实现`should_continue`判断（循环条件）
+- [x] 添加循环计数器（防无限循环）
+- [x] 测试：对比多城市差旅标准
+
+**产出**：
+- `src/modules/module_5_langgraph/utils/conditions.py` ✅
+- `src/modules/module_5_langgraph/nodes/rewrite_node.py` ✅
+- `src/modules/module_5_langgraph/nodes/agent_node.py` ✅
+- `src/modules/module_5_langgraph/nodes/tools_node.py` ✅
+- `src/modules/module_5_langgraph/graphs/react_graph.py` ✅
+- `src/modules/module_5_langgraph/tests/test_react_graph.py` ✅ (7/7测试通过)
+
+**核心特性**：
+- ✅ 条件路由：agent → should_continue → [tools | answer]
+- ✅ 循环控制：tools → agent（ReAct循环）
+- ✅ 迭代限制：max_iterations防止无限循环
+- ✅ 状态管理：iteration计数器自动递增
 - [ ] 实现`should_continue`判断（循环条件）
 - [ ] 添加循环计数器（防无限循环）
 - [ ] 测试：对比多城市差旅标准
