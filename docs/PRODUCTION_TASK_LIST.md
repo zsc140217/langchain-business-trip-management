@@ -20,17 +20,29 @@
 
 ## 📋 模块1：Agent Loop核心架构 🔴 P0
 
-### T1.1 StateGraph基础架构
+### T1.1 StateGraph基础架构 ✅ **已完成** (2026-06-20)
 
 **任务**：
-- [ ] 定义共享状态（`TravelAgentState`）
-- [ ] 实现基础节点：retrieve → answer
-- [ ] 集成现有RAG（Query Rewriter + Hybrid Retriever）
-- [ ] 测试基础流程
+- [x] 定义共享状态（`TravelAgentState`）
+- [x] 实现基础节点：retrieve → answer
+- [x] 集成现有RAG（Query Rewriter + Hybrid Retriever）
+- [x] 测试基础流程
+- [x] 代码审查并修复所有CRITICAL/HIGH问题
 
 **产出**：
-- `src/modules/module_5_langgraph/state.py`
-- `src/modules/module_5_langgraph/basic_agent.py`
+- `src/modules/module_5_langgraph/state.py` ✅
+- `src/modules/module_5_langgraph/nodes/retrieve_node.py` ✅
+- `src/modules/module_5_langgraph/nodes/answer_node.py` ✅
+- `src/modules/module_5_langgraph/graphs/basic_graph.py` ✅
+- `src/modules/module_5_langgraph/tests/test_basic_graph.py` ✅ (6/6测试通过)
+- `src/modules/module_5_langgraph/examples/basic_example.py` ✅
+- `docs/T1.1_COMPLETION_SUMMARY.md` ✅
+
+**代码质量**：
+- ✅ 修复CRITICAL问题：硬编码路径 → pathlib.Path
+- ✅ 修复HIGH问题：输入验证、异常处理分类
+- ✅ 使用logging替代print()
+- ✅ 提取魔法数字为命名常量
 
 ### T1.2 条件分支 + ReAct循环
 
