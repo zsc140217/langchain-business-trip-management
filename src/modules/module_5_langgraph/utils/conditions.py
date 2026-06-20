@@ -1,0 +1,37 @@
+"""
+条件判断函数
+用于LangGraph的conditional_edges
+"""
+from typing import Literal
+import logging
+from ..state import TravelAgentState
+
+logger = logging.getLogger(__name__)
+
+
+def should_continue(state: TravelAgentState) -> Literal["tools", "end"]:
+    """
+    判断是否继续执行工具调用
+    
+    ReAct循环的关键：检查是否有待执行的tool_calls
+    
+    Args:
+        state: 当前状态
+        
+    Returns:
+        "tools" - 有tool_calls，执行工具
+        "end" - 无tool_calls，结束循环
+    """
+    # 检查迭代次数限制
+    if state["iteration"] >= state["max_iterations"]:
+        logger.warning(f"达到最大迭代次数 {state['max_iterations']}，强制结束")
+        return "end"
+    
+    # 检查是否有待执行的工具调用
+    tool_calls = state.get("tool_calls", [])
+    if tool_calls and len(tool_calls) > 0:
+        logger.info(f"发现 {len(tool_calls)} 个工具调用，继续执行")
+        return "tools"
+    
+    logger.info("无工具调用，结束循环")
+    return "end"
