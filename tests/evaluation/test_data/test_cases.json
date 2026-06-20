@@ -1,0 +1,303 @@
+[
+  {
+    "task_id": "simple_001",
+    "complexity": "simple",
+    "user_query": "帮我查询明天从上海到北京的经济舱机票",
+    "expected_tools": [
+      "search_flights"
+    ],
+    "expected_output_keywords": [
+      "上海",
+      "北京",
+      "经济舱",
+      "价格"
+    ],
+    "forbidden_keywords": [
+      "商务舱",
+      "头等舱"
+    ],
+    "policy_constraints": {
+      "max_budget": 2000,
+      "allowed_flight_classes": [
+        "economy"
+      ]
+    },
+    "reference_answer": "已为您找到明天从上海到北京的经济舱航班，CA1234次，08:30出发，10:45到达，价格1200元。",
+    "retrieved_contexts": [
+      "航班CA1234: 上海浦东-北京首都，经济舱1200元",
+      "航班MU5678: 上海虹桥-北京大兴，经济舱1150元"
+    ],
+    "category": "booking",
+    "metadata": {
+      "priority": "high"
+    }
+  },
+  {
+    "task_id": "simple_002",
+    "complexity": "simple",
+    "user_query": "推荐北京三环内四星级以下的酒店",
+    "expected_tools": [
+      "search_hotels"
+    ],
+    "expected_output_keywords": [
+      "北京",
+      "酒店",
+      "价格",
+      "位置"
+    ],
+    "forbidden_keywords": [
+      "五星级",
+      "奢华"
+    ],
+    "policy_constraints": {
+      "max_budget": 800,
+      "max_hotel_rating": 4
+    },
+    "reference_answer": "推荐北京希尔顿酒店，四星级，位于朝阳区，房价650元/晚。",
+    "retrieved_contexts": [
+      "希尔顿酒店：四星级，朝阳区，650元/晚",
+      "如家酒店：三星级，海淀区，380元/晚"
+    ],
+    "category": "booking",
+    "metadata": {
+      "priority": "medium"
+    }
+  },
+  {
+    "task_id": "simple_003",
+    "complexity": "simple",
+    "user_query": "北京明天天气怎么样？",
+    "expected_tools": [
+      "get_weather"
+    ],
+    "expected_output_keywords": [
+      "北京",
+      "天气",
+      "温度"
+    ],
+    "forbidden_keywords": [],
+    "policy_constraints": {},
+    "reference_answer": "北京明天晴，气温18-28度，适合出行。",
+    "retrieved_contexts": [
+      "北京天气预报：晴，18-28℃，空气质量良好"
+    ],
+    "category": "weather",
+    "metadata": {
+      "priority": "low"
+    }
+  },
+  {
+    "task_id": "medium_001",
+    "complexity": "medium",
+    "user_query": "我要去深圳出差3天，帮我订经济舱机票和酒店",
+    "expected_tools": [
+      "search_flights",
+      "search_hotels"
+    ],
+    "expected_output_keywords": [
+      "深圳",
+      "机票",
+      "酒店",
+      "总价"
+    ],
+    "forbidden_keywords": [
+      "商务舱"
+    ],
+    "policy_constraints": {
+      "max_budget": 4000,
+      "allowed_flight_classes": [
+        "economy"
+      ],
+      "max_hotel_rating": 4
+    },
+    "reference_answer": "已为您规划深圳3日行程：往返经济舱机票2400元，酒店3晚1350元，总计3750元。",
+    "retrieved_contexts": [
+      "深圳往返机票：经济舱2400元",
+      "深圳锦江之星：三星级，450元/晚"
+    ],
+    "category": "booking",
+    "metadata": {
+      "priority": "high",
+      "duration_days": 3
+    }
+  },
+  {
+    "task_id": "medium_002",
+    "complexity": "medium",
+    "user_query": "我想订商务舱去杭州，公司政策允许吗？",
+    "expected_tools": [
+      "check_policy",
+      "search_flights"
+    ],
+    "expected_output_keywords": [
+      "政策",
+      "经济舱",
+      "建议"
+    ],
+    "forbidden_keywords": [],
+    "policy_constraints": {
+      "max_budget": 1500,
+      "allowed_flight_classes": [
+        "economy"
+      ]
+    },
+    "reference_answer": "根据公司差旅政策，国内航班仅允许预订经济舱。已为您查询经济舱航班，价格800元。",
+    "retrieved_contexts": [
+      "差旅政策：国内航班限经济舱，预算1500元以内",
+      "杭州经济舱航班：800元"
+    ],
+    "category": "policy",
+    "metadata": {
+      "priority": "high"
+    }
+  },
+  {
+    "task_id": "complex_001",
+    "complexity": "complex",
+    "user_query": "我需要去北京、上海、深圳三地出差，每个城市停留2天，帮我规划最优路线和预订",
+    "expected_tools": [
+      "plan_itinerary",
+      "search_flights",
+      "search_hotels",
+      "calculate_budget"
+    ],
+    "expected_output_keywords": [
+      "行程",
+      "路线",
+      "北京",
+      "上海",
+      "深圳",
+      "总预算"
+    ],
+    "forbidden_keywords": [
+      "头等舱"
+    ],
+    "policy_constraints": {
+      "max_budget": 8000,
+      "allowed_flight_classes": [
+        "economy"
+      ],
+      "max_hotel_rating": 4
+    },
+    "reference_answer": "已为您规划6日三城行程：北京(2天)->上海(2天)->深圳(2天)，机票4200元，酒店2700元，总计6900元。",
+    "retrieved_contexts": [
+      "多城市航线推荐：北京-上海-深圳，总计4200元",
+      "酒店预算：每城市2晚约900元"
+    ],
+    "category": "complex",
+    "metadata": {
+      "priority": "high",
+      "cities": 3,
+      "duration_days": 6
+    }
+  },
+  {
+    "task_id": "complex_002",
+    "complexity": "complex",
+    "user_query": "我的CA1234航班取消了，帮我改签到最近的航班",
+    "expected_tools": [
+      "check_flight_status",
+      "search_alternative_flights",
+      "rebooking"
+    ],
+    "expected_output_keywords": [
+      "改签",
+      "航班",
+      "时间",
+      "费用"
+    ],
+    "forbidden_keywords": [],
+    "policy_constraints": {
+      "max_budget": 2500
+    },
+    "reference_answer": "CA1234航班已取消。为您改签到CA1236，12:30出发，补差价200元，改签费50元。",
+    "retrieved_contexts": [
+      "CA1234航班状态：已取消",
+      "备选航班CA1236：12:30出发，经济舱1400元"
+    ],
+    "category": "emergency",
+    "metadata": {
+      "priority": "critical"
+    }
+  },
+  {
+    "task_id": "policy_001_violation",
+    "complexity": "simple",
+    "user_query": "帮我订一张去上海的商务舱机票",
+    "expected_tools": [
+      "check_policy"
+    ],
+    "expected_output_keywords": [
+      "政策",
+      "不允许",
+      "经济舱"
+    ],
+    "forbidden_keywords": [
+      "商务舱"
+    ],
+    "policy_constraints": {
+      "max_budget": 1500,
+      "allowed_flight_classes": [
+        "economy"
+      ]
+    },
+    "reference_answer": "抱歉，根据公司差旅政策，国内航班仅允许预订经济舱。已为您查询经济舱航班。",
+    "retrieved_contexts": [
+      "差旅政策：国内航班限经济舱"
+    ],
+    "category": "policy",
+    "metadata": {
+      "expected_violation": true
+    }
+  },
+  {
+    "task_id": "policy_002_violation",
+    "complexity": "simple",
+    "user_query": "我想住五星级酒店",
+    "expected_tools": [
+      "check_policy",
+      "search_hotels"
+    ],
+    "expected_output_keywords": [
+      "政策",
+      "四星",
+      "建议"
+    ],
+    "forbidden_keywords": [
+      "五星"
+    ],
+    "policy_constraints": {
+      "max_hotel_rating": 4,
+      "max_budget": 800
+    },
+    "reference_answer": "根据公司政策，酒店限四星级及以下。为您推荐四星级酒店。",
+    "retrieved_contexts": [
+      "差旅政策：酒店限四星级以下，预算800元/晚"
+    ],
+    "category": "policy",
+    "metadata": {
+      "expected_violation": true
+    }
+  },
+  {
+    "task_id": "edge_001",
+    "complexity": "medium",
+    "user_query": "我想出差",
+    "expected_tools": [
+      "clarify_requirements"
+    ],
+    "expected_output_keywords": [
+      "目的地",
+      "日期",
+      "需求"
+    ],
+    "forbidden_keywords": [],
+    "policy_constraints": {},
+    "reference_answer": "请问您的出差目的地、出发日期和预计停留天数是多少？",
+    "retrieved_contexts": [],
+    "category": "clarification",
+    "metadata": {
+      "requires_followup": true
+    }
+  }
+]

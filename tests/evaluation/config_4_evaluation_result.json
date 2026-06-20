@@ -1,0 +1,1033 @@
+{
+  "config": "finetuned_model_with_query_rewriter",
+  "accuracy_at_1": 0.4117647058823529,
+  "recall_at_5": 0.7647058823529411,
+  "mrr": 0.5343137254901961,
+  "by_difficulty": {
+    "easy": {
+      "accuracy_at_1": 0.4,
+      "recall_at_5": 0.8,
+      "count": 5
+    },
+    "medium": {
+      "accuracy_at_1": 0.2857142857142857,
+      "recall_at_5": 0.7142857142857143,
+      "count": 7
+    },
+    "hard": {
+      "accuracy_at_1": 0.6,
+      "recall_at_5": 0.8,
+      "count": 5
+    },
+    "distractor": {
+      "accuracy_at_1": 1.0,
+      "count": 3
+    }
+  },
+  "query_rewrites": [
+    {
+      "original": "去北京出差能住什么价位的酒店？",
+      "rewritten": "去北京出差住宿费用标准的酒店",
+      "difficulty": "easy"
+    },
+    {
+      "original": "经济舱的机票可以报销吗？",
+      "rewritten": "经济舱的机票可以报销",
+      "difficulty": "easy"
+    },
+    {
+      "original": "出差补贴一天给多少钱？",
+      "rewritten": "出差补贴一天给多少钱",
+      "difficulty": "easy"
+    },
+    {
+      "original": "火车票能报销吗？",
+      "rewritten": "火车票能报销",
+      "difficulty": "easy"
+    },
+    {
+      "original": "出差住宿发票丢了怎么办？",
+      "rewritten": "出差住宿发票丢了怎么办",
+      "difficulty": "easy"
+    },
+    {
+      "original": "去魔都出差住宿预算多少？",
+      "rewritten": "去上海出差住宿预算多少",
+      "difficulty": "medium"
+    },
+    {
+      "original": "副总裁能坐商务舱吗？",
+      "rewritten": "副总裁是否可以商务舱",
+      "difficulty": "medium"
+    },
+    {
+      "original": "从北京到成都应该坐飞机还是高铁？",
+      "rewritten": "从北京到成都交通工具选择飞机还是高铁",
+      "difficulty": "medium"
+    },
+    {
+      "original": "周末加班出差有额外补贴吗？",
+      "rewritten": "周末加班出差补贴标准",
+      "difficulty": "medium"
+    },
+    {
+      "original": "出差期间生病就医费用能报吗？",
+      "rewritten": "出差期间生病就医费用是否可以报销",
+      "difficulty": "medium"
+    },
+    {
+      "original": "一次出差去多个城市，住宿标准怎么算？",
+      "rewritten": "一次出差去多个城市，住宿标准怎么算",
+      "difficulty": "medium"
+    },
+    {
+      "original": "提前预订机票有折扣吗？",
+      "rewritten": "提前预订机票有折扣",
+      "difficulty": "medium"
+    },
+    {
+      "original": "商务舱和经济舱的差别是什么？",
+      "rewritten": "商务舱和经济舱的差别是什么",
+      "difficulty": "hard"
+    },
+    {
+      "original": "杭州属于几线城市？住宿标准是多少？",
+      "rewritten": "杭州属于几线城市住宿标准是多少",
+      "difficulty": "hard"
+    },
+    {
+      "original": "国际出差的政策和国内一样吗？",
+      "rewritten": "国际出差的政策和国内一样",
+      "difficulty": "hard"
+    },
+    {
+      "original": "出差超过一个月，标准有变化吗？",
+      "rewritten": "出差超过一个月，标准有变化",
+      "difficulty": "hard"
+    },
+    {
+      "original": "CEO出差有什么特殊待遇？",
+      "rewritten": "CEO出差有什么特殊待遇",
+      "difficulty": "hard"
+    },
+    {
+      "original": "公司年会预算是多少？",
+      "rewritten": "公司年会预算是多少",
+      "difficulty": "distractor"
+    },
+    {
+      "original": "员工入职需要什么材料？",
+      "rewritten": "员工入职需要什么材料",
+      "difficulty": "distractor"
+    },
+    {
+      "original": "如何申请年假？",
+      "rewritten": "如何申请年假",
+      "difficulty": "distractor"
+    }
+  ],
+  "failed_queries": [
+    {
+      "query": "经济舱的机票可以报销吗？",
+      "expected": "doc_05",
+      "got": "doc_21",
+      "rank": 2
+    },
+    {
+      "query": "出差补贴一天给多少钱？",
+      "expected": "doc_12",
+      "got": "doc_20",
+      "rank": 3
+    },
+    {
+      "query": "火车票能报销吗？",
+      "expected": "doc_09",
+      "got": "doc_05",
+      "rank": -1
+    },
+    {
+      "query": "去魔都出差住宿预算多少？",
+      "expected": "doc_11",
+      "got": "doc_06",
+      "rank": 3
+    },
+    {
+      "query": "副总裁能坐商务舱吗？",
+      "expected": "doc_23",
+      "got": "doc_24",
+      "rank": 3
+    },
+    {
+      "query": "从北京到成都应该坐飞机还是高铁？",
+      "expected": "doc_15",
+      "got": "doc_29",
+      "rank": -1
+    },
+    {
+      "query": "出差期间生病就医费用能报吗？",
+      "expected": "doc_01",
+      "got": "doc_04",
+      "rank": 3
+    },
+    {
+      "query": "提前预订机票有折扣吗？",
+      "expected": "doc_16",
+      "got": "doc_04",
+      "rank": -1
+    },
+    {
+      "query": "国际出差的政策和国内一样吗？",
+      "expected": "doc_14",
+      "got": "doc_04",
+      "rank": -1
+    },
+    {
+      "query": "CEO出差有什么特殊待遇？",
+      "expected": "doc_24",
+      "got": "doc_09",
+      "rank": 4
+    }
+  ],
+  "detailed_results": [
+    {
+      "query": "去北京出差能住什么价位的酒店？",
+      "rewritten_query": "去北京出差住宿费用标准的酒店",
+      "expected_doc_id": "doc_06",
+      "difficulty": "easy",
+      "rank": 1,
+      "is_correct": true,
+      "top_1_doc_id": "doc_06",
+      "top_1_score": 0.6488782167434692,
+      "retrieved_docs": [
+        {
+          "rank": 1,
+          "doc_id": "doc_06",
+          "content_preview": "酒店住宿标准：一线城市（北上广深）不超过500元/晚，超出部分自付。",
+          "score": 0.6488782167434692
+        },
+        {
+          "rank": 2,
+          "doc_id": "doc_19",
+          "content_preview": "酒店住宿标准：一线城市（北上广深）不超过500元/晚，二线城市不超过300元/晚，三线城市不超过200元/晚。超出部分自付。",
+          "score": 0.6201553344726562
+        },
+        {
+          "rank": 3,
+          "doc_id": "doc_11",
+          "content_preview": "一线城市（北上广深）酒店住宿不超过500元/晚。二线城市300元/晚，三线城市200元/晚。",
+          "score": 0.6103787422180176
+        },
+        {
+          "rank": 4,
+          "doc_id": "doc_08",
+          "content_preview": "酒店住宿标准：一线城市500元/晚，二线300元/晚，三线200元/晚。超出部分需自付。",
+          "score": 0.5439771413803101
+        },
+        {
+          "rank": 5,
+          "doc_id": "doc_24",
+          "content_preview": "普通员工不得预订商务舱或头等舱。商务舱仅限副总裁及以上级别或长途国际航班。",
+          "score": 0.2626877725124359
+        }
+      ]
+    },
+    {
+      "query": "经济舱的机票可以报销吗？",
+      "rewritten_query": "经济舱的机票可以报销",
+      "expected_doc_id": "doc_05",
+      "difficulty": "easy",
+      "rank": 2,
+      "is_correct": false,
+      "top_1_doc_id": "doc_21",
+      "top_1_score": 0.7751121520996094,
+      "retrieved_docs": [
+        {
+          "rank": 1,
+          "doc_id": "doc_21",
+          "content_preview": "国内航班经济舱可以全额报销，但需要提供正规发票和行程单。经济舱票价应在市场合理范围内。",
+          "score": 0.7751121520996094
+        },
+        {
+          "rank": 2,
+          "doc_id": "doc_05",
+          "content_preview": "国内航班经济舱可以全额报销，需提供发票和行程单，票价应合理。",
+          "score": 0.7602070569992065
+        },
+        {
+          "rank": 3,
+          "doc_id": "doc_10",
+          "content_preview": "国内航班经济舱可以全额报销，但需要提供正规发票和行程单。票价应在市场合理范围内。",
+          "score": 0.7516487836837769
+        },
+        {
+          "rank": 4,
+          "doc_id": "doc_03",
+          "content_preview": "机票报销需提供行程单和发票。经济舱全额报销，商务舱需符合职级或航程要求。",
+          "score": 0.7379934191703796
+        },
+        {
+          "rank": 5,
+          "doc_id": "doc_17",
+          "content_preview": "机票报销需要提供正规发票和行程单。经济舱可全额报销，票价需在合理范围。",
+          "score": 0.7349938750267029
+        }
+      ]
+    },
+    {
+      "query": "出差补贴一天给多少钱？",
+      "rewritten_query": "出差补贴一天给多少钱",
+      "expected_doc_id": "doc_12",
+      "difficulty": "easy",
+      "rank": 3,
+      "is_correct": false,
+      "top_1_doc_id": "doc_20",
+      "top_1_score": 0.6985698342323303,
+      "retrieved_docs": [
+        {
+          "rank": 1,
+          "doc_id": "doc_20",
+          "content_preview": "出差补贴标准：国内出差每天200元，涵盖市内交通和餐饮。周末出差补贴相同。",
+          "score": 0.6985698342323303
+        },
+        {
+          "rank": 2,
+          "doc_id": "doc_25",
+          "content_preview": "出差补贴标准：国内出差每天200元，包含市内交通和餐饮补贴。周末出差补贴标准不变。",
+          "score": 0.6968556642532349
+        },
+        {
+          "rank": 3,
+          "doc_id": "doc_12",
+          "content_preview": "国内出差每天补贴200元，包含市内交通和餐饮补贴。周末出差标准不变。",
+          "score": 0.6547076106071472
+        },
+        {
+          "rank": 4,
+          "doc_id": "doc_02",
+          "content_preview": "每日200元出差补贴包含市内交通和餐饮补贴。机场往返可单独报销。",
+          "score": 0.5882614850997925
+        },
+        {
+          "rank": 5,
+          "doc_id": "doc_13",
+          "content_preview": "周末出差补贴标准与工作日相同，每天200元。如占用休息日，可申请调休，调休时长为实际出差天数。",
+          "score": 0.5065977573394775
+        }
+      ]
+    },
+    {
+      "query": "火车票能报销吗？",
+      "rewritten_query": "火车票能报销",
+      "expected_doc_id": "doc_09",
+      "difficulty": "easy",
+      "rank": -1,
+      "is_correct": false,
+      "top_1_doc_id": "doc_05",
+      "top_1_score": 0.4578682482242584,
+      "retrieved_docs": [
+        {
+          "rank": 1,
+          "doc_id": "doc_05",
+          "content_preview": "国内航班经济舱可以全额报销，需提供发票和行程单，票价应合理。",
+          "score": 0.4578682482242584
+        },
+        {
+          "rank": 2,
+          "doc_id": "doc_01",
+          "content_preview": "报销材料清单：1)差旅申请单（已审批）2)机票行程单或火车票 3)酒店发票 4)其他交通费发票 5)费用明细表。所有材料需在出差结束后10个工作日内提交。",
+          "score": 0.45358219742774963
+        },
+        {
+          "rank": 3,
+          "doc_id": "doc_17",
+          "content_preview": "机票报销需要提供正规发票和行程单。经济舱可全额报销，票价需在合理范围。",
+          "score": 0.452300488948822
+        },
+        {
+          "rank": 4,
+          "doc_id": "doc_10",
+          "content_preview": "国内航班经济舱可以全额报销，但需要提供正规发票和行程单。票价应在市场合理范围内。",
+          "score": 0.4435998201370239
+        },
+        {
+          "rank": 5,
+          "doc_id": "doc_07",
+          "content_preview": "市内交通费用包含在每日200元补贴中。机场往返可单独报销出租车或机场大巴费用，需提供发票。",
+          "score": 0.4302423596382141
+        }
+      ]
+    },
+    {
+      "query": "出差住宿发票丢了怎么办？",
+      "rewritten_query": "出差住宿发票丢了怎么办",
+      "expected_doc_id": "doc_01",
+      "difficulty": "easy",
+      "rank": 1,
+      "is_correct": true,
+      "top_1_doc_id": "doc_01",
+      "top_1_score": 0.43809083104133606,
+      "retrieved_docs": [
+        {
+          "rank": 1,
+          "doc_id": "doc_01",
+          "content_preview": "报销材料清单：1)差旅申请单（已审批）2)机票行程单或火车票 3)酒店发票 4)其他交通费发票 5)费用明细表。所有材料需在出差结束后10个工作日内提交。",
+          "score": 0.43809083104133606
+        },
+        {
+          "rank": 2,
+          "doc_id": "doc_17",
+          "content_preview": "机票报销需要提供正规发票和行程单。经济舱可全额报销，票价需在合理范围。",
+          "score": 0.3039203882217407
+        },
+        {
+          "rank": 3,
+          "doc_id": "doc_03",
+          "content_preview": "机票报销需提供行程单和发票。经济舱全额报销，商务舱需符合职级或航程要求。",
+          "score": 0.2785244286060333
+        },
+        {
+          "rank": 4,
+          "doc_id": "doc_05",
+          "content_preview": "国内航班经济舱可以全额报销，需提供发票和行程单，票价应合理。",
+          "score": 0.2575235068798065
+        },
+        {
+          "rank": 5,
+          "doc_id": "doc_10",
+          "content_preview": "国内航班经济舱可以全额报销，但需要提供正规发票和行程单。票价应在市场合理范围内。",
+          "score": 0.25679388642311096
+        }
+      ]
+    },
+    {
+      "query": "去魔都出差住宿预算多少？",
+      "rewritten_query": "去上海出差住宿预算多少",
+      "expected_doc_id": "doc_11",
+      "difficulty": "medium",
+      "rank": 3,
+      "is_correct": false,
+      "top_1_doc_id": "doc_06",
+      "top_1_score": 0.6036767363548279,
+      "retrieved_docs": [
+        {
+          "rank": 1,
+          "doc_id": "doc_06",
+          "content_preview": "酒店住宿标准：一线城市（北上广深）不超过500元/晚，超出部分自付。",
+          "score": 0.6036767363548279
+        },
+        {
+          "rank": 2,
+          "doc_id": "doc_19",
+          "content_preview": "酒店住宿标准：一线城市（北上广深）不超过500元/晚，二线城市不超过300元/晚，三线城市不超过200元/晚。超出部分自付。",
+          "score": 0.5841678380966187
+        },
+        {
+          "rank": 3,
+          "doc_id": "doc_11",
+          "content_preview": "一线城市（北上广深）酒店住宿不超过500元/晚。二线城市300元/晚，三线城市200元/晚。",
+          "score": 0.5716812610626221
+        },
+        {
+          "rank": 4,
+          "doc_id": "doc_08",
+          "content_preview": "酒店住宿标准：一线城市500元/晚，二线300元/晚，三线200元/晚。超出部分需自付。",
+          "score": 0.5553595423698425
+        },
+        {
+          "rank": 5,
+          "doc_id": "doc_20",
+          "content_preview": "出差补贴标准：国内出差每天200元，涵盖市内交通和餐饮。周末出差补贴相同。",
+          "score": 0.2508806586265564
+        }
+      ]
+    },
+    {
+      "query": "副总裁能坐商务舱吗？",
+      "rewritten_query": "副总裁是否可以商务舱",
+      "expected_doc_id": "doc_23",
+      "difficulty": "medium",
+      "rank": 3,
+      "is_correct": false,
+      "top_1_doc_id": "doc_24",
+      "top_1_score": 0.7558184862136841,
+      "retrieved_docs": [
+        {
+          "rank": 1,
+          "doc_id": "doc_24",
+          "content_preview": "普通员工不得预订商务舱或头等舱。商务舱仅限副总裁及以上级别或长途国际航班。",
+          "score": 0.7558184862136841
+        },
+        {
+          "rank": 2,
+          "doc_id": "doc_29",
+          "content_preview": "商务舱仅限副总裁及以上级别，或飞行时间超过4小时的国际航班。普通员工不得预订商务舱或头等舱。",
+          "score": 0.7480940818786621
+        },
+        {
+          "rank": 3,
+          "doc_id": "doc_23",
+          "content_preview": "商务舱报销需满足：1)副总裁及以上 2)国际航班4小时+ 3)跨洲际8小时+。其他情况只能报销经济舱。",
+          "score": 0.7146089673042297
+        },
+        {
+          "rank": 4,
+          "doc_id": "doc_28",
+          "content_preview": "商务舱预订条件：副总裁及以上级别，或国际航班飞行4小时以上。跨洲际航班（8小时+）商务舱自动批准。",
+          "score": 0.6960389018058777
+        },
+        {
+          "rank": 5,
+          "doc_id": "doc_27",
+          "content_preview": "商务舱仅限高管或长途国际航班。普通员工预订商务舱或头等舱不予报销。",
+          "score": 0.6393541693687439
+        }
+      ]
+    },
+    {
+      "query": "从北京到成都应该坐飞机还是高铁？",
+      "rewritten_query": "从北京到成都交通工具选择飞机还是高铁",
+      "expected_doc_id": "doc_15",
+      "difficulty": "medium",
+      "rank": -1,
+      "is_correct": false,
+      "top_1_doc_id": "doc_29",
+      "top_1_score": 0.24970874190330505,
+      "retrieved_docs": [
+        {
+          "rank": 1,
+          "doc_id": "doc_29",
+          "content_preview": "商务舱仅限副总裁及以上级别，或飞行时间超过4小时的国际航班。普通员工不得预订商务舱或头等舱。",
+          "score": 0.24970874190330505
+        },
+        {
+          "rank": 2,
+          "doc_id": "doc_07",
+          "content_preview": "市内交通费用包含在每日200元补贴中。机场往返可单独报销出租车或机场大巴费用，需提供发票。",
+          "score": 0.24751070141792297
+        },
+        {
+          "rank": 3,
+          "doc_id": "doc_27",
+          "content_preview": "商务舱仅限高管或长途国际航班。普通员工预订商务舱或头等舱不予报销。",
+          "score": 0.24659182131290436
+        },
+        {
+          "rank": 4,
+          "doc_id": "doc_09",
+          "content_preview": "高铁出行优先选择二等座，可正常报销。商务座需总监级别或特殊情况。",
+          "score": 0.24537375569343567
+        },
+        {
+          "rank": 5,
+          "doc_id": "doc_14",
+          "content_preview": "国际航班：飞行时间4小时以内经济舱，4小时以上可申请商务舱（需总监审批）。跨洲际航班（8小时以上）商务舱自动批准。",
+          "score": 0.24396617710590363
+        }
+      ]
+    },
+    {
+      "query": "周末加班出差有额外补贴吗？",
+      "rewritten_query": "周末加班出差补贴标准",
+      "expected_doc_id": "doc_13",
+      "difficulty": "medium",
+      "rank": 1,
+      "is_correct": true,
+      "top_1_doc_id": "doc_13",
+      "top_1_score": 0.6347883343696594,
+      "retrieved_docs": [
+        {
+          "rank": 1,
+          "doc_id": "doc_13",
+          "content_preview": "周末出差补贴标准与工作日相同，每天200元。如占用休息日，可申请调休，调休时长为实际出差天数。",
+          "score": 0.6347883343696594
+        },
+        {
+          "rank": 2,
+          "doc_id": "doc_25",
+          "content_preview": "出差补贴标准：国内出差每天200元，包含市内交通和餐饮补贴。周末出差补贴标准不变。",
+          "score": 0.6161254644393921
+        },
+        {
+          "rank": 3,
+          "doc_id": "doc_20",
+          "content_preview": "出差补贴标准：国内出差每天200元，涵盖市内交通和餐饮。周末出差补贴相同。",
+          "score": 0.6036376357078552
+        },
+        {
+          "rank": 4,
+          "doc_id": "doc_12",
+          "content_preview": "国内出差每天补贴200元，包含市内交通和餐饮补贴。周末出差标准不变。",
+          "score": 0.5891604423522949
+        },
+        {
+          "rank": 5,
+          "doc_id": "doc_02",
+          "content_preview": "每日200元出差补贴包含市内交通和餐饮补贴。机场往返可单独报销。",
+          "score": 0.3879094421863556
+        }
+      ]
+    },
+    {
+      "query": "出差期间生病就医费用能报吗？",
+      "rewritten_query": "出差期间生病就医费用是否可以报销",
+      "expected_doc_id": "doc_01",
+      "difficulty": "medium",
+      "rank": 3,
+      "is_correct": false,
+      "top_1_doc_id": "doc_04",
+      "top_1_score": 0.3610245883464813,
+      "retrieved_docs": [
+        {
+          "rank": 1,
+          "doc_id": "doc_04",
+          "content_preview": "国际出差需提前7天申请，并提交详细行程和预算。国内出差提前3天即可。",
+          "score": 0.3610245883464813
+        },
+        {
+          "rank": 2,
+          "doc_id": "doc_16",
+          "content_preview": "差旅审批流程：国内出差需提前3天申请，国际出差需提前7天申请。紧急出差（48小时内）需部门经理特批。",
+          "score": 0.33240726590156555
+        },
+        {
+          "rank": 3,
+          "doc_id": "doc_01",
+          "content_preview": "报销材料清单：1)差旅申请单（已审批）2)机票行程单或火车票 3)酒店发票 4)其他交通费发票 5)费用明细表。所有材料需在出差结束后10个工作日内提交。",
+          "score": 0.3294171988964081
+        },
+        {
+          "rank": 4,
+          "doc_id": "doc_05",
+          "content_preview": "国内航班经济舱可以全额报销，需提供发票和行程单，票价应合理。",
+          "score": 0.32632479071617126
+        },
+        {
+          "rank": 5,
+          "doc_id": "doc_10",
+          "content_preview": "国内航班经济舱可以全额报销，但需要提供正规发票和行程单。票价应在市场合理范围内。",
+          "score": 0.32255667448043823
+        }
+      ]
+    },
+    {
+      "query": "一次出差去多个城市，住宿标准怎么算？",
+      "rewritten_query": "一次出差去多个城市，住宿标准怎么算",
+      "expected_doc_id": "doc_19",
+      "difficulty": "medium",
+      "rank": 1,
+      "is_correct": true,
+      "top_1_doc_id": "doc_19",
+      "top_1_score": 0.498821496963501,
+      "retrieved_docs": [
+        {
+          "rank": 1,
+          "doc_id": "doc_19",
+          "content_preview": "酒店住宿标准：一线城市（北上广深）不超过500元/晚，二线城市不超过300元/晚，三线城市不超过200元/晚。超出部分自付。",
+          "score": 0.498821496963501
+        },
+        {
+          "rank": 2,
+          "doc_id": "doc_08",
+          "content_preview": "酒店住宿标准：一线城市500元/晚，二线300元/晚，三线200元/晚。超出部分需自付。",
+          "score": 0.4907715618610382
+        },
+        {
+          "rank": 3,
+          "doc_id": "doc_06",
+          "content_preview": "酒店住宿标准：一线城市（北上广深）不超过500元/晚，超出部分自付。",
+          "score": 0.48513707518577576
+        },
+        {
+          "rank": 4,
+          "doc_id": "doc_11",
+          "content_preview": "一线城市（北上广深）酒店住宿不超过500元/晚。二线城市300元/晚，三线城市200元/晚。",
+          "score": 0.4504087269306183
+        },
+        {
+          "rank": 5,
+          "doc_id": "doc_20",
+          "content_preview": "出差补贴标准：国内出差每天200元，涵盖市内交通和餐饮。周末出差补贴相同。",
+          "score": 0.29931628704071045
+        }
+      ]
+    },
+    {
+      "query": "提前预订机票有折扣吗？",
+      "rewritten_query": "提前预订机票有折扣",
+      "expected_doc_id": "doc_16",
+      "difficulty": "medium",
+      "rank": -1,
+      "is_correct": false,
+      "top_1_doc_id": "doc_04",
+      "top_1_score": 0.45659878849983215,
+      "retrieved_docs": [
+        {
+          "rank": 1,
+          "doc_id": "doc_04",
+          "content_preview": "国际出差需提前7天申请，并提交详细行程和预算。国内出差提前3天即可。",
+          "score": 0.45659878849983215
+        },
+        {
+          "rank": 2,
+          "doc_id": "doc_17",
+          "content_preview": "机票报销需要提供正规发票和行程单。经济舱可全额报销，票价需在合理范围。",
+          "score": 0.392301470041275
+        },
+        {
+          "rank": 3,
+          "doc_id": "doc_05",
+          "content_preview": "国内航班经济舱可以全额报销，需提供发票和行程单，票价应合理。",
+          "score": 0.37756168842315674
+        },
+        {
+          "rank": 4,
+          "doc_id": "doc_10",
+          "content_preview": "国内航班经济舱可以全额报销，但需要提供正规发票和行程单。票价应在市场合理范围内。",
+          "score": 0.3725596070289612
+        },
+        {
+          "rank": 5,
+          "doc_id": "doc_21",
+          "content_preview": "国内航班经济舱可以全额报销，但需要提供正规发票和行程单。经济舱票价应在市场合理范围内。",
+          "score": 0.3546079397201538
+        }
+      ]
+    },
+    {
+      "query": "商务舱和经济舱的差别是什么？",
+      "rewritten_query": "商务舱和经济舱的差别是什么",
+      "expected_doc_id": "doc_23",
+      "difficulty": "hard",
+      "rank": 1,
+      "is_correct": true,
+      "top_1_doc_id": "doc_23",
+      "top_1_score": 0.6660270690917969,
+      "retrieved_docs": [
+        {
+          "rank": 1,
+          "doc_id": "doc_23",
+          "content_preview": "商务舱报销需满足：1)副总裁及以上 2)国际航班4小时+ 3)跨洲际8小时+。其他情况只能报销经济舱。",
+          "score": 0.6660270690917969
+        },
+        {
+          "rank": 2,
+          "doc_id": "doc_29",
+          "content_preview": "商务舱仅限副总裁及以上级别，或飞行时间超过4小时的国际航班。普通员工不得预订商务舱或头等舱。",
+          "score": 0.633240282535553
+        },
+        {
+          "rank": 3,
+          "doc_id": "doc_27",
+          "content_preview": "商务舱仅限高管或长途国际航班。普通员工预订商务舱或头等舱不予报销。",
+          "score": 0.6326333284378052
+        },
+        {
+          "rank": 4,
+          "doc_id": "doc_14",
+          "content_preview": "国际航班：飞行时间4小时以内经济舱，4小时以上可申请商务舱（需总监审批）。跨洲际航班（8小时以上）商务舱自动批准。",
+          "score": 0.6215591430664062
+        },
+        {
+          "rank": 5,
+          "doc_id": "doc_24",
+          "content_preview": "普通员工不得预订商务舱或头等舱。商务舱仅限副总裁及以上级别或长途国际航班。",
+          "score": 0.602796733379364
+        }
+      ]
+    },
+    {
+      "query": "杭州属于几线城市？住宿标准是多少？",
+      "rewritten_query": "杭州属于几线城市住宿标准是多少",
+      "expected_doc_id": "doc_19",
+      "difficulty": "hard",
+      "rank": 1,
+      "is_correct": true,
+      "top_1_doc_id": "doc_19",
+      "top_1_score": 0.6001599431037903,
+      "retrieved_docs": [
+        {
+          "rank": 1,
+          "doc_id": "doc_19",
+          "content_preview": "酒店住宿标准：一线城市（北上广深）不超过500元/晚，二线城市不超过300元/晚，三线城市不超过200元/晚。超出部分自付。",
+          "score": 0.6001599431037903
+        },
+        {
+          "rank": 2,
+          "doc_id": "doc_08",
+          "content_preview": "酒店住宿标准：一线城市500元/晚，二线300元/晚，三线200元/晚。超出部分需自付。",
+          "score": 0.5874261260032654
+        },
+        {
+          "rank": 3,
+          "doc_id": "doc_11",
+          "content_preview": "一线城市（北上广深）酒店住宿不超过500元/晚。二线城市300元/晚，三线城市200元/晚。",
+          "score": 0.5859689712524414
+        },
+        {
+          "rank": 4,
+          "doc_id": "doc_06",
+          "content_preview": "酒店住宿标准：一线城市（北上广深）不超过500元/晚，超出部分自付。",
+          "score": 0.5795758366584778
+        },
+        {
+          "rank": 5,
+          "doc_id": "doc_29",
+          "content_preview": "商务舱仅限副总裁及以上级别，或飞行时间超过4小时的国际航班。普通员工不得预订商务舱或头等舱。",
+          "score": 0.23186618089675903
+        }
+      ]
+    },
+    {
+      "query": "国际出差的政策和国内一样吗？",
+      "rewritten_query": "国际出差的政策和国内一样",
+      "expected_doc_id": "doc_14",
+      "difficulty": "hard",
+      "rank": -1,
+      "is_correct": false,
+      "top_1_doc_id": "doc_04",
+      "top_1_score": 0.4797189235687256,
+      "retrieved_docs": [
+        {
+          "rank": 1,
+          "doc_id": "doc_04",
+          "content_preview": "国际出差需提前7天申请，并提交详细行程和预算。国内出差提前3天即可。",
+          "score": 0.4797189235687256
+        },
+        {
+          "rank": 2,
+          "doc_id": "doc_16",
+          "content_preview": "差旅审批流程：国内出差需提前3天申请，国际出差需提前7天申请。紧急出差（48小时内）需部门经理特批。",
+          "score": 0.40212950110435486
+        },
+        {
+          "rank": 3,
+          "doc_id": "doc_12",
+          "content_preview": "国内出差每天补贴200元，包含市内交通和餐饮补贴。周末出差标准不变。",
+          "score": 0.4012410640716553
+        },
+        {
+          "rank": 4,
+          "doc_id": "doc_20",
+          "content_preview": "出差补贴标准：国内出差每天200元，涵盖市内交通和餐饮。周末出差补贴相同。",
+          "score": 0.4011625051498413
+        },
+        {
+          "rank": 5,
+          "doc_id": "doc_25",
+          "content_preview": "出差补贴标准：国内出差每天200元，包含市内交通和餐饮补贴。周末出差补贴标准不变。",
+          "score": 0.38756999373435974
+        }
+      ]
+    },
+    {
+      "query": "出差超过一个月，标准有变化吗？",
+      "rewritten_query": "出差超过一个月，标准有变化",
+      "expected_doc_id": "doc_16",
+      "difficulty": "hard",
+      "rank": 1,
+      "is_correct": true,
+      "top_1_doc_id": "doc_16",
+      "top_1_score": 0.37925389409065247,
+      "retrieved_docs": [
+        {
+          "rank": 1,
+          "doc_id": "doc_16",
+          "content_preview": "差旅审批流程：国内出差需提前3天申请，国际出差需提前7天申请。紧急出差（48小时内）需部门经理特批。",
+          "score": 0.37925389409065247
+        },
+        {
+          "rank": 2,
+          "doc_id": "doc_04",
+          "content_preview": "国际出差需提前7天申请，并提交详细行程和预算。国内出差提前3天即可。",
+          "score": 0.37767618894577026
+        },
+        {
+          "rank": 3,
+          "doc_id": "doc_22",
+          "content_preview": "差旅审批流程：国内出差需提前3天申请。紧急出差（48小时内）需部门经理特批。",
+          "score": 0.37404143810272217
+        },
+        {
+          "rank": 4,
+          "doc_id": "doc_01",
+          "content_preview": "报销材料清单：1)差旅申请单（已审批）2)机票行程单或火车票 3)酒店发票 4)其他交通费发票 5)费用明细表。所有材料需在出差结束后10个工作日内提交。",
+          "score": 0.2588834762573242
+        },
+        {
+          "rank": 5,
+          "doc_id": "doc_14",
+          "content_preview": "国际航班：飞行时间4小时以内经济舱，4小时以上可申请商务舱（需总监审批）。跨洲际航班（8小时以上）商务舱自动批准。",
+          "score": 0.25064703822135925
+        }
+      ]
+    },
+    {
+      "query": "CEO出差有什么特殊待遇？",
+      "rewritten_query": "CEO出差有什么特殊待遇",
+      "expected_doc_id": "doc_24",
+      "difficulty": "hard",
+      "rank": 4,
+      "is_correct": false,
+      "top_1_doc_id": "doc_09",
+      "top_1_score": 0.3818562924861908,
+      "retrieved_docs": [
+        {
+          "rank": 1,
+          "doc_id": "doc_09",
+          "content_preview": "高铁出行优先选择二等座，可正常报销。商务座需总监级别或特殊情况。",
+          "score": 0.3818562924861908
+        },
+        {
+          "rank": 2,
+          "doc_id": "doc_26",
+          "content_preview": "高铁商务座允许条件：1)总监及以上级别 2)特殊健康原因并提供证明 3)二等座已售罄。否则优先二等座。",
+          "score": 0.38118183612823486
+        },
+        {
+          "rank": 3,
+          "doc_id": "doc_18",
+          "content_preview": "高铁优先二等座。商务座仅在以下情况允许：总监及以上级别、健康原因有证明、二等座售罄。",
+          "score": 0.37037739157676697
+        },
+        {
+          "rank": 4,
+          "doc_id": "doc_24",
+          "content_preview": "普通员工不得预订商务舱或头等舱。商务舱仅限副总裁及以上级别或长途国际航班。",
+          "score": 0.36719217896461487
+        },
+        {
+          "rank": 5,
+          "doc_id": "doc_15",
+          "content_preview": "高铁出行优先选择二等座。商务座仅在以下情况允许：1)总监及以上级别 2)特殊健康原因并提供证明 3)二等座已售罄。",
+          "score": 0.3623277544975281
+        }
+      ]
+    },
+    {
+      "query": "公司年会预算是多少？",
+      "rewritten_query": "公司年会预算是多少",
+      "expected_doc_id": "distractor",
+      "difficulty": "distractor",
+      "rank": 1,
+      "is_correct": true,
+      "top_1_doc_id": "doc_19",
+      "top_1_score": 0.2986687421798706,
+      "retrieved_docs": [
+        {
+          "rank": 1,
+          "doc_id": "doc_19",
+          "content_preview": "酒店住宿标准：一线城市（北上广深）不超过500元/晚，二线城市不超过300元/晚，三线城市不超过200元/晚。超出部分自付。",
+          "score": 0.2986687421798706
+        },
+        {
+          "rank": 2,
+          "doc_id": "doc_08",
+          "content_preview": "酒店住宿标准：一线城市500元/晚，二线300元/晚，三线200元/晚。超出部分需自付。",
+          "score": 0.29723531007766724
+        },
+        {
+          "rank": 3,
+          "doc_id": "doc_06",
+          "content_preview": "酒店住宿标准：一线城市（北上广深）不超过500元/晚，超出部分自付。",
+          "score": 0.2958950996398926
+        },
+        {
+          "rank": 4,
+          "doc_id": "doc_11",
+          "content_preview": "一线城市（北上广深）酒店住宿不超过500元/晚。二线城市300元/晚，三线城市200元/晚。",
+          "score": 0.2692733108997345
+        },
+        {
+          "rank": 5,
+          "doc_id": "doc_24",
+          "content_preview": "普通员工不得预订商务舱或头等舱。商务舱仅限副总裁及以上级别或长途国际航班。",
+          "score": 0.21795454621315002
+        }
+      ]
+    },
+    {
+      "query": "员工入职需要什么材料？",
+      "rewritten_query": "员工入职需要什么材料",
+      "expected_doc_id": "distractor",
+      "difficulty": "distractor",
+      "rank": 1,
+      "is_correct": true,
+      "top_1_doc_id": "doc_01",
+      "top_1_score": 0.4441164433956146,
+      "retrieved_docs": [
+        {
+          "rank": 1,
+          "doc_id": "doc_01",
+          "content_preview": "报销材料清单：1)差旅申请单（已审批）2)机票行程单或火车票 3)酒店发票 4)其他交通费发票 5)费用明细表。所有材料需在出差结束后10个工作日内提交。",
+          "score": 0.4441164433956146
+        },
+        {
+          "rank": 2,
+          "doc_id": "doc_22",
+          "content_preview": "差旅审批流程：国内出差需提前3天申请。紧急出差（48小时内）需部门经理特批。",
+          "score": 0.302975594997406
+        },
+        {
+          "rank": 3,
+          "doc_id": "doc_03",
+          "content_preview": "机票报销需提供行程单和发票。经济舱全额报销，商务舱需符合职级或航程要求。",
+          "score": 0.28804293274879456
+        },
+        {
+          "rank": 4,
+          "doc_id": "doc_16",
+          "content_preview": "差旅审批流程：国内出差需提前3天申请，国际出差需提前7天申请。紧急出差（48小时内）需部门经理特批。",
+          "score": 0.2853848338127136
+        },
+        {
+          "rank": 5,
+          "doc_id": "doc_17",
+          "content_preview": "机票报销需要提供正规发票和行程单。经济舱可全额报销，票价需在合理范围。",
+          "score": 0.23535701632499695
+        }
+      ]
+    },
+    {
+      "query": "如何申请年假？",
+      "rewritten_query": "如何申请年假",
+      "expected_doc_id": "distractor",
+      "difficulty": "distractor",
+      "rank": 1,
+      "is_correct": true,
+      "top_1_doc_id": "doc_13",
+      "top_1_score": 0.3406645655632019,
+      "retrieved_docs": [
+        {
+          "rank": 1,
+          "doc_id": "doc_13",
+          "content_preview": "周末出差补贴标准与工作日相同，每天200元。如占用休息日，可申请调休，调休时长为实际出差天数。",
+          "score": 0.3406645655632019
+        },
+        {
+          "rank": 2,
+          "doc_id": "doc_04",
+          "content_preview": "国际出差需提前7天申请，并提交详细行程和预算。国内出差提前3天即可。",
+          "score": 0.26753169298171997
+        },
+        {
+          "rank": 3,
+          "doc_id": "doc_16",
+          "content_preview": "差旅审批流程：国内出差需提前3天申请，国际出差需提前7天申请。紧急出差（48小时内）需部门经理特批。",
+          "score": 0.24131688475608826
+        },
+        {
+          "rank": 4,
+          "doc_id": "doc_22",
+          "content_preview": "差旅审批流程：国内出差需提前3天申请。紧急出差（48小时内）需部门经理特批。",
+          "score": 0.23870286345481873
+        },
+        {
+          "rank": 5,
+          "doc_id": "doc_01",
+          "content_preview": "报销材料清单：1)差旅申请单（已审批）2)机票行程单或火车票 3)酒店发票 4)其他交通费发票 5)费用明细表。所有材料需在出差结束后10个工作日内提交。",
+          "score": 0.1911567896604538
+        }
+      ]
+    }
+  ]
+}

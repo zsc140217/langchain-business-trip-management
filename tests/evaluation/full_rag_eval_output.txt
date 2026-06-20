@@ -1,0 +1,41 @@
+E:\Desktop\langchain-business-trip-management\tests\evaluation\run_full_rag_eval.py:24: DeprecationWarning: `langchain-community` is being sunset and is no longer actively maintained. See https://github.com/langchain-ai/langchain-community/issues/674 for details and migration guidance toward standalone integration packages.
+  from langchain_community.vectorstores import FAISS
+C:\Users\Lenovo\AppData\Local\Programs\Python\Python312\Lib\site-packages\jieba\_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+[INFO] Loading test data...
+[INFO] Loaded 20 queries and 29 documents
+[INFO] Loading embedding model: E:\Desktop\langchain-business-trip-management\learning\models\bge-large-zh-travel-finetuned
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights: 100%|██████████| 391/391 [00:00<00:00, 5044.44it/s]
+E:\Desktop\langchain-business-trip-management\tests\evaluation\run_full_rag_eval.py:66: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  print(f"[INFO] Embedding dimension: {self.embedding_model.get_sentence_embedding_dimension()}")
+Building prefix dict from the default dictionary ...
+Dumping model to file cache C:\Users\Lenovo\AppData\Local\Temp\jieba.cache
+Loading model cost 0.396 seconds.
+Prefix dict has been built successfully.
+[INFO] Model loaded in 0.22s
+[INFO] Embedding dimension: 1024
+[INFO] Initializing LLM for query rewriting...
+
+======================================================================
+完整RAG系统评估 - 配置4：微调模型 + Query重写 + 混合检索
+======================================================================
+[INFO] Test queries: 20
+[INFO] Document corpus: 29
+[INFO] Creating hybrid retriever with 29 documents...
+[INFO] Building BM25 index...
+[INFO] Building FAISS vector store...
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:06<00:00,  6.41s/it]Batches: 100%|██████████| 1/1 [00:06<00:00,  6.41s/it]
+`embedding_function` is expected to be an Embeddings object, support for passing in a function will soon be removed.
+[INFO] Hybrid retriever ready!
+
+[INFO] Evaluating queries with hybrid retrieval...
+Traceback (most recent call last):
+  File "E:\Desktop\langchain-business-trip-management\tests\evaluation\run_full_rag_eval.py", line 424, in <module>
+    main()
+  File "E:\Desktop\langchain-business-trip-management\tests\evaluation\run_full_rag_eval.py", line 412, in main
+    result = evaluator.evaluate(test_data)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Desktop\langchain-business-trip-management\tests\evaluation\run_full_rag_eval.py", line 224, in evaluate
+    expected_doc_id = query_data["expected_doc_id"]
+                      ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+KeyError: 'expected_doc_id'

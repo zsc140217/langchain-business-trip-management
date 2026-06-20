@@ -10,12 +10,15 @@ public VectorStore vectorStore(EmbeddingModel embeddingModel) {
 """
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import DashScopeEmbeddings
-from langchain_core.messages import Document
-from typing import List
+from langchain_core.documents import Document
+from typing import List, Literal
 import os
 
 
-def create_vectorstore(documents: List[Document]):
+def create_vectorstore(
+    documents: List[Document],
+    embedding_type: Literal["cloud", "local_finetuned"] = "cloud"
+):
     """
     创建FAISS向量存储
 

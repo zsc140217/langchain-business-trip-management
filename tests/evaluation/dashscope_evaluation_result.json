@@ -1,0 +1,521 @@
+{
+  "config": "dashscope_cloud_api_with_simple_rewriter",
+  "model": "text-embedding-v2",
+  "provider": "DashScope",
+  "accuracy_at_1": 0.3333333333333333,
+  "recall_at_5": 0.8333333333333334,
+  "mrr": 0.4680555555555555,
+  "avg_latency_ms": 569.8599696159363,
+  "by_difficulty": {
+    "easy": {
+      "accuracy_at_1": 0.4,
+      "recall_at_5": 1.0,
+      "count": 5
+    },
+    "medium": {
+      "accuracy_at_1": 0.25,
+      "recall_at_5": 0.75,
+      "count": 4
+    },
+    "hard": {
+      "accuracy_at_1": 0.3333333333333333,
+      "recall_at_5": 0.6666666666666666,
+      "count": 3
+    },
+    "distractor": {
+      "accuracy_at_1": 0,
+      "recall_at_5": 0,
+      "count": 0
+    }
+  },
+  "query_rewrites": [
+    {
+      "original": "去北京出差能住什么价位的酒店？",
+      "rewritten": "去北京出差能住什么价位的酒店",
+      "difficulty": "easy"
+    },
+    {
+      "original": "经济舱的机票可以报销吗？",
+      "rewritten": "经济舱的机票可以报销",
+      "difficulty": "easy"
+    },
+    {
+      "original": "出差补贴一天给多少钱？",
+      "rewritten": "出差补贴一天给费用标准",
+      "difficulty": "easy"
+    },
+    {
+      "original": "火车票能报销吗？",
+      "rewritten": "火车票能报销",
+      "difficulty": "easy"
+    },
+    {
+      "original": "出差住宿发票丢了怎么办？",
+      "rewritten": "出差住宿发票丢了怎么办",
+      "difficulty": "easy"
+    },
+    {
+      "original": "去魔都出差住宿预算多少？",
+      "rewritten": "去上海出差住宿预算多少",
+      "difficulty": "medium"
+    },
+    {
+      "original": "副总裁能坐商务舱吗？",
+      "rewritten": "副总裁能坐商务舱",
+      "difficulty": "medium"
+    },
+    {
+      "original": "从北京到成都应该坐飞机还是高铁？",
+      "rewritten": "从北京到成都应该坐飞机还是高铁",
+      "difficulty": "medium"
+    },
+    {
+      "original": "周末加班出差有额外补贴吗？",
+      "rewritten": "周末加班出差有额外补贴",
+      "difficulty": "medium"
+    },
+    {
+      "original": "出差期间生病就医费用能报吗？",
+      "rewritten": "出差期间生病就医费用能报",
+      "difficulty": "medium"
+    },
+    {
+      "original": "一次出差去多个城市，住宿标准怎么算？",
+      "rewritten": "一次出差去多个城市，住宿标准怎么算",
+      "difficulty": "medium"
+    },
+    {
+      "original": "提前预订机票有折扣吗？",
+      "rewritten": "提前预订机票有折扣",
+      "difficulty": "medium"
+    },
+    {
+      "original": "商务舱和经济舱的差别是什么？",
+      "rewritten": "商务舱和经济舱的差别是什么",
+      "difficulty": "hard"
+    },
+    {
+      "original": "杭州属于几线城市？住宿标准是多少？",
+      "rewritten": "杭州属于几线城市住宿标准是多少",
+      "difficulty": "hard"
+    },
+    {
+      "original": "国际出差的政策和国内一样吗？",
+      "rewritten": "国际出差的政策和国内一样",
+      "difficulty": "hard"
+    },
+    {
+      "original": "出差超过一个月，标准有变化吗？",
+      "rewritten": "出差超过一个月，标准有变化",
+      "difficulty": "hard"
+    },
+    {
+      "original": "CEO出差有什么特殊待遇？",
+      "rewritten": "CEO出差有什么特殊待遇",
+      "difficulty": "hard"
+    },
+    {
+      "original": "公司年会预算是多少？",
+      "rewritten": "公司年会预算是多少",
+      "difficulty": "distractor"
+    },
+    {
+      "original": "员工入职需要什么材料？",
+      "rewritten": "员工入职需要什么材料",
+      "difficulty": "distractor"
+    },
+    {
+      "original": "如何申请年假？",
+      "rewritten": "如何申请年假",
+      "difficulty": "distractor"
+    }
+  ],
+  "failed_queries": [
+    {
+      "query": "经济舱的机票可以报销吗？",
+      "rewritten_query": "经济舱的机票可以报销",
+      "expected": "doc_03",
+      "got": "doc_05",
+      "rank": 5,
+      "difficulty": "easy"
+    },
+    {
+      "query": "出差补贴一天给多少钱？",
+      "rewritten_query": "出差补贴一天给费用标准",
+      "expected": "doc_13",
+      "got": "doc_20",
+      "rank": 3,
+      "difficulty": "easy"
+    },
+    {
+      "query": "火车票能报销吗？",
+      "rewritten_query": "火车票能报销",
+      "expected": "doc_09",
+      "got": "doc_01",
+      "rank": 3,
+      "difficulty": "easy"
+    },
+    {
+      "query": "副总裁能坐商务舱吗？",
+      "rewritten_query": "副总裁能坐商务舱",
+      "expected": "doc_23",
+      "got": "doc_29",
+      "rank": 4,
+      "difficulty": "medium"
+    },
+    {
+      "query": "周末加班出差有额外补贴吗？",
+      "rewritten_query": "周末加班出差有额外补贴",
+      "expected": "doc_12",
+      "got": "doc_13",
+      "rank": 4,
+      "difficulty": "medium"
+    },
+    {
+      "query": "出差期间生病就医费用能报吗？",
+      "rewritten_query": "出差期间生病就医费用能报",
+      "expected": "doc_09",
+      "got": "doc_01",
+      "rank": -1,
+      "difficulty": "medium"
+    },
+    {
+      "query": "商务舱和经济舱的差别是什么？",
+      "rewritten_query": "商务舱和经济舱的差别是什么",
+      "expected": "doc_03",
+      "got": "doc_28",
+      "rank": -1,
+      "difficulty": "hard"
+    },
+    {
+      "query": "杭州属于几线城市？住宿标准是多少？",
+      "rewritten_query": "杭州属于几线城市住宿标准是多少",
+      "expected": "doc_11",
+      "got": "doc_19",
+      "rank": 4,
+      "difficulty": "hard"
+    }
+  ],
+  "detailed_results": [
+    {
+      "query": "去北京出差能住什么价位的酒店？",
+      "rewritten_query": "去北京出差能住什么价位的酒店",
+      "expected_doc_id": "doc_06",
+      "retrieved_doc_ids": [
+        "doc_06",
+        "doc_19",
+        "doc_08",
+        "doc_11",
+        "doc_12"
+      ],
+      "rank": 1,
+      "is_correct": true,
+      "difficulty": "easy",
+      "retrieve_time_ms": 571.5911388397217
+    },
+    {
+      "query": "经济舱的机票可以报销吗？",
+      "rewritten_query": "经济舱的机票可以报销",
+      "expected_doc_id": "doc_03",
+      "retrieved_doc_ids": [
+        "doc_05",
+        "doc_10",
+        "doc_21",
+        "doc_17",
+        "doc_03"
+      ],
+      "rank": 5,
+      "is_correct": false,
+      "difficulty": "easy",
+      "retrieve_time_ms": 539.0341281890869
+    },
+    {
+      "query": "出差补贴一天给多少钱？",
+      "rewritten_query": "出差补贴一天给费用标准",
+      "expected_doc_id": "doc_13",
+      "retrieved_doc_ids": [
+        "doc_20",
+        "doc_25",
+        "doc_13",
+        "doc_12",
+        "doc_02"
+      ],
+      "rank": 3,
+      "is_correct": false,
+      "difficulty": "easy",
+      "retrieve_time_ms": 568.321704864502
+    },
+    {
+      "query": "火车票能报销吗？",
+      "rewritten_query": "火车票能报销",
+      "expected_doc_id": "doc_09",
+      "retrieved_doc_ids": [
+        "doc_01",
+        "doc_05",
+        "doc_09",
+        "doc_21",
+        "doc_03"
+      ],
+      "rank": 3,
+      "is_correct": false,
+      "difficulty": "easy",
+      "retrieve_time_ms": 619.8945045471191
+    },
+    {
+      "query": "出差住宿发票丢了怎么办？",
+      "rewritten_query": "出差住宿发票丢了怎么办",
+      "expected_doc_id": "doc_01",
+      "retrieved_doc_ids": [
+        "doc_01",
+        "doc_22",
+        "doc_16",
+        "doc_03",
+        "doc_04"
+      ],
+      "rank": 1,
+      "is_correct": true,
+      "difficulty": "easy",
+      "retrieve_time_ms": 534.365177154541
+    },
+    {
+      "query": "去魔都出差住宿预算多少？",
+      "rewritten_query": "去上海出差住宿预算多少",
+      "expected_doc_id": null,
+      "retrieved_doc_ids": [
+        "doc_19",
+        "doc_08",
+        "doc_06",
+        "doc_20",
+        "doc_12"
+      ],
+      "rank": -1,
+      "is_correct": null,
+      "difficulty": "medium",
+      "retrieve_time_ms": 586.4543914794922
+    },
+    {
+      "query": "副总裁能坐商务舱吗？",
+      "rewritten_query": "副总裁能坐商务舱",
+      "expected_doc_id": "doc_23",
+      "retrieved_doc_ids": [
+        "doc_29",
+        "doc_24",
+        "doc_28",
+        "doc_23",
+        "doc_26"
+      ],
+      "rank": 4,
+      "is_correct": false,
+      "difficulty": "medium",
+      "retrieve_time_ms": 593.4171676635742
+    },
+    {
+      "query": "从北京到成都应该坐飞机还是高铁？",
+      "rewritten_query": "从北京到成都应该坐飞机还是高铁",
+      "expected_doc_id": null,
+      "retrieved_doc_ids": [
+        "doc_09",
+        "doc_15",
+        "doc_14",
+        "doc_18",
+        "doc_05"
+      ],
+      "rank": -1,
+      "is_correct": null,
+      "difficulty": "medium",
+      "retrieve_time_ms": 575.6933689117432
+    },
+    {
+      "query": "周末加班出差有额外补贴吗？",
+      "rewritten_query": "周末加班出差有额外补贴",
+      "expected_doc_id": "doc_12",
+      "retrieved_doc_ids": [
+        "doc_13",
+        "doc_20",
+        "doc_25",
+        "doc_12",
+        "doc_02"
+      ],
+      "rank": 4,
+      "is_correct": false,
+      "difficulty": "medium",
+      "retrieve_time_ms": 528.7580490112305
+    },
+    {
+      "query": "出差期间生病就医费用能报吗？",
+      "rewritten_query": "出差期间生病就医费用能报",
+      "expected_doc_id": "doc_09",
+      "retrieved_doc_ids": [
+        "doc_01",
+        "doc_20",
+        "doc_25",
+        "doc_12",
+        "doc_02"
+      ],
+      "rank": -1,
+      "is_correct": false,
+      "difficulty": "medium",
+      "retrieve_time_ms": 564.6464824676514
+    },
+    {
+      "query": "一次出差去多个城市，住宿标准怎么算？",
+      "rewritten_query": "一次出差去多个城市，住宿标准怎么算",
+      "expected_doc_id": "doc_06",
+      "retrieved_doc_ids": [
+        "doc_06",
+        "doc_19",
+        "doc_08",
+        "doc_20",
+        "doc_25"
+      ],
+      "rank": 1,
+      "is_correct": true,
+      "difficulty": "medium",
+      "retrieve_time_ms": 587.3429775238037
+    },
+    {
+      "query": "提前预订机票有折扣吗？",
+      "rewritten_query": "提前预订机票有折扣",
+      "expected_doc_id": null,
+      "retrieved_doc_ids": [
+        "doc_04",
+        "doc_17",
+        "doc_03",
+        "doc_05",
+        "doc_10"
+      ],
+      "rank": -1,
+      "is_correct": null,
+      "difficulty": "medium",
+      "retrieve_time_ms": 564.8961067199707
+    },
+    {
+      "query": "商务舱和经济舱的差别是什么？",
+      "rewritten_query": "商务舱和经济舱的差别是什么",
+      "expected_doc_id": "doc_03",
+      "retrieved_doc_ids": [
+        "doc_28",
+        "doc_23",
+        "doc_29",
+        "doc_27",
+        "doc_14"
+      ],
+      "rank": -1,
+      "is_correct": false,
+      "difficulty": "hard",
+      "retrieve_time_ms": 566.9629573822021
+    },
+    {
+      "query": "杭州属于几线城市？住宿标准是多少？",
+      "rewritten_query": "杭州属于几线城市住宿标准是多少",
+      "expected_doc_id": "doc_11",
+      "retrieved_doc_ids": [
+        "doc_19",
+        "doc_08",
+        "doc_06",
+        "doc_11",
+        "doc_20"
+      ],
+      "rank": 4,
+      "is_correct": false,
+      "difficulty": "hard",
+      "retrieve_time_ms": 560.7154369354248
+    },
+    {
+      "query": "国际出差的政策和国内一样吗？",
+      "rewritten_query": "国际出差的政策和国内一样",
+      "expected_doc_id": "doc_04",
+      "retrieved_doc_ids": [
+        "doc_04",
+        "doc_16",
+        "doc_20",
+        "doc_14",
+        "doc_12"
+      ],
+      "rank": 1,
+      "is_correct": true,
+      "difficulty": "hard",
+      "retrieve_time_ms": 551.3486862182617
+    },
+    {
+      "query": "出差超过一个月，标准有变化吗？",
+      "rewritten_query": "出差超过一个月，标准有变化",
+      "expected_doc_id": null,
+      "retrieved_doc_ids": [
+        "doc_13",
+        "doc_16",
+        "doc_04",
+        "doc_22",
+        "doc_20"
+      ],
+      "rank": -1,
+      "is_correct": null,
+      "difficulty": "hard",
+      "retrieve_time_ms": 581.780195236206
+    },
+    {
+      "query": "CEO出差有什么特殊待遇？",
+      "rewritten_query": "CEO出差有什么特殊待遇",
+      "expected_doc_id": null,
+      "retrieved_doc_ids": [
+        "doc_24",
+        "doc_29",
+        "doc_20",
+        "doc_25",
+        "doc_28"
+      ],
+      "rank": -1,
+      "is_correct": null,
+      "difficulty": "hard",
+      "retrieve_time_ms": 590.0704860687256
+    },
+    {
+      "query": "公司年会预算是多少？",
+      "rewritten_query": "公司年会预算是多少",
+      "expected_doc_id": null,
+      "retrieved_doc_ids": [
+        "doc_23",
+        "doc_20",
+        "doc_25",
+        "doc_27",
+        "doc_29"
+      ],
+      "rank": -1,
+      "is_correct": null,
+      "difficulty": "distractor",
+      "retrieve_time_ms": 604.4793128967285
+    },
+    {
+      "query": "员工入职需要什么材料？",
+      "rewritten_query": "员工入职需要什么材料",
+      "expected_doc_id": null,
+      "retrieved_doc_ids": [
+        "doc_28",
+        "doc_24",
+        "doc_29",
+        "doc_01",
+        "doc_16"
+      ],
+      "rank": -1,
+      "is_correct": null,
+      "difficulty": "distractor",
+      "retrieve_time_ms": 548.5694408416748
+    },
+    {
+      "query": "如何申请年假？",
+      "rewritten_query": "如何申请年假",
+      "expected_doc_id": null,
+      "retrieved_doc_ids": [
+        "doc_13",
+        "doc_16",
+        "doc_22",
+        "doc_04",
+        "doc_20"
+      ],
+      "rank": -1,
+      "is_correct": null,
+      "difficulty": "distractor",
+      "retrieve_time_ms": 558.8576793670654
+    }
+  ]
+}

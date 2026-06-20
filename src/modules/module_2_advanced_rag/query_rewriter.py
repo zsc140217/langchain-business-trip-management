@@ -115,7 +115,9 @@ class EnterpriseQueryRewriter:
 
         try:
             # 3. 调用LLM改写（Temperature=0.1，稳定性优先）
-            rewritten_query = self.llm.predict(prompt, temperature=0.1)
+            from langchain_core.messages import HumanMessage
+            response = self.llm.invoke([HumanMessage(content=prompt)])
+            rewritten_query = response.content
 
             # 4. 清理结果
             rewritten_query = self._clean_result(rewritten_query)

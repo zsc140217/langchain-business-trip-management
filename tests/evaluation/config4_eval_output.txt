@@ -1,0 +1,106 @@
+[INFO] Using fine-tuned model: ..\..\learning\models\bge-large-zh-travel-finetuned
+[INFO] Loading model: ..\..\learning\models\bge-large-zh-travel-finetuned
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights:  28%|██▊       | 108/391 [00:00<00:00, 1065.22it/s]Loading weights:  91%|█████████ | 355/391 [00:00<00:00, 1872.69it/s]Loading weights: 100%|██████████| 391/391 [00:00<00:00, 1826.39it/s]
+[INFO] Model loaded in 0.87s
+
+======================================================================
+Configuration 4: Fine-tuned Model + Query Rewriter
+======================================================================
+[INFO] Test queries: 20
+[INFO] Document corpus: 29
+[INFO] Encoding 29 documents...
+
+[INFO] Evaluating queries with query rewriting...
+  [ 1/20] [OK] 去北京出差能住什么价位的酒店？
+       → 去北京出差住宿费用标准的酒店
+  [ 2/20] [FAIL] 经济舱的机票可以报销吗？
+       → 经济舱的机票可以报销
+  [ 3/20] [FAIL] 出差补贴一天给多少钱？
+       → 出差补贴一天给多少钱
+  [ 4/20] [FAIL] 火车票能报销吗？
+       → 火车票能报销
+  [ 5/20] [OK] 出差住宿发票丢了怎么办？
+       → 出差住宿发票丢了怎么办
+  [ 6/20] [FAIL] 去魔都出差住宿预算多少？
+       → 去上海出差住宿预算多少
+  [ 7/20] [FAIL] 副总裁能坐商务舱吗？
+       → 副总裁是否可以商务舱
+  [ 8/20] [FAIL] 从北京到成都应该坐飞机还是高铁？
+       → 从北京到成都交通工具选择飞机还是高铁
+  [ 9/20] [OK] 周末加班出差有额外补贴吗？
+       → 周末加班出差补贴标准
+  [10/20] [FAIL] 出差期间生病就医费用能报吗？
+       → 出差期间生病就医费用是否可以报销
+  [11/20] [OK] 一次出差去多个城市，住宿标准怎么算？
+       → 一次出差去多个城市，住宿标准怎么算
+  [12/20] [FAIL] 提前预订机票有折扣吗？
+       → 提前预订机票有折扣
+  [13/20] [OK] 商务舱和经济舱的差别是什么？
+       → 商务舱和经济舱的差别是什么
+  [14/20] [OK] 杭州属于几线城市？住宿标准是多少？
+       → 杭州属于几线城市住宿标准是多少
+  [15/20] [FAIL] 国际出差的政策和国内一样吗？
+       → 国际出差的政策和国内一样
+  [16/20] [OK] 出差超过一个月，标准有变化吗？
+       → 出差超过一个月，标准有变化
+  [17/20] [FAIL] CEO出差有什么特殊待遇？
+       → CEO出差有什么特殊待遇
+  [18/20] [OK] 公司年会预算是多少？
+       → 公司年会预算是多少
+  [19/20] [OK] 员工入职需要什么材料？
+       → 员工入职需要什么材料
+  [20/20] [OK] 如何申请年假？
+       → 如何申请年假
+
+======================================================================
+EVALUATION RESULTS
+======================================================================
+
+--- Overall Metrics ---
+Accuracy@1:  41.18%
+Recall@5:    76.47%
+MRR:         0.5343
+
+--- By Difficulty ---
+Easy         Accuracy@1: 40.00%  (n=5)
+Medium       Accuracy@1: 28.57%  (n=7)
+Hard         Accuracy@1: 60.00%  (n=5)
+Distractor   Accuracy@1: 100.00%  (n=3)
+
+--- Query Rewrites (Sample) ---
+  Original:  去北京出差能住什么价位的酒店？
+  Rewritten: 去北京出差住宿费用标准的酒店
+
+  Original:  经济舱的机票可以报销吗？
+  Rewritten: 经济舱的机票可以报销
+
+  Original:  出差补贴一天给多少钱？
+  Rewritten: 出差补贴一天给多少钱
+
+  Original:  火车票能报销吗？
+  Rewritten: 火车票能报销
+
+  Original:  出差住宿发票丢了怎么办？
+  Rewritten: 出差住宿发票丢了怎么办
+
+
+--- Failed Queries (10) ---
+  Query: 经济舱的机票可以报销吗？
+  Expected: doc_05 | Got: doc_21 | Rank: 2
+
+  Query: 出差补贴一天给多少钱？
+  Expected: doc_12 | Got: doc_20 | Rank: 3
+
+  Query: 火车票能报销吗？
+  Expected: doc_09 | Got: doc_05 | Rank: -1
+
+  Query: 去魔都出差住宿预算多少？
+  Expected: doc_11 | Got: doc_06 | Rank: 3
+
+  Query: 副总裁能坐商务舱吗？
+  Expected: doc_23 | Got: doc_24 | Rank: 3
+
+
+[OK] Results saved to: E:\Desktop\langchain-business-trip-management\tests\evaluation\config_4_evaluation_result.json
+
+======================================================================

@@ -1,0 +1,20 @@
+{
+  "metadata": {
+    "total_questions": 50,
+    "distribution": {
+      "simple": 15,
+      "medium": 20,
+      "reasoning": 10,
+      "multi_context": 5
+    },
+    "knowledge_base_documents": [
+      "travel_policy",
+      "SPRING_AI_VS_LANGCHAIN", 
+      "RAG_EVALUATION_GUIDE",
+      "INTERVIEW_CHEAT_SHEET",
+      "API_DOCS"
+    ],
+    "generated_date": "2026-06-04",
+    "description": "Test dataset for RAG system evaluation"
+  },
+  "test_cases": [
