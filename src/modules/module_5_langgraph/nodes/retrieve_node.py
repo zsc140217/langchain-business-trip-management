@@ -59,9 +59,9 @@ def retrieve_node(state: TravelAgentState) -> Dict[str, Any]:
         retriever = get_retriever(vectorstore, k=DEFAULT_RETRIEVAL_TOP_K)
 
         # 执行检索
-        docs = retriever.get_relevant_documents(query)
+        docs = retriever.invoke(query)
 
-        logger.info(f"✅ 检索到 {len(docs)} 个文档")
+        logger.info(f"检索到 {len(docs)} 个文档")
 
         return {"documents": docs}
 

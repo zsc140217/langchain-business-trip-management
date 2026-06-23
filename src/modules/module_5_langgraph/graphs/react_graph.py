@@ -31,23 +31,23 @@ def create_react_graph():
     Returns:
         编译后的图
     """
-    print("🔧 创建ReAct图（条件分支 + 循环）...")
-    
+    print("[+] Creating ReAct Graph (Conditional Edges + Loop)...")
+
     workflow = StateGraph(TravelAgentState)
-    
+
     # 添加节点
     workflow.add_node("rewrite", rewrite_node)
     workflow.add_node("retrieve", retrieve_node)
     workflow.add_node("agent", agent_node)
     workflow.add_node("tools", tools_node)
     workflow.add_node("answer", answer_node)
-    
+
     # 添加边
     workflow.set_entry_point("rewrite")
     workflow.add_edge("rewrite", "retrieve")
     workflow.add_edge("retrieve", "agent")
-    
-    # 🔑 关键：条件边（T1.2核心）
+
+    # 关键：条件边（T1.2核心）
     workflow.add_conditional_edges(
         "agent",
         should_continue,
@@ -56,21 +56,21 @@ def create_react_graph():
             "end": "answer"     # 无tool_calls → 生成答案
         }
     )
-    
-    # 🔁 关键：循环边
+
+    # 关键：循环边
     workflow.add_edge("tools", "agent")  # 工具执行后回到agent
-    
+
     # 结束
     workflow.add_edge("answer", END)
-    
+
     graph = workflow.compile()
-    
-    print("✅ ReAct图创建完成！")
-    print("\n流程图：")
-    print("  START → rewrite → retrieve → agent")
-    print("                              ↓     ↓")
-    print("                          answer ← tools")
-    print("                              ↓     ↓")
+
+    print("[OK] ReAct Graph Created!")
+    print("\nFlow Diagram:")
+    print("  START -> rewrite -> retrieve -> agent")
+    print("                              |     |")
+    print("                          answer <- tools")
+    print("                              |     |")
     print("                            END   (loop)")
     
     return graph
@@ -93,16 +93,16 @@ def run_react_graph(query: str, max_iterations: int = 3):
     initial_state = create_initial_state(query, max_iterations=max_iterations)
     
     print(f"\n{'='*60}")
-    print(f"🚀 运行ReAct图")
-    print(f"查询：{query}")
-    print(f"最大迭代：{max_iterations}")
+    print(f"[RUN] ReAct Graph")
+    print(f"Query: {query}")
+    print(f"Max Iterations: {max_iterations}")
     print(f"{'='*60}\n")
-    
+
     final_state = graph.invoke(initial_state)
-    
+
     print(f"\n{'='*60}")
-    print(f"✅ 执行完成")
-    print(f"实际迭代：{final_state.get('iteration', 0)}")
+    print(f"[OK] Execution Complete")
+    print(f"Actual Iterations: {final_state.get('iteration', 0)}")
     print(f"{'='*60}\n")
     
     return final_state
@@ -110,24 +110,24 @@ def run_react_graph(query: str, max_iterations: int = 3):
 
 # 测试代码
 if __name__ == "__main__":
-    print("测试ReAct图...\n")
-    
+    print("Testing ReAct Graph...\n")
+
     query = "上海和北京的住宿标准对比"
-    
+
     try:
         result = run_react_graph(query, max_iterations=3)
-        
-        print("最终答案：")
+
+        print("Final Answer:")
         print("-" * 60)
-        print(result.get("answer", "未生成答案"))
+        print(result.get("answer", "No answer generated"))
         print("-" * 60)
-        
-        print(f"\n迭代次数：{result.get('iteration', 0)}")
-        print(f"文档数量：{len(result.get('documents', []))}")
-        
-        print("\n✅ ReAct图测试成功！")
-        
+
+        print(f"\nIterations: {result.get('iteration', 0)}")
+        print(f"Documents: {len(result.get('documents', []))}")
+
+        print("\n[OK] ReAct Graph Test Passed!")
+
     except Exception as e:
-        print(f"\n❌ 测试失败：{e}")
+        print(f"\n[ERROR] Test Failed: {e}")
         import traceback
         traceback.print_exc()
