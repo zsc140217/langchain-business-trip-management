@@ -5,6 +5,7 @@ __pycache__/
 *.so
 .Python
 venv/
+venv_*/
 env/
 ENV/
 
@@ -23,3 +24,26 @@ ENV/
 
 # Logs
 *.log
+
+# Models (large files)
+learning/models/*/
+*.safetensors
+*.bin
+*.pth
+*.onnx
+
+# Node modules
+node_modules/
+package-lock.json
+
+# Test coverage
+.coverage
+htmlcov/
+
+# Build artifacts
+*.dll
+*.lib
+*.exe.stackdump
+
+# Test results
+test_result.json
