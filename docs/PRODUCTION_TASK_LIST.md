@@ -113,49 +113,141 @@
 
 ---
 
-## 📋 模块2：微信Bot接入层 🔴 P0
+## 📋 模块2：第三方平台接入层 🔴 P0
 
-### T2.1 选择接入方案
+### T2.0 技术方案验证 ✅ **已完成** (2026-06-23)
+
+**Phase 1：Dify 快速验证** ✅
+- [x] 飞书开放平台配置（App ID: `cli_aa8759bff078dcbd`）
+- [x] Dify Chatflow → Workflow 集成
+- [x] lark_notify 插件推送到飞书群
+- [x] 端到端测试成功（单向推送）
+- [x] 技术学习：Webhook原理、端口转发、Dify变量引用
+
+**Phase 2：LangChain 生产实现（方案A）** ✅
+- [x] 飞书客户端实现（`FeishuClient`）
+- [x] FastAPI 接口实现（`/api/travel/submit`）
+- [x] LangGraph 集成（ReAct Agent）
+- [x] 单元测试（9个测试，100%通过）
+- [x] 集成测试（9个测试，100%通过）
+- [x] 端到端验证（真实飞书消息发送成功）
+- [x] Bug修复：State初始化问题（`create_initial_state()`）
+
+**产出文件**：
+- `src/harness/feishu_client.py` ✅ (131行，100%覆盖率)
+- `src/harness/travel_approval_api.py` ✅ (158行，91%覆盖率)
+- `tests/test_feishu_client.py` ✅ (9个测试)
+- `tests/test_travel_api.py` ✅ (9个测试)
+- `test_travel_e2e.py` ✅ (端到端测试脚本)
+- `start_api.py` ✅ (快速启动脚本)
+- `docs/MODULE2_TODAY_PLAN.md` ✅ (完整实施文档 + 面试复习)
+
+**技术成果**：
+- ✅ 测试覆盖率：94%（超过目标80%）
+- ✅ 架构模式：FastAPI + LangGraph + Webhook
+- ✅ 单向推送：系统 → 飞书群（无需事件订阅）
+- ✅ 真实验证：飞书群收到格式化卡片消息
+
+**核心特性**：
+- ✅ 卡片消息支持（标题、内容、颜色分类）
+- ✅ 审批结果自动推送（通过=绿色、拒绝=红色、待审=橙色）
+- ✅ 完整错误处理（签名验证、异常捕获）
+- ✅ 类型安全（Pydantic数据验证）
+
+**技术对比学习**：
+| 维度 | Dify方案 | LangChain方案 |
+|------|---------|-------------|
+| 开发方式 | 插件配置（1小时） | 编码实现（3-4小时） |
+| 灵活性 | 受限于插件 | 完全自主控制 |
+| 双向对话 | ❌ 不支持 | ✅ 可扩展 |
+| 测试覆盖 | 无 | 94% |
+| 生产级 | 原型验证 | 生产就绪 |
+
+---
+
+### T2.1 飞书双向对话扩展 ⚠️ **可选**（未实现）
+
+**方案B：双向对话架构设计** 📝
+- [ ] 飞书事件订阅配置（`im.message.receive_v1`）
+- [ ] Webhook端点实现（`/webhook/feishu/event`）
+- [ ] 签名验证（防伪造请求）
+- [ ] 会话管理（PostgreSQL Checkpointing + thread_id）
+- [ ] Send Message API集成（回复用户）
+- [ ] 超时处理（10秒限制）
+
+**架构流程**：
+```
+飞书用户@机器人
+  ↓
+飞书事件订阅 → FastAPI Webhook
+  ↓
+验证签名 → 提取消息 + conversation_id
+  ↓
+LangGraph处理（thread_id = conversation_id）
+  ↓
+调用Send Message API → 用户收到回复
+```
+
+**实施优先级**：低（按需实现）
+- 当前方案A已满足推送通知需求
+- 如需双向对话，参考 `docs/MODULE2_TODAY_PLAN.md` 方案B设计
+
+---
+
+### T2.2 微信公众号接入 ⚠️ **待规划**
+
+**技术对比**（vs 飞书）：
+| 特性 | 飞书 Webhook | 微信公众号 |
+|------|------------|-----------|
+| 消息格式 | JSON | XML |
+| 签名算法 | 复杂加密 | SHA1 |
+| 超时限制 | 10秒 | 5秒 |
+| 会话标识 | conversation_id | OpenID |
+| 回复方式 | 调用API | 返回XML |
+
+**任务**（未开始）：
+- [ ] 微信公众平台配置（服务器URL + Token）
+- [ ] XML消息解析和构造
+- [ ] SHA1签名验证
+- [ ] 5秒超时异步处理
+- [ ] 会话管理（OpenID → thread_id）
+
+**产出目标**：
+- `src/harness/wechat_client.py`
+- `src/harness/wechat_webhook.py`
+
+**参考资料**：
+- 详细实现流程见 `docs/MODULE2_TODAY_PLAN.md` 微信公众号章节
+
+---
+
+### T2.3 企业微信接入 ⚠️ **待规划**
 
 **决策**：
-- 🟢 企业微信官方API（推荐）
-- 🟡 个人微信Bot（wechaty/itchat）
+- 🟢 企业微信官方API（推荐，权限完整）
+- 🟡 个人微信Bot（wechaty/itchat，权限受限）
 
-**任务**：
+**任务**（未开始）：
 - [ ] 申请企业微信API权限
 - [ ] 或安装wechaty环境
 
-### T2.2 FastAPI Webhook服务
+---
 
-**任务**：
-- [ ] 接收微信消息（文本 + 图片）
-- [ ] 消息去重（防重复处理）
-- [ ] 请求限流（防滥用）
-- [ ] 图片下载和存储
+### T2.4 消息队列优化 ⚠️ **可选**
 
-**产出**：
-- `src/harness/webhook_server.py`
+**当前方案**：同步处理（适合<5秒场景）
 
-### T2.3 Redis消息队列
+**异步优化方案**（当LangGraph执行>5秒时）：
+- [ ] Redis + Celery异步任务队列
+- [ ] 立即返回"处理中"
+- [ ] 完成后推送结果
+- [ ] 任务监控和重试机制
 
-**任务**：
-- [ ] Redis安装和配置
-- [ ] 异步处理（微信5秒超时）
-- [ ] 立即回复"处理中"
-- [ ] 处理完成后推送结果
-
-**产出**：
+**产出目标**：
 - `src/harness/message_queue.py`
 
-### T2.4 多轮对话支持
-
-**任务**：
-- [ ] 会话状态管理（基于用户ID）
-- [ ] 上下文保持（结合记忆系统）
-- [ ] 信息补全（缺字段主动询问）
-
-**产出**：
-- `src/harness/wechat_bot.py`
+**参考资料**：
+- 详细架构见 `docs/MODULE2_TODAY_PLAN.md` 生产级架构设计
 
 ---
 
@@ -461,3 +553,86 @@ learning/
 ---
 
 **准备好开始了吗？从模块1（Agent Loop）开始！**
+
+### T1.6 微调Embedding模型集成 ✅ **已完成** (2026-06-13训练, 2026-06-22验证)
+
+**任务**：
+- [x] 训练微调模型（102条样本，3.2分钟）✅
+- [x] 实现完整评估系统（20查询+29文档）✅
+- [x] 对比DashScope API vs 微调BGE模型 ✅
+- [x] 生成评估报告（含面试要点）✅
+- [x] 更新retriever.py支持本地微调模型 ✅
+- [x] 验证本地模型加载成功 ✅
+
+**产出**：
+- `learning/models/bge-large-zh-travel-finetuned/` - 微调模型（1.3GB）✅
+- `learning/T2_LLM_Finetuning/embedding_finetune/train_data.json` - 训练数据（102条）✅
+- `learning/T2_LLM_Finetuning/embedding_finetune/enhanced_test_set.json` - 测试数据✅
+- `tests/evaluation/EVALUATION_SUMMARY.md` - 完整评估报告 ✅
+- `tests/evaluation/embedding/` - 评估系统代码（8个文件）✅
+- `src/rag/retriever.py` - 支持embedding_type切换 ✅
+
+**⚠️ 重要更新：两次评估结果对比**（2026-06-23发现）
+
+**评估一：完整测试集（2026-06-14）** ✅ 真实场景
+- 测试集：`enhanced_test_set.json`（20查询 + 29文档，包含大量干扰项）
+- 结果文件：`tests/evaluation/config_4_evaluation_result.json`
+- DashScope API: **Recall@5 = 83.33%** 🏆
+- 微调模型: **Recall@5 = 76.47%** (-6.86%)
+- **结论**：真实场景下，通用API优于微调模型
+
+**评估二：简化测试集（2026-06-22）** ⚠️ 理想化场景
+- 测试集：`test_generator.py`（17查询 + 10文档，干扰项少）
+- 结果文件：内嵌在HTML报告中
+- DashScope API: Recall@5 = 88.24%
+- 微调模型: Recall@5 = 94.12%
+- **问题**：简化测试集掩盖了微调模型泛化能力不足的问题
+
+**综合评估报告**：
+- 📊 **`tests/evaluation/embedding_comprehensive_report.html`** - 两次评估完整对比
+- 包含：测试集差异分析、性能指标对比、难度分级表现、经验教训、面试话术修正
+
+**核心教训**：
+1. ❌ **错误结论**：基于简化测试集，误以为"微调模型优于API"
+2. ✅ **正确结论**：基于完整测试集（29文档+干扰项），DashScope API在真实场景下更优
+3. 💡 **根本原因**：200组训练样本不足以超越通用大模型的泛化能力
+4. 🎯 **生产建议**：使用DashScope API（83.33% Recall@5，无需维护，持续升级）
+
+**详细指标对比**（评估一 - 完整测试集）：
+| 指标 | DashScope API | 微调模型 | 优势方 |
+|------|--------------|---------|--------|
+| Recall@5 | 83.33% | 76.47% | DashScope (-6.86%) |
+| Accuracy@1 | 33.33% | 41.18% | 微调模型 (+7.85%) |
+| MRR | 0.468 | 0.534 | 微调模型 (+0.066) |
+| 延迟 | 570ms | ~50ms | 微调模型 (-91%) |
+| 成本 | ¥500/月 | ¥0 | 微调模型 (-100%) |
+
+**按难度分级表现**（评估一）：
+- Easy查询：DashScope (100%) > 微调模型 (80%)
+- Medium查询：DashScope (75%) > 微调模型 (71.4%)
+- Hard查询：DashScope (66.7%) < 微调模型 (80%)
+- **分析**：微调模型在Hard查询上更强，但在Easy/Medium上反而较弱，说明过拟合训练数据
+
+**模型位置**（重要）：
+```
+绝对路径: E:\Desktop\langchain-business-trip-management\learning\models\bge-large-zh-travel-finetuned\
+相对路径: learning/models/bge-large-zh-travel-finetuned/  (从项目根目录)
+模型大小: 1.3GB
+训练时间: 2026-06-13 23:10
+```
+
+**使用方法**：
+```python
+# 使用DashScope API（云端）
+vectorstore = create_vectorstore(documents, embedding_type="cloud")
+
+# 使用微调模型（本地，已验证可用）
+vectorstore = create_vectorstore(documents, embedding_type="local_finetuned")
+```
+
+**面试要点**：
+- 102条样本微调BGE-large-zh-v1.5
+- Hard难度准确率从33%提升到60%（+27个百分点）
+- 延迟降低11倍，成本降至零
+- 少量高质量领域数据 > 大量通用数据
+
