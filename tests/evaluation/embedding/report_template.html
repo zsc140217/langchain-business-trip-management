@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Embedding模型评估报告</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        body { font-family: 'Microsoft YaHei', sans-serif; background: #f8f9fa; }
+        .hero { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 3rem 0; }
+        .metric-card { background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 2rem; margin-bottom: 2rem; }
+        .big-number { font-size: 3.5rem; font-weight: 700; color: #dc3545; }
+        .metric-label { font-size: 1rem; color: #6c757d; margin-top: 0.5rem; }
+        .speech-box { background: #fff3cd; border-left: 4px solid #ffc107; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; }
+        .decision-tree { background: white; padding: 2rem; border-radius: 12px; margin: 2rem 0; }
+        .tree-item { padding: 1rem; margin: 0.5rem 0; border-left: 3px solid #667eea; background: #f8f9fa; }
+        .checklist { list-style: none; padding: 0; }
+        .checklist li { padding: 0.75rem; margin: 0.5rem 0; background: white; border-radius: 8px; border-left: 3px solid #28a745; }
+        .checklist li:before { content: '☑ '; color: #28a745; font-weight: bold; margin-right: 0.5rem; }
+    </style>
+</head>
+<body>
+    <div class="hero text-center">
+        <div class="container">
+            <h1 class="display-4">🎯 Embedding模型评估报告</h1>
+            <p class="lead">DashScope API vs 微调本地模型</p>
+            <p>{{REPORT_DATE}}</p>
+        </div>
+    </div>
+
+    <div class="container my-5">
+        <section class="metric-card">
+            <h2 class="h3 mb-4">📋 执行摘要</h2>
+            <p class="lead">微调后的本地模型在Recall@5上提升<strong class="text-danger">{{RECALL_IMPROVEMENT}}%</strong>，推理延迟降低<strong class="text-danger">{{LATENCY_REDUCTION}}%</strong>，成本降为<strong class="text-danger">零</strong>。</p>
+        </section>
+
+        <section>
+            <h2 class="h3 mb-4">🔢 核心指标</h2>
+            <div class="row">
+                <div class="col-md-3 mb-4">
+                    <div class="metric-card text-center">
+                        <div class="big-number">{{RECALL_IMPROVEMENT}}%</div>
+                        <div class="metric-label">Recall@5提升</div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="metric-card text-center">
+                        <div class="big-number">{{NDCG_IMPROVEMENT}}%</div>
+                        <div class="metric-label">NDCG@5提升</div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="metric-card text-center">
+                        <div class="big-number">-{{LATENCY_REDUCTION}}%</div>
+                        <div class="metric-label">延迟降低</div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="metric-card text-center">
+                        <div class="big-number">¥0</div>
+                        <div class="metric-label">运行成本</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="metric-card">
+            <h2 class="h3 mb-4">💬 面试话术</h2>
+            <div class="speech-box">
+                <h5>30秒版本</h5>
+                <p id="speech30s">{{SPEECH_30S}}</p>
+            </div>
+            <div class="speech-box">
+                <h5>2分钟版本</h5>
+                <p id="speech2m" style="white-space: pre-line;">{{SPEECH_2M}}</p>
+            </div>
+        </section>
+
+        <section class="metric-card">
+            <h2 class="h3 mb-4">📊 性能对比</h2>
+            <div class="row">
+                <div class="col-md-6"><canvas id="recallChart"></canvas></div>
+                <div class="col-md-6"><canvas id="radarChart"></canvas></div>
+            </div>
+        </section>
+
+        <section class="metric-card">
+            <h2 class="h3 mb-4">📈 详细指标对比</h2>
+            <table class="table table-hover" id="metricsTable">
+                <thead><tr><th>指标</th><th>DashScope</th><th>微调模型</th><th>提升</th></tr></thead>
+                <tbody id="metricsTableBody"></tbody>
+            </table>
+        </section>
+
+        <section class="metric-card">
+            <h2 class="h3 mb-4">📝 记忆清单</h2>
+            <ul class="checklist">
+                <li>核心数字: Recall@5 提升{{RECALL_IMPROVEMENT}}%，延迟降低{{LATENCY_REDUCTION}}%</li>
+                <li>三大决策维度: 准确性、成本、延迟</li>
+                <li>技术栈: BGE-large-zh + MNR Loss + Hard Negatives</li>
+            </ul>
+        </section>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const chartData = {{CHART_DATA}};
+        const overallComparison = {{OVERALL_COMPARISON}};
+
+        // Recall对比图
+        new Chart(document.getElementById('recallChart'), {
+            type: 'bar',
+            data: {
+                labels: chartData.recall_comparison.labels,
+                datasets: [
+                    { label: 'DashScope', data: chartData.recall_comparison.dashscope, backgroundColor: 'rgba(255, 99, 132, 0.7)' },
+                    { label: '微调模型', data: chartData.recall_comparison.finetuned, backgroundColor: 'rgba(75, 192, 192, 0.7)' }
+                ]
+            },
+            options: { responsive: true, scales: { y: { beginAtZero: true, max: 1 } } }
+        });
+
+        // 雷达图
+        new Chart(document.getElementById('radarChart'), {
+            type: 'radar',
+            data: {
+                labels: chartData.radar_data.labels,
+                datasets: [
+                    { label: 'DashScope', data: chartData.radar_data.dashscope, borderColor: 'rgba(255, 99, 132, 1)', backgroundColor: 'rgba(255, 99, 132, 0.2)' },
+                    { label: '微调模型', data: chartData.radar_data.finetuned, borderColor: 'rgba(75, 192, 192, 1)', backgroundColor: 'rgba(75, 192, 192, 0.2)' }
+                ]
+            },
+            options: { responsive: true, scales: { r: { beginAtZero: true, max: 100 } } }
+        });
+
+        // 填充表格
+        const tbody = document.getElementById('metricsTableBody');
+        for (const [metric, data] of Object.entries(overallComparison)) {
+            tbody.innerHTML += `<tr><td>${metric}</td><td>${data.dashscope.toFixed(4)}</td><td>${data.finetuned.toFixed(4)}</td><td>${data.improvement_pct > 0 ? '+' : ''}${data.improvement_pct.toFixed(2)}%</td></tr>`;
+        }
+    </script>
+</body>
+</html>
