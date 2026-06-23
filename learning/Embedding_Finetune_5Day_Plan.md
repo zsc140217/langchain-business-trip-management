@@ -165,7 +165,7 @@ print(f"Dimension: {len(query_emb)}")   # 预期=1024
 - 虚拟环境：`venv_embedding_finetune`
 - 依赖包：sentence-transformers 2.7.0, FlagEmbedding, faiss-cpu等
 - 模型测试：相似度0.5749，维度1024
-
+learning\Embedding_Finetune_5Day_Plan.md
 **Day 2 数据准备（部分）：**
 - 提取34个政策段落 → `policy_docs.json`
 - 生成102条训练数据 → `training_data_raw.json`

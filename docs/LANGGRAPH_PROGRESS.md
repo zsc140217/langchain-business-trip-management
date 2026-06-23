@@ -51,7 +51,18 @@
 
 **Agent Loop核心架构（T1.1-T1.5）全部完成**
 - 总计：5个任务，100%完成
-- 测试：18+测试通过
+- 测试：32+测试通过
+- 完成总结：
+  - `docs/T1.1_COMPLETION_SUMMARY.md` ✅
+  - `docs/T1.4_T1.5_COMPLETION_SUMMARY.md` ✅
+
+**Vectorstore构建完成：**
+- ✅ 22个文档，565个文本块
+- ✅ 3.4MB FAISS向量索引
+- ✅ 使用 text-embedding-v2
+- ✅ 检索功能正常（每次返回5个文档）
+
+**关键代码示例：**
 ```python
 from langgraph.types import interrupt
 
@@ -60,16 +71,13 @@ def approval_node(state):
     return {"status": "approved" if decision else "rejected"}
 ```
 
-### T1.5 Send API（流式输出）
-- 流式输出、事件流、并行执行
-
 ---
 
 ## 📂 代码结构
 ```
 src/modules/module_5_langgraph/
-├── graphs/ (basic_graph, react_graph, checkpoint_graph)
-├── nodes/ (agent_node✅, tools_node✅, retrieve, answer, rewrite)
+├── graphs/ (basic_graph, react_graph, checkpoint_graph, approval_graph, streaming_graph)
+├── nodes/ (agent_node✅, tools_node✅, retrieve, answer, rewrite, check_approval, approval, process_approval)
 ├── tests/ (test_basic, test_react, test_checkpoint)
 └── state.py
 ```
@@ -80,6 +88,9 @@ src/modules/module_5_langgraph/
 1. ✅ LLM API配置（DASHSCOPE_BASE_URL）
 2. ✅ 环境变量加载（load_dotenv）
 3. ✅ Windows GBK编码（移除emoji）
+4. ✅ Vectorstore构建（DashScopeEmbeddings）
+5. ✅ Embedding模型统一（text-embedding-v2）
+6. ✅ 检索API更新（invoke替代get_relevant_documents）
 
 ---
 
@@ -90,7 +101,8 @@ src/modules/module_5_langgraph/
 - T1.4: 6/6 ✅
 - T1.5: 2/2 ✅
 - E2E: 2/2 ✅
-- **总计：26/26 ✅**
+- 完整E2E: 6/6 ✅
+- **总计：32/32 ✅**
 
 ---
 
@@ -102,8 +114,13 @@ DASHSCOPE_BASE_URL=https://dashscope.aliyuncs.com/compatible-mode/v1
 
 # 可用模型
 qwen-flash, qwen3.7-plus
+
+# Embedding模型
+text-embedding-v2
 ```
 
 ---
 
 **进度：** T1.1 ✅ | T1.2 ✅ | T1.3 ✅ | T1.4 ✅ | T1.5 ✅ | **模块1完成！🎉**
+
+**下一步：** 模块2 - 微信Bot接入
