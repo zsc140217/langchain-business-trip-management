@@ -251,156 +251,323 @@ LangGraph处理（thread_id = conversation_id）
 
 ---
 
-## 📋 模块3：多模态处理 🟡 P1
+## 📋 模块3：多模态处理 🟡 P1 ⚠️ **已调研，待实施**
 
-### T3.1 YOLO模型集成
+### 📊 调研完成（2026-06-24）
 
-**任务**：
-- [ ] 加载YOLO模型（票据检测）
-- [ ] 检测票据类型（机票/酒店/发票）
-- [ ] 定位关键区域
-- [ ] 推理优化（GPU加速）
+**Workflow调研**：12个agents，644K tokens，28分钟
+- **详细计划**：`docs/MODULE3_IMPLEMENTATION_PLAN.md`（中文完整版）
+- **成本分析**：`scripts/multimodal_cost_analysis.md`
 
-**产出**：
-- `src/utils/yolo_detector.py`
+### 🎯 核心方案：Vision LLM MVP（跳过YOLO）
 
-**降级方案**：如果YOLO未准备好，跳过T3.1，直接用Vision LLM
+**决策依据**：
+- **时间优势**：2-3天 vs YOLO+OCR需6-12周
+- **成本可控**：$0.03/文档
+- **准确率更高**：79-88%（Qwen-VL）vs 76-84%（YOLO+OCR）
+- **零训练数据**：无需300-1,500张标注图片
+- **技术栈**：Qwen-VL-Max + Redis缓存
 
-### T3.2 OCR文字提取
-
-**任务**：
-- [ ] PaddleOCR集成
-- [ ] 文字定位和识别
-- [ ] 结果后处理（去噪）
-
-**产出**：
-- `src/utils/ocr_extractor.py`
-
-### T3.3 Vision LLM验证
+### T3.1 Vision LLM集成（MVP）⭐ P0 - 未开始
 
 **任务**：
-- [ ] GPT-4o或Claude Sonnet 4集成
-- [ ] Prompt设计：验证OCR结果
-- [ ] 结构化输出（金额/日期/类型）
+- [ ] 实现`VisionLLMClient`基类（Qwen-VL-Max）
+- [ ] 设计结构化输出schema（ReceiptData模型）
+- [ ] 编写中英文收据prompt模板
+- [ ] 添加每字段置信度评分（0-100）
+- [ ] 实现指数退避重试逻辑
+- [ ] 单元测试
 
 **产出**：
-- `src/agents/vision_agent.py`
+- `src/agents/vision_llm_client.py`（~150行）
+- `src/agents/receipt_extractor.py`（~200行）
+- `src/models/receipt_data.py`（~100行）
+- `tests/test_vision_llm.py`（~120行）
 
-### T3.4 完整Pipeline
+**时间估计**：8小时
+
+### T3.2 图片预处理管道 🟡 P1 - 未开始
 
 **任务**：
-- [ ] 图片 → YOLO → OCR → Vision LLM → 结构化
-- [ ] 错误处理（图片模糊、OCR失败）
-- [ ] 准确率测试
+- [ ] 图片验证（格式、大小、分辨率）
+- [ ] 图片缩放（最大2048px）
+- [ ] 格式转换（HEIC→JPEG）
+- [ ] 质量检查（模糊检测）
+- [ ] 单元测试
 
 **产出**：
-- `src/agents/multimodal_agent.py`
-- 评估报告
+- `src/utils/image_preprocessor.py`（~80行）
+- `src/utils/image_validator.py`（~100行）
+- `src/utils/image_quality_checker.py`（~120行）
+- `tests/test_image_preprocessing.py`（~80行）
+
+**时间估计**：4小时
+
+### T3.3 结构化数据提取与验证 🟡 P1 - 未开始
+
+**任务**：
+- [ ] 定义Pydantic schemas
+- [ ] 验证规则（日期格式、金额范围）
+- [ ] 置信度阈值（<70%拒绝）
+- [ ] 缺失字段回退
+- [ ] 全面测试
+
+**产出**：
+- `src/utils/data_validator.py`（~150行）
+- `tests/test_data_extraction.py`（~100行）
+
+**时间估计**：4小时
+
+### T3.4 LangGraph集成（Human-in-the-Loop）⭐ P0 - 未开始
+
+**任务**：
+- [ ] 创建`multimodal_processing_node.py`
+- [ ] 基于置信度添加条件路由
+- [ ] 扩展`TravelAgentState`
+- [ ] 集成T1.4的approval_node（低置信度→人工审核）
+- [ ] 更新graph包含multimodal节点
+- [ ] 集成测试
+
+**产出**：
+- `src/modules/module_5_langgraph/nodes/multimodal_node.py`（~180行）
+- `src/modules/module_5_langgraph/utils/multimodal_conditions.py`（~60行）
+- `src/modules/module_5_langgraph/graphs/multimodal_approval_graph.py`（~200行）
+- `tests/test_multimodal_graph.py`（~150行）
+
+**时间估计**：12小时
+
+### T3.5 成本监控与缓存 🟢 P2 - 未开始
+
+**任务**：
+- [ ] API调用成本追踪
+- [ ] Redis缓存（SHA256哈希，TTL 24h，目标命中率40%）
+- [ ] 每日成本告警（>$5/天）
+- [ ] 限流（100次/小时）
+
+**产出**：
+- `src/monitoring/vision_cost_tracker.py`（~100行）
+- `src/utils/image_cache.py`（~120行）
+- `tests/test_cost_monitoring.py`（~80行）
+
+**时间估计**：4小时
+
+### T3.6 端到端测试与评估 ⭐ P0 - 未开始
+
+**任务**：
+- [ ] 收集/生成20个收据样本
+- [ ] 创建真值标签
+- [ ] 计算准确率指标
+- [ ] 测量延迟（P50/P95/P99）
+- [ ] 计算成本
+- [ ] 生成评估报告
+
+**产出**：
+- `tests/evaluation/multimodal_eval.py`（~250行）
+- `tests/evaluation/multimodal_report.html`
+- `data/receipts/test_set/`（20张）
+- `data/receipts/ground_truth.json`
+
+**成功标准**：准确率≥85%，P95延迟<5s，成本<$0.05/文档
+
+**时间估计**：4小时
+
+### 📅 实施时间线（5天Sprint）
+
+| Day | 任务 | 时间 |
+|-----|------|------|
+| Day 1 | T3.1 + T3.2 | 12h |
+| Day 2 | T3.3 + T3.4（Part 1）| 8h |
+| Day 3 | T3.4（Part 2）| 8h |
+| Day 4 | T3.6 + T3.5 | 8h |
+| Day 5 | 审查 + 文档 | 6h |
+
+**总计**：42小时，~2,200行代码
+
+### ⚠️ 关键风险
+
+| 风险 | 缓解措施 |
+|------|----------|
+| 成本超预算 | $5/天告警、Redis缓存、批处理 |
+| 中文准确率低 | Qwen-VL（70%+已验证）、prompt工程、人工审核 |
+| 集成破坏功能 | 集成测试、feature flag、回滚计划 |
+
+**详细实施计划**：见 `docs/MODULE3_IMPLEMENTATION_PLAN.md`
 
 ---
 
-## 📋 模块4：记忆系统 🟡 P1
+## 📋 模块4：记忆系统 ✅ **已完成** (2026-06-24)
 
-### T4.1 短期记忆（对话历史）
-
-**任务**：
-- [ ] Redis存储最近10轮对话
-- [ ] 自动过期（24小时）
-- [ ] 上下文窗口管理
-
-**产出**：
-- `src/memory/short_term.py`
-
-### T4.2 工作记忆（实体提取）
+### T4.1 后端抽象层 ✅ **已完成**
 
 **任务**：
-- [ ] 从对话提取实体（人名/地点/日期/金额）
-- [ ] 实体去重和合并
-- [ ] 实体关联
+- [x] 设计抽象接口（ShortTermBackend, LongTermBackend）
+- [x] 实现文件存储后端（默认，零依赖）
+- [x] 实现Redis后端（短期记忆，24h TTL）
+- [x] 实现PostgreSQL后端（长期记忆）
+- [x] 后端工厂（环境变量配置，自动降级）
 
 **产出**：
-- `src/memory/working_memory.py`
+- `src/memory/backends/base.py` ✅
+- `src/memory/backends/file_backend.py` ✅
+- `src/memory/backends/redis_backend.py` ✅
+- `src/memory/backends/postgres_backend.py` ✅
+- `src/memory/backends/__init__.py` ✅
 
-### T4.3 长期记忆（用户画像）
+### T4.2 Docker部署 ✅ **已完成**
 
 **任务**：
-- [ ] PostgreSQL存储用户偏好
-- [ ] 向量数据库存储历史查询
-- [ ] 画像更新策略
+- [x] docker-compose.yml（Redis + PostgreSQL）
+- [x] PostgreSQL初始化脚本
+- [x] 容器启动和健康检查
 
 **产出**：
-- `src/memory/long_term.py`
+- `docker-compose.yml` ✅
+- `scripts/init_db.sql` ✅
+- Docker容器：travel-agent-redis, travel-agent-postgres ✅
 
-### T4.4 记忆检索策略
+### T4.3 测试验证 ✅ **已完成**
 
 **任务**：
-- [ ] 混合检索（时间衰减 + 语义相似度）
-- [ ] 记忆相关性排序
-- [ ] 记忆注入到Prompt
+- [x] 文件后端测试
+- [x] Redis后端测试
+- [x] PostgreSQL后端测试
+- [x] 自动降级测试
 
 **产出**：
-- `src/agents/memory_agent.py`
+- `tests/test_memory_backends.py` ✅
+- 测试结果：全部通过 ✅
+
+### T4.4 三层记忆系统（保留现有实现）
+
+**现有文件**（文件存储版本）：
+- `src/memory/chat_memory.py` ✅
+- `src/memory/working_memory.py` ✅
+- `src/memory/long_term_memory.py` ✅
+- `src/memory/memory_service.py` ✅
+
+**核心特性**：
+- ✅ 短期记忆：20条消息，滑动窗口
+- ✅ 工作记忆：实体提取（城市/客户/日期/金额），30分钟TTL
+- ✅ 长期记忆：用户画像、偏好统计
+- ✅ 后端可切换：file | production
+
+**架构优势**：
+- ✅ 抽象接口设计（策略模式）
+- ✅ 配置化后端切换（环境变量）
+- ✅ 自动故障降级（连接失败→文件存储）
+- ✅ Docker容器化部署
+
+**使用方式**：
+```python
+# 环境变量
+export MEMORY_BACKEND=production
+
+# 代码指定
+from src.memory.backends import create_backends
+short, long = create_backends("production")
+```
+
+**测试结果**：
+```
+文件后端: ✅ 通过 (3条消息)
+Redis后端: ✅ 通过 (2条消息)
+PostgreSQL后端: ✅ 通过 (1条查询历史)
+Docker容器: ✅ 运行中 (healthy)
+```
+
+**统计数据**：
+- 代码文件：5个
+- 代码行数：616行
+- Docker容器：2个（Redis + PostgreSQL）
+- 测试覆盖：3种后端全部通过
+
+**完成度**：100%
+
+### T4.5 知识复习与面试准备 ✅ **已完成** (2026-06-25)
+
+**任务**：
+- [x] 口头问答复习（15道题）
+- [x] Docker原理深入理解
+- [x] 架构设计权衡思维训练
+- [x] 面试话术准备（30秒/2分钟版本）
+
+**核心知识点掌握**：
+- ✅ 三层记忆架构（短期/工作/长期）
+- ✅ 冷热数据分离原理（Redis vs PostgreSQL）
+- ✅ Docker基础概念（容器、镜像、volumes、healthcheck）
+- ✅ 后端抽象层设计（策略模式）
+- ✅ 容错降级机制
+- ✅ 高并发优化方案（连接池、读写分离、异步写入）
+- ✅ 数据一致性处理
+
+**面试话术（30秒版）**：
+> "实现了冷热数据分离的三层记忆系统。短期记忆用Redis存储最近20条对话消息，利用内存高速访问和24小时TTL自动过期；长期记忆用PostgreSQL存储用户画像和历史记录，利用磁盘廉价存储和SQL复杂查询能力；工作记忆提取实体和上下文。通过抽象接口支持多后端切换，开发用文件存储零依赖，生产用Redis+PostgreSQL。Docker Compose一键部署，包含healthcheck健康检查、自动降级和连接池优化。这是生产级AI应用的标准内存架构。"
+
+**复习材料**：
+- 15道面试题及答案（涵盖概念、实现、Docker、架构、故障处理）
+- 技术选型对比表（Redis vs PostgreSQL）
+- Docker知识地图（容器、volumes、healthcheck）
+- 高并发优化方案（5大优化措施）
+- 架构演进路径（从MVP到生产级）
+
+**学习成果**：
+- ✅ 能够用30秒清晰表达核心优化点
+- ✅ 理解并能解释技术选型的权衡
+- ✅ 掌握Docker基础概念和使用场景
+- ✅ 具备故障处理和高并发优化思维
 
 ---
 
-## 📋 模块5：监控告警系统 🟡 P1
+## 📋 模块5：监控告警系统 ✅ **已完成** (2026-06-25)
 
-### T5.1 LangSmith集成
+**完成度**：100% ✅  
+**验证状态**：四个监控网站全部通过  
+**学习效果**：10道复习题完成
 
-**任务**：
-- [ ] LangSmith API配置
-- [ ] 调用链追踪（每个LLM调用）
-- [ ] Prompt和响应记录
-- [ ] 延迟和Token统计
+### 核心成果
+- ✅ LangSmith自动追踪
+- ✅ Prometheus 8个指标
+- ✅ Grafana Dashboard (7个面板)
+- ✅ Alertmanager (7条告警规则)
+- ✅ Docker部署完成
+- ✅ 测试数据验证（1633个请求）
 
-**产出**：
-- `src/monitoring/langsmith_tracer.py`
-
-### T5.2 Prometheus指标
-
-**任务**：
-- [ ] 自定义指标：请求量、成功率、错误率
-- [ ] LLM调用次数、Token消耗
-- [ ] 检索命中率、缓存命中率
-- [ ] /metrics端点
-
-**产出**：
-- `src/monitoring/prometheus_metrics.py`
-
-### T5.3 Grafana看板
-
-**任务**：
-- [ ] 实时流量监控
-- [ ] 错误率趋势
-- [ ] 成本分析
-- [ ] P95/P99延迟分布
-
-**产出**：
-- `monitoring/grafana_dashboard.json`
-
-### T5.4 告警规则
-
-**任务**：
-- [ ] 错误率 > 5%
-- [ ] P95延迟 > 10秒
-- [ ] 日成本 > $50
-- [ ] 微信/邮件通知
-
-**产出**：
-- 告警配置文件
+**详细内容见**：`monitoring_verification_report.md` 和 `docs/MODULE5_COMPLETION_SUMMARY.md`
 
 ---
 
 ## 📋 模块6：高级RAG 🟢 P2
 
-### T6.1 Self-RAG
+### T6.1 Self-RAG ✅ **已完成** (2026-06-27)
 
 **任务**：
-- [ ] LLM判断是否需要检索
-- [ ] 闲聊直接回复，事实性才检索
+- [x] LLM判断是否需要检索
+- [x] 闲聊直接回复，事实性才检索
+- [x] 实现QueryClassifier查询分类器
+- [x] 实现SelfRAG自适应检索器
+- [x] 添加错误处理和降级机制
+- [x] 编写完整测试（15个单元测试 + 7个集成测试）
+- [x] 代码审查并修复HIGH级别问题
 
 **产出**：
-- `src/rag/self_rag.py`
+- `src/rag/query_classifier.py` ✅ (~200行)
+- `src/rag/self_rag.py` ✅ (~220行)
+- `tests/test_self_rag.py` ✅ (15个测试)
+- `tests/test_self_rag_integration.py` ✅ (7个测试)
+- `examples/self_rag_demo.py` ✅
+- `docs/T6.1_SELF_RAG_COMPLETION.md` ✅
+
+**核心特性**：
+- ✅ 智能查询分类（FACTUAL/CHITCHAT）
+- ✅ 动态决策是否检索（节省成本）
+- ✅ Few-shot示例提升准确率
+- ✅ 启发式规则后备方案
+- ✅ 完善的错误处理机制
+- ✅ 测试覆盖率63%（核心逻辑全覆盖）
+
+**测试结果**：
+- 所有22个测试通过（15单元 + 7集成）
+- 代码审查：0 CRITICAL，0 HIGH（已修复）
 
 ### T6.2 GraphRAG（知识图谱）
 
