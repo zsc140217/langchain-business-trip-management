@@ -5,8 +5,8 @@
 对应Spring AI的：
 src/main/java/com/jblmj/aiagent/rag/EnterpriseHybridRetriever.java
 """
-from langchain.retrievers import BM25Retriever
-from langchain_core.messages import Document
+from langchain_community.retrievers import BM25Retriever
+from langchain_core.documents import Document
 from langchain_community.embeddings import DashScopeEmbeddings
 from typing import List, Dict
 import jieba
