@@ -9,15 +9,14 @@ chatClient.prompt()
     .call()
     .content()
 """
-from langchain.chains import RetrievalQA
-from langchain.prompts import PromptTemplate
-from langchain.schema.runnable import RunnablePassthrough
-from langchain.schema.output_parser import StrOutputParser
+from langchain_core.prompts import PromptTemplate
+from langchain_core.runnables import RunnablePassthrough, RunnableParallel
+from langchain_core.output_parsers import StrOutputParser
 
 
 def create_rag_chain(llm, retriever):
     """
-    创建RAG链
+    创建RAG链（使用LCEL现代语法）
 
     这是LangChain的核心概念：Chain（链）
 
@@ -35,19 +34,18 @@ def create_rag_chain(llm, retriever):
 
     对比Spring AI：
     - Spring AI用Advisor模式（QuestionAnswerAdvisor）
-    - LangChain用Chain模式（RetrievalQA）
-    - Spring AI需要手动组装，LangChain有现成的链
+    - LangChain用Chain模式
+    - 使用LCEL (LangChain Expression Language) 更灵活
 
     Args:
         llm: 语言模型实例
         retriever: 检索器实例
 
     Returns:
-        RAG链实例
+        包装的RAG链，返回result和source_documents
     """
 
     # 自定义Prompt模板
-    # 这个模板定义了如何把检索到的文档和用户问题组合起来
     template = """你是一个企业差旅助手。请根据以下企业差旅规章回答用户的问题。
 
 规章内容：
@@ -63,18 +61,49 @@ def create_rag_chain(llm, retriever):
         input_variables=["context", "question"]
     )
 
-    # 创建RetrievalQA链
-    # chain_type="stuff"表示把所有检索到的文档都塞进Prompt
-    # 其他选项：map_reduce（分别处理再合并）、refine（逐步优化）
-    qa_chain = RetrievalQA.from_chain_type(
-        llm=llm,
-        chain_type="stuff",  # 最简单的方式：把所有文档拼接
-        retriever=retriever,
-        return_source_documents=True,  # 返回来源文档
-        chain_type_kwargs={"prompt": prompt}
+    # 格式化文档的函数
+    def format_docs(docs):
+        return "\n\n".join(doc.page_content for doc in docs)
+
+    # 使用LCEL组装RAG链
+    # 这个链会：
+    # 1. 获取检索到的文档并格式化
+    # 2. 传递问题
+    # 3. 生成prompt
+    # 4. 调用LLM
+    # 5. 解析输出
+    rag_chain_core = (
+        {
+            "context": retriever | format_docs,
+            "question": RunnablePassthrough()
+        }
+        | prompt
+        | llm
+        | StrOutputParser()
     )
 
-    return qa_chain
+    # 包装成返回result和source_documents的格式（兼容旧API）
+    def invoke_with_sources(query_dict):
+        """包装函数，返回result和source_documents"""
+        query = query_dict.get("query", query_dict.get("question", ""))
+
+        # 获取相关文档
+        source_docs = retriever.invoke(query)
+
+        # 生成答案
+        result = rag_chain_core.invoke(query)
+
+        return {
+            "result": result,
+            "source_documents": source_docs
+        }
+
+    # 创建一个可调用的对象
+    class RAGChainWrapper:
+        def invoke(self, query_dict):
+            return invoke_with_sources(query_dict)
+
+    return RAGChainWrapper()
 
 
 def create_rag_chain_lcel(llm, retriever):
