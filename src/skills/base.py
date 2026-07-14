@@ -150,7 +150,7 @@ class SkillRegistry:
         """
         for skill in self.skills:
             if skill.can_handle(query):
-                print(f"🎯 选中Skill: {skill.name}")
+                print(f"[目标] 选中Skill: {skill.name}")
                 return skill
 
         print(f"⚠️  没有Skill能处理该查询")

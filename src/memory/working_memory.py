@@ -32,6 +32,9 @@ class WorkingMemory:
     # 上下文摘要
     context_summary: str = ""
 
+    # 审批状态 (Phase 3.1: Approval Domain)
+    approvals: Dict[str, Dict] = field(default_factory=dict)
+
     def update_access_time(self):
         """更新最后访问时间"""
         self.last_accessed = datetime.now()
@@ -89,6 +92,132 @@ class WorkingMemory:
         """检查是否过期"""
         expiry_time = self.last_accessed + timedelta(minutes=ttl_minutes)
         return datetime.now() > expiry_time
+
+    # ========== 审批状态管理方法 (Phase 3.1) ==========
+
+    def add_approval(self, approval_data: Dict) -> None:
+        """
+        添加审批记录（不可变模式）
+
+        Args:
+            approval_data: 审批数据字典，必须包含 approval_id
+        """
+        if "approval_id" not in approval_data:
+            raise ValueError("审批数据必须包含 approval_id 字段")
+
+        approval_id = approval_data["approval_id"]
+
+        # 创建新字典副本（不可变模式）
+        self.approvals = {
+            **self.approvals,
+            approval_id: dict(approval_data)  # 创建副本
+        }
+        self.update_access_time()
+
+    def get_approval(self, approval_id: str) -> Optional[Dict]:
+        """
+        获取审批记录（返回副本，不可变）
+
+        Args:
+            approval_id: 审批单号
+
+        Returns:
+            审批数据字典副本，如果不存在返回 None
+        """
+        if approval_id not in self.approvals:
+            return None
+
+        # 返回副本，防止外部修改
+        return dict(self.approvals[approval_id])
+
+    def get_all_approvals(self) -> Dict[str, Dict]:
+        """
+        获取所有审批记录（返回副本）
+
+        Returns:
+            所有审批记录的字典 {approval_id: approval_data}
+        """
+        # 返回深拷贝，防止外部修改
+        return {
+            approval_id: dict(approval_data)
+            for approval_id, approval_data in self.approvals.items()
+        }
+
+    def get_pending_approvals(self) -> Dict[str, Dict]:
+        """
+        获取所有待审批记录
+
+        Returns:
+            待审批记录的字典 {approval_id: approval_data}
+        """
+        return {
+            approval_id: dict(approval_data)
+            for approval_id, approval_data in self.approvals.items()
+            if approval_data.get("status") == "pending"
+        }
+
+    def update_approval_status(
+        self,
+        approval_id: str,
+        status: str,
+        approver: Optional[str] = None,
+        comment: Optional[str] = None,
+        **kwargs
+    ) -> None:
+        """
+        更新审批状态（不可变模式）
+
+        Args:
+            approval_id: 审批单号
+            status: 新状态 (approved/rejected/cancelled)
+            approver: 审批人
+            comment: 审批意见
+            **kwargs: 其他更新字段
+        """
+        if approval_id not in self.approvals:
+            raise ValueError(f"审批记录 {approval_id} 不存在")
+
+        # 创建新的审批记录（不可变模式）
+        updated_approval = {
+            **self.approvals[approval_id],
+            "status": status,
+            "approval_time": datetime.now().isoformat(),
+        }
+
+        if approver:
+            updated_approval["approver"] = approver
+
+        if comment:
+            updated_approval["comment"] = comment
+
+        # 添加其他字段
+        updated_approval.update(kwargs)
+
+        # 创建新的 approvals 字典
+        self.approvals = {
+            **self.approvals,
+            approval_id: updated_approval
+        }
+        self.update_access_time()
+
+    def get_context(self) -> Dict:
+        """
+        获取完整上下文（包括审批信息）
+
+        Returns:
+            包含所有上下文的字典
+        """
+        return {
+            "conversation_id": self.conversation_id,
+            "cities": list(self.cities),
+            "customers": list(self.customers),
+            "dates": list(self.dates),
+            "hotels": list(self.hotels),
+            "current_intent": self.current_intent,
+            "intent_history": self.intent_history,
+            "context_summary": self.context_summary,
+            "approvals": self.get_all_approvals(),  # 返回副本
+        }
 
 
 class WorkingMemoryManager:

@@ -25,7 +25,7 @@ def check_approval_node(state: TravelAgentState) -> Dict[str, Any]:
     Returns:
         approval_required, approval_reason, approval_status
     """
-    logger.info("🔍 检查是否需要审批...")
+    logger.info("[搜索] 检查是否需要审批...")
 
     reasons = []
     query = state.get("query", "")

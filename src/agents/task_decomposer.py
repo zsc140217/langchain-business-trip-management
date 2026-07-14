@@ -5,13 +5,12 @@
 对应Spring AI的：
 src/main/java/com/jblmj/aiagent/service/TaskDecomposer.java
 """
-from langchain.chains import LLMChain
-from langchain.output_parsers import PydanticOutputParser, OutputFixingParser
-from langchain.prompts import PromptTemplate
+from langchain_core.output_parsers import PydanticOutputParser
 from pydantic import BaseModel, Field
 from typing import List, Optional, Dict
 import asyncio
 import json
+import re
 
 
 class SubTask(BaseModel):
@@ -66,8 +65,6 @@ class TaskDecomposer:
     def __init__(self, llm):
         self.llm = llm
         self.parser = PydanticOutputParser(pydantic_object=List[SubTask])
-        self.fixing_parser = OutputFixingParser.from_llm(parser=self.parser, llm=llm)
-        self.chain = self._create_chain()
 
     def decompose(self, query: str) -> List[SubTask]:
         """
@@ -90,41 +87,7 @@ class TaskDecomposer:
 
         try:
             # 1. 调用LLM生成任务列表
-            result = self.chain.run(query=query)
-            print(f"LLM响应：{result[:200]}...")
-
-            # 2. 解析JSON
-            try:
-                tasks = self.parser.parse(result)
-            except Exception as e:
-                print(f"解析失败，尝试自动修复：{e}")
-                tasks = self.fixing_parser.parse(result)
-
-            print(f"成功分解为 {len(tasks)} 个子任务")
-
-            # 3. 验证依赖关系
-            self._validate_dependencies(tasks)
-
-            # 4. 打印任务详情
-            for task in tasks:
-                deps = f"依赖任务{task.depends_on}" if task.depends_on else "无依赖"
-                print(f"  任务{task.id}: {task.description} ({deps})")
-
-            print(f"========== 任务分解完成 ==========\n")
-            return tasks
-
-        except Exception as e:
-            print(f"❌ 任务分解失败：{e}")
-            print("降级为单个RAG任务")
-            return self._create_fallback_tasks(query)
-
-    def _create_chain(self):
-        """
-        创建任务分解链
-
-        使用Few-shot Prompt提高LLM输出质量
-        """
-        prompt_template = """你是任务规划专家，请将用户查询分解为多个子任务，并标注依赖关系。
+            prompt_template = """你是任务规划专家，请将用户查询分解为多个子任务，并标注依赖关系。
 
 可用任务类型：
 1. QUERY_WEATHER: 查询天气（参数：city）
@@ -188,13 +151,46 @@ class TaskDecomposer:
 
 子任务列表："""
 
-        prompt = PromptTemplate(
-            template=prompt_template,
-            input_variables=["query"],
-            partial_variables={"format_instructions": self.parser.get_format_instructions()}
-        )
+            from langchain_core.messages import HumanMessage
+            prompt = prompt_template.format(
+                query=query,
+                format_instructions=self.parser.get_format_instructions()
+            )
+            messages = [HumanMessage(content=prompt)]
+            result = self.llm.invoke(messages).content
+            print(f"LLM响应：{result[:200]}...")
 
-        return LLMChain(llm=self.llm, prompt=prompt)
+            # 2. 解析JSON
+            try:
+                tasks = self.parser.parse(result)
+            except Exception as e:
+                print(f"解析失败，尝试手动提取JSON：{e}")
+                # 尝试从响应中提取JSON数组
+                json_match = re.search(r'\[[\s\S]*\]', result)
+                if json_match:
+                    json_str = json_match.group(0)
+                    tasks_data = json.loads(json_str)
+                    tasks = [SubTask(**task_data) for task_data in tasks_data]
+                else:
+                    raise ValueError("无法从响应中提取有效的JSON")
+
+            print(f"成功分解为 {len(tasks)} 个子任务")
+
+            # 3. 验证依赖关系
+            self._validate_dependencies(tasks)
+
+            # 4. 打印任务详情
+            for task in tasks:
+                deps = f"依赖任务{task.depends_on}" if task.depends_on else "无依赖"
+                print(f"  任务{task.id}: {task.description} ({deps})")
+
+            print(f"========== 任务分解完成 ==========\n")
+            return tasks
+
+        except Exception as e:
+            print(f"❌ 任务分解失败：{e}")
+            print("降级为单个RAG任务")
+            return self._create_fallback_tasks(query)
 
     def _validate_dependencies(self, tasks: List[SubTask]):
         """

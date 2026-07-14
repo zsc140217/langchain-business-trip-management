@@ -236,7 +236,7 @@ if __name__ == "__main__":
         for question in test_questions:
             print(f"\n❓ {question}")
             answer = rag_chain.invoke(question)
-            print(f"💡 {answer}")
+            print(f"[提示] {answer}")
 
         # 6. 测试带来源的链
         print("\n\nStep 6: 测试带来源的RAG链...")
@@ -246,7 +246,7 @@ if __name__ == "__main__":
         print(f"\n❓ {question}")
         result = rag_chain_with_sources.invoke(question)
 
-        print(f"💡 答案：{result['answer']}")
+        print(f"[提示] 答案：{result['answer']}")
         print(f"\n📚 来源文档数：{len(result['source_documents'])}")
         for i, doc in enumerate(result['source_documents'], 1):
             print(f"\n--- 来源 {i} ---")

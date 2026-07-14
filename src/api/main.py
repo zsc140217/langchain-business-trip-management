@@ -10,22 +10,25 @@ LangServe API - FastAPI应用主入口
 4. CORS支持
 5. 健康检查和监控
 """
-import os
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from langserve import add_routes
 import uvicorn
+import os
+import sys
+from pathlib import Path
+from pydantic import BaseModel
 
 # 导入所有模块的chain/agent
 from chains import (
-    get_simple_rag_chain,
-    get_advanced_rag_chain,
-    get_react_agent,
-    get_multi_agent_graph,
-    get_sequential_chain,
-    get_parallel_chain,
-    get_memory_chain,
+get_simple_rag_chain,
+get_advanced_rag_chain,
+get_react_agent,
+get_multi_agent_graph,
+get_sequential_chain,
+get_parallel_chain,
+get_memory_chain,
 )
 
 # 创建FastAPI应用
@@ -340,7 +343,7 @@ def main():
     print(f"🏥 健康检查: http://{host}:{port}/health")
     print(f"📦 模块列表: http://{host}:{port}/modules")
     print("=" * 80)
-    print("\n✨ 已部署的模块:")
+    print("\n[新功能] 已部署的模块:")
     print("  1. Simple RAG       → /simple-rag/playground")
     print("  2. Advanced RAG     → /advanced-rag/playground")
     print("  3. ReAct Agent      → /react-agent/playground")
@@ -356,13 +359,13 @@ def main():
         print("   请设置环境变量后重启服务")
 
     if not os.getenv("LANGCHAIN_API_KEY"):
-        print("\n💡 提示: 未设置 LANGCHAIN_API_KEY，LangSmith追踪功能将不可用")
+        print("\n[提示] 提示: 未设置 LANGCHAIN_API_KEY，LangSmith追踪功能将不可用")
         print("   如需启用，请设置以下环境变量：")
         print("   - LANGCHAIN_API_KEY")
         print("   - LANGCHAIN_TRACING_V2=true")
         print("   - LANGCHAIN_PROJECT=business-trip-management")
 
-    print("\n🎯 按 Ctrl+C 停止服务\n")
+    print("\n[目标] 按 Ctrl+C 停止服务\n")
 
     uvicorn.run(
         app,
@@ -374,3 +377,112 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# ============================================================================
+# IntelligentRouter 初始化（三层路由系统）
+# ============================================================================
+
+# 将项目根目录添加到 sys.path，支持 IntelligentRouter 的 from src.xxx 导入
+_PROJECT_ROOT = str(Path(__file__).resolve().parent.parent.parent)
+if _PROJECT_ROOT not in sys.path:
+     sys.path.insert(0, _PROJECT_ROOT)
+
+from agents.intelligent_router import IntelligentRouter
+
+# 全局路由实例（延迟初始化）
+_router_instance = None
+
+
+def get_intelligent_router():
+     """获取 IntelligentRouter 单例"""
+     global _router_instance
+     if _router_instance is None:
+         from src.models.llm import get_llm
+         from src.rag.loader import load_documents_from_text
+         from src.rag.retriever import create_vectorstore, get_retriever
+
+         print("\n[IntelligentRouter] 正在初始化三层路由系统...")
+
+         # 加载企业差旅规章文档
+         policy_text = """
+企业差旅管理规章
+
+第一章 住宿标准
+1. 一线城市（北京、上海、广州、深圳）：标准间不超过500元/晚
+2. 二线城市（杭州、成都、武汉等）：标准间不超过400元/晚
+3. 三线及以下城市：标准间不超过300元/晚
+
+第二章 交通标准
+1. 市内交通：实报实销，需提供发票
+2. 城际交通：
+    - 距离<500公里：高铁二等座
+    - 距离>=500公里：飞机经济舱
+3. 出租车：仅限机场、火车站往返酒店
+
+第三章 餐饮补贴
+1. 早餐：20元/天
+2. 午餐：50元/天
+3. 晚餐：80元/天
+4. 总计：150元/天
+
+第四章 其他规定
+1. 出差需提前3天申请
+2. 出差结束后7天内提交报销
+3. 所有费用需提供正式发票
+4. 超出标准部分自行承担
+         """
+
+         try:
+             llm = get_llm(temperature=0.3)
+             documents = load_documents_from_text(policy_text, chunk_size=200)
+             vectorstore = create_vectorstore(documents)
+             retriever = get_retriever(vectorstore, k=3)
+
+             _router_instance = IntelligentRouter(
+                 llm=llm,
+                 retriever=retriever
+             )
+             print("[IntelligentRouter] 初始化完成！")
+         except Exception as e:
+             print(f"[IntelligentRouter] 初始化失败: {e}")
+             import traceback
+             traceback.print_exc()
+             _router_instance = None
+
+     return _router_instance
+
+
+class ChatRequest(BaseModel):
+     query: str
+
+
+class ChatResponse(BaseModel):
+     answer: str
+     route: str = ""
+     latency: float = 0
+     intent: str | None = None
+     classification: dict | None = None
+     complexity: str | None = None
+     sources: list = []
+
+
+@app.post("/api/chat/sync")
+async def chat_sync(request: ChatRequest):
+     """智能对话同步接口 - 使用三层路由系统"""
+     router = get_intelligent_router()
+     if router is None:
+         raise HTTPException(status_code=503, detail="路由系统未初始化，请检查日志")
+
+     try:
+         result = router.route(request.query)
+         return ChatResponse(
+             answer=result["answer"],
+             route=result.get("route", ""),
+             latency=result.get("latency", 0),
+             intent=result.get("intent"),
+             classification=result.get("classification"),
+             complexity=str(result.get("complexity", "")) if result.get("complexity") else None,
+             sources=result.get("sources", [])
+         )
+     except Exception as e:
+         raise HTTPException(status_code=500, detail=str(e))

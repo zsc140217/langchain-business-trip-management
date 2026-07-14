@@ -172,7 +172,7 @@ def run_react_agent_with_prompt(
         else:
             try:
                 if verbose:
-                    print(f"\n🔧 执行工具: {action_name}")
+                    print(f"\n[工具] 执行工具: {action_name}")
                     print(f"   参数: {action_args}")
 
                 tool_result = tool_map[action_name].invoke(action_args)

@@ -157,7 +157,7 @@ def search_hotels(city: str, min_price: Optional[int] = None, max_price: Optiona
             f"  💰 ¥{hotel['price']}/晚\n"
             f"  ⭐ 评分：{hotel['rating']}/5.0\n"
             f"  📍 {hotel['address']}\n"
-            f"  ✨ 设施：{facilities}\n"
+            f"  [新功能] 设施：{facilities}\n"
         )
 
     result_lines.append("ℹ️  (模拟数据，实际价格和房态以酒店官网为准)")
@@ -276,7 +276,7 @@ def get_hotel_details(city: str, hotel_name: str) -> str:
         f"  {services}\n\n"
         f"【宾客评价】\n" +
         "\n".join([f"  • {review}" for review in review_keywords[:3]]) + "\n\n"
-        f"💡 预订建议：\n"
+        f"[提示] 预订建议：\n"
         f"  • 提前3-7天预订享受优惠价格\n"
         f"  • 会员可享受房间升级和积分优惠\n"
         f"  • 长住（7天以上）可申请折扣\n"

@@ -172,6 +172,107 @@ class MemoryService:
             "working_memories": self.working_memory_manager.get_memory_stats(),
         }
 
+    def query_memory(
+        self,
+        user_id: str,
+        conversation_id: str,
+        query: str
+    ) -> str:
+        """
+        查询记忆系统（跨三层）
+
+        Args:
+            user_id: 用户ID
+            conversation_id: 会话ID
+            query: 查询内容
+
+        Returns:
+            记忆查询结果
+        """
+        results = []
+
+        # 1. 查询短期记忆（对话历史）
+        chat_memory = self.get_chat_memory(conversation_id)
+        chat_history = chat_memory.get_context_string(limit=10)
+        if chat_history and query.lower() in chat_history.lower():
+            results.append(f"【对话历史】\n{chat_history}")
+
+        # 2. 查询工作记忆（当前会话上下文）
+        working_memory = self.working_memory_manager.get_or_create(conversation_id)
+        context = working_memory.get_context()
+
+        # 检查工作记忆中的实体
+        memory_parts = []
+        if context.get("cities"):
+            memory_parts.append(f"涉及城市: {', '.join(context['cities'])}")
+        if context.get("customers"):
+            memory_parts.append(f"客户: {', '.join(context['customers'])}")
+        if context.get("dates"):
+            memory_parts.append(f"日期: {', '.join(context['dates'])}")
+        if context.get("hotels"):
+            memory_parts.append(f"酒店: {', '.join(context['hotels'])}")
+        if context.get("current_intent"):
+            memory_parts.append(f"当前意图: {context['current_intent']}")
+
+        # 检查审批状态
+        if context.get("approvals"):
+            approvals = context['approvals']
+            if approvals:
+                approval_list = []
+                for approval_id, approval_data in approvals.items():
+                    status = approval_data.get("status", "unknown")
+                    amount = approval_data.get("amount", 0)
+                    approval_list.append(f"  - {approval_id}: {status} (¥{amount})")
+                memory_parts.append(f"审批记录:\n" + "\n".join(approval_list))
+
+        if memory_parts:
+            results.append(f"【当前上下文】\n" + "\n".join(memory_parts))
+
+        # 3. 查询长期记忆（用户画像）
+        user_stats = self.long_term_memory_manager.get_user_stats(user_id)
+        if user_stats.get("conversation_count", 0) > 0:
+            profile_parts = []
+            profile_parts.append(f"历史对话数: {user_stats['conversation_count']}")
+            if user_stats.get("top_cities"):
+                profile_parts.append(f"常去城市: {', '.join(user_stats['top_cities'])}")
+            if user_stats.get("top_customers"):
+                profile_parts.append(f"常见客户: {', '.join(user_stats['top_customers'])}")
+
+            results.append(f"【用户画像】\n" + "\n".join(profile_parts))
+
+        if not results:
+            return "未找到相关记忆信息"
+
+        return "\n\n".join(results)
+
+    def update_approval_status(
+        self,
+        user_id: str,
+        conversation_id: str,
+        approval_id: str,
+        status: str,
+        **kwargs
+    ) -> None:
+        """
+        更新审批状态到工作记忆
+
+        Args:
+            user_id: 用户ID
+            conversation_id: 会话ID
+            approval_id: 审批单号
+            status: 审批状态 (pending/approved/rejected/cancelled)
+            **kwargs: 其他更新字段（approver, comment, approval_time等）
+        """
+        # 获取工作记忆
+        working_memory = self.working_memory_manager.get_or_create(conversation_id)
+
+        # 更新审批状态
+        working_memory.update_approval_status(
+            approval_id=approval_id,
+            status=status,
+            **kwargs
+        )
+
 
 if __name__ == "__main__":
     # 测试代码

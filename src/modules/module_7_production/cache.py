@@ -16,10 +16,10 @@ from typing import Any, Dict, List, Optional, Tuple
 from datetime import datetime, timedelta
 from abc import ABC, abstractmethod
 
-from langchain.globals import set_llm_cache
+from langchain_core.globals import set_llm_cache
 from langchain_core.caches import InMemoryCache
 from langchain_core.embeddings import Embeddings
-from langchain.storage import InMemoryStore
+from langchain_core.stores import InMemoryStore
 
 logger = logging.getLogger(__name__)
 

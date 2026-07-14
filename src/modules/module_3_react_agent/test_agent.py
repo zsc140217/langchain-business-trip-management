@@ -173,7 +173,7 @@ def test_agent_multi_tool():
             # 显示实际调用的工具
             if result.get('intermediate_steps'):
                 called_tools = [step[0].tool for step in result['intermediate_steps']]
-                print(f"🔧 实际调用工具：{', '.join(called_tools)}")
+                print(f"[工具] 实际调用工具：{', '.join(called_tools)}")
 
         except Exception as e:
             print(f"❌ 执行失败：{str(e)}")
@@ -302,7 +302,7 @@ def main():
         print("  ✅ 错误处理机制有效")
         print("  ✅ 工具元数据完整")
 
-        print("\n💡 下一步：")
+        print("\n[提示] 下一步：")
         print("  1. 查看README.md了解详细文档")
         print("  2. 尝试修改agent.py中的ReAct Prompt")
         print("  3. 添加更多业务工具（火车票、租车等）")

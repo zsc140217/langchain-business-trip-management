@@ -411,7 +411,7 @@ if __name__ == "__main__":
         print(f"   文档数量: {len(docs)}")
 
         # 2. 创建融合检索器
-        print("\n🔧 创建融合检索器...")
+        print("\n[工具] 创建融合检索器...")
         vectorstore = create_vectorstore(docs)
         fusion_retriever = create_fusion_retriever(
             vectorstore=vectorstore,

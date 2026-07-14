@@ -155,7 +155,7 @@ if __name__ == "__main__":
     print(f"工具参数：{query_weather.args}")
 
     print("\n✅ 天气工具测试完成！")
-    print("\n💡 提示：")
+    print("\n[提示] 提示：")
     print("- 如果看到'模拟数据'，说明未配置QWEATHER_API_KEY")
     print("- 配置后可获取真实天气数据")
     print("- 申请地址：https://dev.qweather.com/")

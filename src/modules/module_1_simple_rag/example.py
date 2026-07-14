@@ -149,7 +149,7 @@ def demo_with_sources():
 
     result = rag_chain.invoke(question)
 
-    print(f"💡 答案：{result['answer']}\n")
+    print(f"[提示] 答案：{result['answer']}\n")
     print(f"📚 参考了 {len(result['source_documents'])} 个文档：")
 
     for i, doc in enumerate(result['source_documents'], 1):
@@ -194,7 +194,7 @@ def demo_persistence():
     question = "一线城市住宿标准是多少？"
     print(f"\n❓ {question}")
     answer = rag_chain.invoke(question)
-    print(f"💡 {answer}")
+    print(f"[提示] {answer}")
 
     print("\n[OK] 持久化测试成功！")
 

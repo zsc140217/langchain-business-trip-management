@@ -97,7 +97,7 @@ def run_agent_simple(query: str, tools: List, llm=None, verbose: bool = True) ->
             tool_args = tool_call['args']
 
             if verbose:
-                print(f"\n🔧 调用工具: {tool_name}")
+                print(f"\n[工具] 调用工具: {tool_name}")
                 print(f"   参数: {tool_args}")
 
             # 执行工具
