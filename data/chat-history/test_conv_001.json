@@ -1,0 +1,36 @@
+{
+  "chat_id": "test_conv_001",
+  "updated_at": "2026-07-14T21:31:38.491320",
+  "messages": [
+    {
+      "role": "user",
+      "content": "我要去北京出差",
+      "timestamp": "2026-07-14T21:31:38.472271",
+      "metadata": {}
+    },
+    {
+      "role": "assistant",
+      "content": "好的，需要查询天气吗？",
+      "timestamp": "2026-07-14T21:31:38.474281",
+      "metadata": {}
+    },
+    {
+      "role": "user",
+      "content": "我要去北京出差，拜访华为公司",
+      "timestamp": "2026-07-14T21:31:38.478412",
+      "metadata": {}
+    },
+    {
+      "role": "user",
+      "content": "我要去上海出差",
+      "timestamp": "2026-07-14T21:31:38.490811",
+      "metadata": {}
+    },
+    {
+      "role": "assistant",
+      "content": "好的，查询上海的酒店",
+      "timestamp": "2026-07-14T21:31:38.491320",
+      "metadata": {}
+    }
+  ]
+}

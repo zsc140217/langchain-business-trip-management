@@ -1,0 +1,186 @@
+{
+  "dashboard": {
+    "title": "Travel Agent Overview",
+    "tags": [
+      "travel-agent",
+      "production"
+    ],
+    "timezone": "browser",
+    "panels": [
+      {
+        "id": 1,
+        "title": "请求量 (QPS)",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(travel_agent_requests_total[1m])",
+            "legendFormat": "{{status}}"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 0
+        }
+      },
+      {
+        "id": 2,
+        "title": "错误率",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(travel_agent_requests_total{status=\"error\"}[5m]) / rate(travel_agent_requests_total[5m])",
+            "legendFormat": "Error Rate"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 0
+        }
+      },
+      {
+        "id": 3,
+        "title": "请求延迟 (P95/P99)",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(travel_agent_request_duration_seconds_bucket[5m]))",
+            "legendFormat": "P95"
+          },
+          {
+            "expr": "histogram_quantile(0.99, rate(travel_agent_request_duration_seconds_bucket[5m]))",
+            "legendFormat": "P99"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 8
+        }
+      },
+      {
+        "id": 4,
+        "title": "LLM调用量",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(travel_agent_llm_calls_total[1m])",
+            "legendFormat": "{{operation}} (cached={{cached}})"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 8
+        }
+      },
+      {
+        "id": 5,
+        "title": "缓存命中率",
+        "type": "gauge",
+        "targets": [
+          {
+            "expr": "travel_agent_cache_hit_rate"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 6,
+          "x": 0,
+          "y": 16
+        }
+      },
+      {
+        "id": 6,
+        "title": "总成本 (USD)",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "travel_agent_cost_total_usd"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 6,
+          "x": 6,
+          "y": 16
+        }
+      },
+      {
+        "id": 7,
+        "title": "内存使用率",
+        "type": "gauge",
+        "targets": [
+          {
+            "expr": "travel_agent_system_memory_usage_percent"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 6,
+          "x": 12,
+          "y": 16
+        }
+      },
+      {
+        "id": 8,
+        "title": "CPU使用率",
+        "type": "gauge",
+        "targets": [
+          {
+            "expr": "travel_agent_system_cpu_usage_percent"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 6,
+          "x": 18,
+          "y": 16
+        }
+      },
+      {
+        "id": 6,
+        "title": "审批超时 (pending > 24h触发告警)",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "travel_agent_pending_approval_max_hours{type=\"manual\"}",
+            "legendFormat": "manual"
+          },
+          {
+            "expr": "travel_agent_pending_approval_max_hours{type=\"auto\"}",
+            "legendFormat": "auto"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 6,
+          "x": 0,
+          "y": 4
+        },
+        "thresholds": [
+          {
+            "value": 24,
+            "op": "gt",
+            "color": "orange"
+          },
+          {
+            "value": 48,
+            "op": "gt",
+            "color": "red"
+          }
+        ]
+      }
+    ],
+    "refresh": "10s",
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    }
+  }
+}

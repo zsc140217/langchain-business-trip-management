@@ -1,0 +1,502 @@
+[
+  {
+    "id": 1,
+    "query": "你好",
+    "expected_answer": "闲聊回复",
+    "expected_chunks": [],
+    "query_type": "CHITCHAT",
+    "difficulty": "EASY",
+    "retrieval_type": "NONE",
+    "category": "闲聊-问候"
+  },
+  {
+    "id": 2,
+    "query": "今天天气怎么样？",
+    "expected_answer": "闲聊回复",
+    "expected_chunks": [],
+    "query_type": "CHITCHAT",
+    "difficulty": "EASY",
+    "retrieval_type": "NONE",
+    "category": "闲聊-日常"
+  },
+  {
+    "id": 3,
+    "query": "帮我查航班",
+    "expected_answer": "工具调用",
+    "expected_chunks": [],
+    "query_type": "TOOL",
+    "difficulty": "EASY",
+    "retrieval_type": "NONE",
+    "category": "工具-航班查询"
+  },
+  {
+    "id": 4,
+    "query": "查一下北京的酒店",
+    "expected_answer": "工具调用",
+    "expected_chunks": [],
+    "query_type": "TOOL",
+    "difficulty": "EASY",
+    "retrieval_type": "NONE",
+    "category": "工具-酒店查询"
+  },
+  {
+    "id": 5,
+    "query": "去北京出差，公司高管住宿标准是多少？",
+    "expected_answer": "500元/天",
+    "expected_chunks": ["住宿费标准", "北京", "500"],
+    "query_type": "FACTUAL",
+    "difficulty": "EASY",
+    "retrieval_type": "VECTOR",
+    "category": "规则-住宿标准"
+  },
+  {
+    "id": 6,
+    "query": "去成都出差，省内住宿费标准是多少？",
+    "expected_answer": "≤370元/天",
+    "expected_chunks": ["成都市", "≤370", "省内"],
+    "query_type": "FACTUAL",
+    "difficulty": "EASY",
+    "retrieval_type": "VECTOR",
+    "category": "规则-住宿标准"
+  },
+  {
+    "id": 7,
+    "query": "伙食补助费是什么？",
+    "expected_answer": "对工作人员在因公出差期间给予的伙食补偿费用",
+    "expected_chunks": ["伙食补助费", "第十二条"],
+    "query_type": "FACTUAL",
+    "difficulty": "EASY",
+    "retrieval_type": "VECTOR",
+    "category": "规则-定义"
+  },
+  {
+    "id": 8,
+    "query": "差旅费包括哪些？",
+    "expected_answer": "城市间交通费、住宿费、伙食补助费和公杂费",
+    "expected_chunks": ["差旅费", "第三条"],
+    "query_type": "FACTUAL",
+    "difficulty": "EASY",
+    "retrieval_type": "VECTOR",
+    "category": "规则-定义"
+  },
+  {
+    "id": 9,
+    "query": "销售部出差最多的员工是谁？",
+    "expected_answer": "王秀英、李静等（5次）",
+    "expected_chunks": [],
+    "query_type": "FACTUAL",
+    "difficulty": "MEDIUM",
+    "retrieval_type": "GRAPH",
+    "category": "业务-员工统计"
+  },
+  {
+    "id": 10,
+    "query": "人事部有哪些员工？",
+    "expected_answer": "高艳芳（人事经理）、刘秀英、张芳（人事专员）",
+    "expected_chunks": [],
+    "query_type": "FACTUAL",
+    "difficulty": "EASY",
+    "retrieval_type": "GRAPH",
+    "category": "业务-组织架构"
+  },
+  {
+    "id": 11,
+    "query": "高艳芳向谁汇报？",
+    "expected_answer": "孙军强（总经理）",
+    "expected_chunks": [],
+    "query_type": "FACTUAL",
+    "difficulty": "EASY",
+    "retrieval_type": "GRAPH",
+    "category": "业务-组织架构"
+  },
+  {
+    "id": 12,
+    "query": "过去3个月有多少次出差到北京？",
+    "expected_answer": "具体次数（从图谱查询）",
+    "expected_chunks": [],
+    "query_type": "FACTUAL",
+    "difficulty": "MEDIUM",
+    "retrieval_type": "GRAPH",
+    "category": "业务-差旅统计"
+  },
+  {
+    "id": 13,
+    "query": "去上海出差，高管住宿标准是多少？",
+    "expected_answer": "500元/天",
+    "expected_chunks": ["上海", "500", "住宿"],
+    "query_type": "FACTUAL",
+    "difficulty": "EASY",
+    "retrieval_type": "VECTOR",
+    "category": "规则-住宿标准"
+  },
+  {
+    "id": 14,
+    "query": "出差到甘孜州，住宿标准是多少？",
+    "expected_answer": "≤330元/天",
+    "expected_chunks": ["甘孜州", "≤330"],
+    "query_type": "FACTUAL",
+    "difficulty": "MEDIUM",
+    "retrieval_type": "VECTOR",
+    "category": "规则-住宿标准"
+  },
+  {
+    "id": 15,
+    "query": "差旅费报销需要哪些材料？",
+    "expected_answer": "票据、出差审批单等",
+    "expected_chunks": ["报销", "凭据"],
+    "query_type": "FACTUAL",
+    "difficulty": "MEDIUM",
+    "retrieval_type": "VECTOR",
+    "category": "规则-报销流程"
+  },
+  {
+    "id": 16,
+    "query": "公司高管可以乘坐什么交通工具？",
+    "expected_answer": "飞机普通舱经济舱、轮船二等舱、火车软席/高铁一等座",
+    "expected_chunks": ["交通工具", "公司高管", "飞机"],
+    "query_type": "FACTUAL",
+    "difficulty": "EASY",
+    "retrieval_type": "VECTOR",
+    "category": "规则-交通标准"
+  },
+  {
+    "id": 17,
+    "query": "普通员工可以乘坐高铁一等座吗？",
+    "expected_answer": "不可以，普通员工应乘坐高铁二等座",
+    "expected_chunks": ["其余人员", "高铁/动车二等座"],
+    "query_type": "FACTUAL",
+    "difficulty": "MEDIUM",
+    "retrieval_type": "VECTOR",
+    "category": "规则-交通标准"
+  },
+  {
+    "id": 18,
+    "query": "连续乘车超过多少小时可以购买卧铺票？",
+    "expected_answer": "连续乘车超过6小时",
+    "expected_chunks": ["连续乘车", "6小时", "卧铺"],
+    "query_type": "FACTUAL",
+    "difficulty": "MEDIUM",
+    "retrieval_type": "VECTOR",
+    "category": "规则-交通标准"
+  },
+  {
+    "id": 19,
+    "query": "乘坐飞机可以报销哪些费用？",
+    "expected_answer": "机票费、民航发展基金、燃油附加费",
+    "expected_chunks": ["飞机", "民航发展基金", "燃油附加费"],
+    "query_type": "FACTUAL",
+    "difficulty": "MEDIUM",
+    "retrieval_type": "VECTOR",
+    "category": "规则-费用报销"
+  },
+  {
+    "id": 20,
+    "query": "可以购买交通意外保险吗？",
+    "expected_answer": "可以，每人次可以购买一份",
+    "expected_chunks": ["交通意外保险", "一份"],
+    "query_type": "FACTUAL",
+    "difficulty": "EASY",
+    "retrieval_type": "VECTOR",
+    "category": "规则-保险"
+  },
+  {
+    "id": 21,
+    "query": "去北京出差3天，预计住宿和伙食费用是多少？",
+    "expected_answer": "住宿1500元（500×3）+ 伙食300元（100×3）= 1800元",
+    "expected_chunks": ["北京", "500", "100"],
+    "query_type": "FACTUAL",
+    "difficulty": "HARD",
+    "retrieval_type": "HYBRID",
+    "category": "混合-费用计算"
+  },
+  {
+    "id": 22,
+    "query": "张三去上海出差2天，他是普通员工，预计费用？",
+    "expected_answer": "住宿1000元（500×2）+ 伙食200元（100×2）= 1200元",
+    "expected_chunks": ["上海", "500"],
+    "query_type": "FACTUAL",
+    "difficulty": "HARD",
+    "retrieval_type": "HYBRID",
+    "category": "混合-费用计算"
+  },
+  {
+    "id": 23,
+    "query": "华北客户交付项目有哪些人出差？",
+    "expected_answer": "项目相关人员列表",
+    "expected_chunks": [],
+    "query_type": "FACTUAL",
+    "difficulty": "MEDIUM",
+    "retrieval_type": "GRAPH",
+    "category": "业务-项目查询"
+  },
+  {
+    "id": 24,
+    "query": "出差次数最多的部门是哪个？",
+    "expected_answer": "销售部或生产部",
+    "expected_chunks": [],
+    "query_type": "FACTUAL",
+    "difficulty": "MEDIUM",
+    "retrieval_type": "GRAPH",
+    "category": "业务-部门统计"
+  },
+  {
+    "id": 25,
+    "query": "总经理是谁？",
+    "expected_answer": "孙军强",
+    "expected_chunks": [],
+    "query_type": "FACTUAL",
+    "difficulty": "EASY",
+    "retrieval_type": "GRAPH",
+    "category": "业务-组织架构"
+  },
+  {
+    "id": 26,
+    "query": "无住宿发票可以报销住宿费吗？",
+    "expected_answer": "不可以，无住宿发票的一律不予报销住宿费",
+    "expected_chunks": ["无住宿发票", "不予报销"],
+    "query_type": "FACTUAL",
+    "difficulty": "EASY",
+    "retrieval_type": "VECTOR",
+    "category": "规则-报销要求"
+  },
+  {
+    "id": 27,
+    "query": "出差审批流程是什么？",
+    "expected_answer": "严格先审批、后出差的报批程序",
+    "expected_chunks": ["先审批", "后出差"],
+    "query_type": "FACTUAL",
+    "difficulty": "MEDIUM",
+    "retrieval_type": "VECTOR",
+    "category": "规则-审批流程"
+  },
+  {
+    "id": 28,
+    "query": "可以变相旅游吗？",
+    "expected_answer": "严禁以任何名义和方式变相旅游",
+    "expected_chunks": ["严禁", "变相旅游"],
+    "query_type": "FACTUAL",
+    "difficulty": "EASY",
+    "retrieval_type": "VECTOR",
+    "category": "规则-禁止事项"
+  },
+  {
+    "id": 29,
+    "query": "未按规定等级乘坐交通工具怎么办？",
+    "expected_answer": "超支部分由个人自理",
+    "expected_chunks": ["未按规定", "超支", "个人自理"],
+    "query_type": "FACTUAL",
+    "difficulty": "MEDIUM",
+    "retrieval_type": "VECTOR",
+    "category": "规则-违规处理"
+  },
+  {
+    "id": 30,
+    "query": "乘坐自带交通工具可以报销吗？",
+    "expected_answer": "不可以，不予报销交通费",
+    "expected_chunks": ["自带交通工具", "不予报销"],
+    "query_type": "FACTUAL",
+    "difficulty": "EASY",
+    "retrieval_type": "VECTOR",
+    "category": "规则-交通费用"
+  },
+  {
+    "id": 31,
+    "query": "市内出租车费用如何报销？",
+    "expected_answer": "需填制出租车费用清单，注明时间、事由、起止点、金额，经审核批准后报销",
+    "expected_chunks": ["市内出租车", "费用清单", "审核"],
+    "query_type": "FACTUAL",
+    "difficulty": "HARD",
+    "retrieval_type": "VECTOR",
+    "category": "规则-市内交通"
+  },
+  {
+    "id": 32,
+    "query": "去深圳出差，住宿标准是多少？",
+    "expected_answer": "450元/天",
+    "expected_chunks": ["深圳", "450"],
+    "query_type": "FACTUAL",
+    "difficulty": "EASY",
+    "retrieval_type": "VECTOR",
+    "category": "规则-住宿标准"
+  },
+  {
+    "id": 33,
+    "query": "去广东出差，住宿标准是多少？",
+    "expected_answer": "450元/天",
+    "expected_chunks": ["广东", "450"],
+    "query_type": "FACTUAL",
+    "difficulty": "EASY",
+    "retrieval_type": "VECTOR",
+    "category": "规则-住宿标准"
+  },
+  {
+    "id": 34,
+    "query": "7-9月去张家口出差，住宿标准是多少？",
+    "expected_answer": "525元/天（淡旺季浮动）",
+    "expected_chunks": ["张家口", "7-9月", "525"],
+    "query_type": "FACTUAL",
+    "difficulty": "HARD",
+    "retrieval_type": "VECTOR",
+    "category": "规则-淡旺季标准"
+  },
+  {
+    "id": 35,
+    "query": "本办法适用于哪些单位？",
+    "expected_answer": "公司本部，各子公司参照执行",
+    "expected_chunks": ["适用", "公司本部", "子公司"],
+    "query_type": "FACTUAL",
+    "difficulty": "EASY",
+    "retrieval_type": "VECTOR",
+    "category": "规则-适用范围"
+  },
+  {
+    "id": 36,
+    "query": "这个差旅管理办法是哪一年发布的？",
+    "expected_answer": "2019年",
+    "expected_chunks": ["2019"],
+    "query_type": "FACTUAL",
+    "difficulty": "EASY",
+    "retrieval_type": "VECTOR",
+    "category": "规则-基本信息"
+  },
+  {
+    "id": 37,
+    "query": "财务部经理是谁？",
+    "expected_answer": "朱静敏",
+    "expected_chunks": [],
+    "query_type": "FACTUAL",
+    "difficulty": "EASY",
+    "retrieval_type": "GRAPH",
+    "category": "业务-组织架构"
+  },
+  {
+    "id": 38,
+    "query": "采购部有多少人？",
+    "expected_answer": "6人（1个经理+5个采购员）",
+    "expected_chunks": [],
+    "query_type": "FACTUAL",
+    "difficulty": "MEDIUM",
+    "retrieval_type": "GRAPH",
+    "category": "业务-部门统计"
+  },
+  {
+    "id": 39,
+    "query": "副总经理向谁汇报？",
+    "expected_answer": "孙军强（总经理）",
+    "expected_chunks": [],
+    "query_type": "FACTUAL",
+    "difficulty": "EASY",
+    "retrieval_type": "GRAPH",
+    "category": "业务-组织架构"
+  },
+  {
+    "id": 40,
+    "query": "去重庆出差，住宿标准是多少？",
+    "expected_answer": "370元/天",
+    "expected_chunks": ["重庆", "370"],
+    "query_type": "FACTUAL",
+    "difficulty": "EASY",
+    "retrieval_type": "VECTOR",
+    "category": "规则-住宿标准"
+  },
+  {
+    "id": 41,
+    "query": "谢谢你的帮助",
+    "expected_answer": "闲聊回复",
+    "expected_chunks": [],
+    "query_type": "CHITCHAT",
+    "difficulty": "EASY",
+    "retrieval_type": "NONE",
+    "category": "闲聊-感谢"
+  },
+  {
+    "id": 42,
+    "query": "你是谁？",
+    "expected_answer": "闲聊回复",
+    "expected_chunks": [],
+    "query_type": "CHITCHAT",
+    "difficulty": "EASY",
+    "retrieval_type": "NONE",
+    "category": "闲聊-自我介绍"
+  },
+  {
+    "id": 43,
+    "query": "生产部出差次数最多的员工是谁？",
+    "expected_answer": "具体员工名单",
+    "expected_chunks": [],
+    "query_type": "FACTUAL",
+    "difficulty": "MEDIUM",
+    "retrieval_type": "GRAPH",
+    "category": "业务-员工统计"
+  },
+  {
+    "id": 44,
+    "query": "去西藏出差，6-9月住宿标准是多少？",
+    "expected_answer": "530元/天（淡旺季浮动）",
+    "expected_chunks": ["西藏", "6-9月", "530"],
+    "query_type": "FACTUAL",
+    "difficulty": "HARD",
+    "retrieval_type": "VECTOR",
+    "category": "规则-淡旺季标准"
+  },
+  {
+    "id": 45,
+    "query": "公司高管随行人员可以乘坐什么交通工具？",
+    "expected_answer": "因特殊情况需要，随行一人可乘坐同等级交通工具",
+    "expected_chunks": ["高管", "随行一人", "同等级"],
+    "query_type": "FACTUAL",
+    "difficulty": "HARD",
+    "retrieval_type": "VECTOR",
+    "category": "规则-特殊规定"
+  },
+  {
+    "id": 46,
+    "query": "西南市场拓展项目的出差人员有哪些？",
+    "expected_answer": "项目相关人员列表",
+    "expected_chunks": [],
+    "query_type": "FACTUAL",
+    "difficulty": "MEDIUM",
+    "retrieval_type": "GRAPH",
+    "category": "业务-项目查询"
+  },
+  {
+    "id": 47,
+    "query": "去天津出差，住宿标准是多少？",
+    "expected_answer": "380元/天",
+    "expected_chunks": ["天津", "380"],
+    "query_type": "FACTUAL",
+    "difficulty": "EASY",
+    "retrieval_type": "VECTOR",
+    "category": "规则-住宿标准"
+  },
+  {
+    "id": 48,
+    "query": "去浙江出差，住宿标准是多少？",
+    "expected_answer": "400元/天",
+    "expected_chunks": ["浙江", "400"],
+    "query_type": "FACTUAL",
+    "difficulty": "EASY",
+    "retrieval_type": "VECTOR",
+    "category": "规则-住宿标准"
+  },
+  {
+    "id": 49,
+    "query": "制定本办法的依据是什么？",
+    "expected_answer": "《党政机关厉行节约反对浪费条例》，参照《内江投资控股集团有限公司差旅费管理办法》",
+    "expected_chunks": ["依据", "条例", "参照"],
+    "query_type": "FACTUAL",
+    "difficulty": "MEDIUM",
+    "retrieval_type": "VECTOR",
+    "category": "规则-法规依据"
+  },
+  {
+    "id": 50,
+    "query": "工作人员在市内执行公务应该乘坐什么交通工具？",
+    "expected_answer": "原则上乘坐市内公交车，特殊情况可乘坐出租车",
+    "expected_chunks": ["市内", "公交车", "出租"],
+    "query_type": "FACTUAL",
+    "difficulty": "MEDIUM",
+    "retrieval_type": "VECTOR",
+    "category": "规则-市内交通"
+  }
+]
