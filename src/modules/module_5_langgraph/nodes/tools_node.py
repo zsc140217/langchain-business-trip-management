@@ -41,7 +41,7 @@ def tools_node(state: TravelAgentState) -> Dict[str, Any]:
         logger.warning("⚠️  工具节点被调用但没有tool_calls")
         return {"messages": [], "tool_calls": []}
 
-    logger.info(f"🔧 工具执行节点：执行 {len(tool_calls)} 个工具")
+    logger.info(f"[工具] 工具执行节点：执行 {len(tool_calls)} 个工具")
 
     # 创建工具映射
     tool_map = create_tool_map()

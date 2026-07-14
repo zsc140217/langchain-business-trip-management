@@ -1,0 +1,12 @@
+{
+  "total_pages": 27,
+  "total_characters": 16807,
+  "total_tables": 0,
+  "output_file": "E:\Desktop\langchain-business-trip-management\data\knowledge_base\01_差旅管理办法.txt",
+  "technology_stack": {
+    "pymupdf": "1.28.0",
+    "easyocr": "1.7.2",
+    "camelot": "2.0.0"
+  },
+  "notes": "成功识别27页真实企业差旅制度文档，表格提取失败（需要timm库支持ML模式）"
+}

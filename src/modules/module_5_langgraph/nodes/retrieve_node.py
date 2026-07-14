@@ -43,7 +43,7 @@ def retrieve_node(state: TravelAgentState) -> Dict[str, Any]:
         logger.warning("Invalid query (empty or non-string)")
         return {"documents": []}
 
-    logger.info(f"🔍 检索节点：查询 = '{query}'")
+    logger.info(f"[搜索] 检索节点：查询 = '{query}'")
 
     # 检查向量存储是否存在
     if not VECTORSTORE_PATH.exists():

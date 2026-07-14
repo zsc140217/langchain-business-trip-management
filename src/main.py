@@ -100,7 +100,7 @@ async def startup_event():
         documents = load_documents("data/travel_policy.txt")
 
         # 2. 创建向量存储
-        print("🔄 创建向量存储...")
+        print("[刷新] 创建向量存储...")
         vectorstore = create_vectorstore(documents)
 
         # 3. 创建检索器

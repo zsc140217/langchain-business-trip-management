@@ -1,0 +1,247 @@
+{
+  "metadata": {
+    "test_mode": "mock",
+    "test_count": 20,
+    "timestamp": "2026-06-28 21:25:58"
+  },
+  "analysis": {
+    "total_queries": 20,
+    "success_count": 4,
+    "success_rate": 20.0,
+    "avg_latency_ms": 3114.96,
+    "by_category": {
+      "intent": {
+        "count": 6,
+        "success": 4,
+        "total_latency": 10398.02,
+        "avg_latency": 1733.0
+      },
+      "chitchat": {
+        "count": 8,
+        "success": 0,
+        "total_latency": 32964.36,
+        "avg_latency": 4120.55
+      },
+      "simple": {
+        "count": 4,
+        "success": 0,
+        "total_latency": 4490.7,
+        "avg_latency": 1122.67
+      },
+      "medium": {
+        "count": 1,
+        "success": 0,
+        "total_latency": 0,
+        "avg_latency": 0.0
+      },
+      "complex": {
+        "count": 1,
+        "success": 0,
+        "total_latency": 14446.1,
+        "avg_latency": 14446.1
+      }
+    }
+  },
+  "details": [
+    {
+      "query": "北京天气怎么样",
+      "category": "intent",
+      "expected_layer": "layer0_intent",
+      "actual_route": "intent_weather",
+      "latency_ms": 232.09,
+      "llm_calls": 0,
+      "success": true,
+      "error": null
+    },
+    {
+      "query": "查询CA1234航班状态",
+      "category": "intent",
+      "expected_layer": "layer0_intent",
+      "actual_route": "intent_flight",
+      "latency_ms": 0.0,
+      "llm_calls": 0,
+      "success": true,
+      "error": null
+    },
+    {
+      "query": "推荐附近的协议酒店",
+      "category": "intent",
+      "expected_layer": "layer0_intent",
+      "actual_route": "intent_hotel",
+      "latency_ms": 0.0,
+      "llm_calls": 0,
+      "success": true,
+      "error": null
+    },
+    {
+      "query": "某某公司的联系方式",
+      "category": "intent",
+      "expected_layer": "layer0_intent",
+      "actual_route": "fallback",
+      "latency_ms": 6177.7,
+      "llm_calls": 0,
+      "success": false,
+      "error": null
+    },
+    {
+      "query": "到机场怎么走",
+      "category": "intent",
+      "expected_layer": "layer0_intent",
+      "actual_route": "fallback",
+      "latency_ms": 3987.22,
+      "llm_calls": 0,
+      "success": false,
+      "error": null
+    },
+    {
+      "query": "上海明天温度多少",
+      "category": "intent",
+      "expected_layer": "layer0_intent",
+      "actual_route": "intent_weather",
+      "latency_ms": 1.01,
+      "llm_calls": 0,
+      "success": true,
+      "error": null
+    },
+    {
+      "query": "你好",
+      "category": "chitchat",
+      "expected_layer": "layer1_chitchat",
+      "actual_route": "fallback",
+      "latency_ms": 4144.63,
+      "llm_calls": 0,
+      "success": false,
+      "error": null
+    },
+    {
+      "query": "谢谢",
+      "category": "chitchat",
+      "expected_layer": "layer1_chitchat",
+      "actual_route": "fallback",
+      "latency_ms": 3773.65,
+      "llm_calls": 0,
+      "success": false,
+      "error": null
+    },
+    {
+      "query": "今天星期几",
+      "category": "chitchat",
+      "expected_layer": "layer1_chitchat",
+      "actual_route": "fallback",
+      "latency_ms": 3652.36,
+      "llm_calls": 0,
+      "success": false,
+      "error": null
+    },
+    {
+      "query": "你能做什么",
+      "category": "chitchat",
+      "expected_layer": "layer1_chitchat",
+      "actual_route": "fallback",
+      "latency_ms": 4497.24,
+      "llm_calls": 0,
+      "success": false,
+      "error": null
+    },
+    {
+      "query": "出差好累啊",
+      "category": "chitchat",
+      "expected_layer": "layer1_chitchat",
+      "actual_route": "fallback",
+      "latency_ms": 4552.67,
+      "llm_calls": 0,
+      "success": false,
+      "error": null
+    },
+    {
+      "query": "再见",
+      "category": "chitchat",
+      "expected_layer": "layer1_chitchat",
+      "actual_route": "fallback",
+      "latency_ms": 3005.1,
+      "llm_calls": 0,
+      "success": false,
+      "error": null
+    },
+    {
+      "query": "不客气",
+      "category": "chitchat",
+      "expected_layer": "layer1_chitchat",
+      "actual_route": "fallback",
+      "latency_ms": 5108.69,
+      "llm_calls": 0,
+      "success": false,
+      "error": null
+    },
+    {
+      "query": "早上好",
+      "category": "chitchat",
+      "expected_layer": "layer1_chitchat",
+      "actual_route": "fallback",
+      "latency_ms": 4230.02,
+      "llm_calls": 0,
+      "success": false,
+      "error": null
+    },
+    {
+      "query": "北京住宿标准是多少",
+      "category": "simple",
+      "expected_layer": "layer2_synthesis",
+      "actual_route": "error",
+      "latency_ms": 0,
+      "llm_calls": 0,
+      "success": false,
+      "error": "unsupported operand type(s) for +=: 'Mock' and 'str'"
+    },
+    {
+      "query": "一线城市有哪些",
+      "category": "simple",
+      "expected_layer": "layer2_synthesis",
+      "actual_route": "fallback",
+      "latency_ms": 4490.7,
+      "llm_calls": 0,
+      "success": false,
+      "error": null
+    },
+    {
+      "query": "报销流程是什么",
+      "category": "simple",
+      "expected_layer": "layer2_synthesis",
+      "actual_route": "error",
+      "latency_ms": 0,
+      "llm_calls": 0,
+      "success": false,
+      "error": "unsupported operand type(s) for +=: 'Mock' and 'str'"
+    },
+    {
+      "query": "审批需要多久",
+      "category": "simple",
+      "expected_layer": "layer2_synthesis",
+      "actual_route": "error",
+      "latency_ms": 0,
+      "llm_calls": 0,
+      "success": false,
+      "error": "unsupported operand type(s) for +=: 'Mock' and 'str'"
+    },
+    {
+      "query": "北京和上海住宿标准对比",
+      "category": "medium",
+      "expected_layer": "layer2_synthesis",
+      "actual_route": "error",
+      "latency_ms": 0,
+      "llm_calls": 0,
+      "success": false,
+      "error": "unsupported operand type(s) for +=: 'Mock' and 'str'"
+    },
+    {
+      "query": "去杭州出差，查天气并推荐酒店",
+      "category": "complex",
+      "expected_layer": "layer2_orchestration",
+      "actual_route": "fallback",
+      "latency_ms": 14446.1,
+      "llm_calls": 0,
+      "success": false,
+      "error": null
+    }
+  ]
+}

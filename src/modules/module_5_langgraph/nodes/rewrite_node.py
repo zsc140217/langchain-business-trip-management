@@ -27,7 +27,7 @@ def rewrite_node(state: TravelAgentState) -> Dict[str, Any]:
     # 简化版：直接返回原查询（可选集成EnterpriseQueryRewriter）
     # 如果需要LLM改写，在这里调用query_rewriter
     
-    logger.info(f"🔄 查询改写节点：'{query}'")
+    logger.info(f"[刷新] 查询改写节点：'{query}'")
     logger.info(f"   保持原查询（简化实现）")
     
     return {

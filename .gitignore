@@ -26,11 +26,13 @@ ENV/
 *.log
 
 # Models (large files)
-learning/models/*/
+learning/models/
+venv_embedding_finetune/
 *.safetensors
 *.bin
 *.pth
 *.onnx
+*.dll
 
 # Node modules
 node_modules/
@@ -47,3 +49,12 @@ htmlcov/
 
 # Test results
 test_result.json
+
+# Runtime files
+*.pid
+
+# Environment files
+.env.*
+
+# Temp/error files
+=*

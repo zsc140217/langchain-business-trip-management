@@ -212,7 +212,7 @@ def get_flight_price(departure_city: str, arrival_city: str, flight_class: Optio
         f"  🕐 {cheapest_flight['departure']} → {cheapest_flight['arrival']}\n"
         f"  💰 ¥{int(min_price)}\n\n"
         f"{trend}\n\n"
-        f"💡 省钱技巧：\n"
+        f"[提示] 省钱技巧：\n"
         f"  • 提前7-14天预订通常更便宜\n"
         f"  • 避开节假日高峰期\n"
         f"  • 选择早班或晚班航班\n"

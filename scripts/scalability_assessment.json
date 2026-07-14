@@ -1,0 +1,422 @@
+{
+  "assessment_scope": {
+    "scale_range": "1K → 100K documents/month",
+    "evaluation_date": "2026-06-24",
+    "architectures_compared": [
+      "Vision LLM API",
+      "YOLO + OCR Local",
+      "Hybrid Approach"
+    ]
+  },
+  "approach_1_vision_llm_api": {
+    "horizontal_scaling": {
+      "ease": "Very Easy",
+      "method": "Simple API parallelization with concurrent requests",
+      "implementation": "Thread pool or async/await patterns",
+      "scaling_complexity": "Low - no infrastructure management"
+    },
+    "rate_limits": {
+      "openai_gpt4_vision": {
+        "rpm": 10000,
+        "tpm": 2000000,
+        "daily_capacity_estimate": "~14.4M requests/day",
+        "monthly_capacity_1k_tier": "Sufficient for 1K-10K docs",
+        "monthly_capacity_100k_tier": "Need enterprise tier or multiple accounts"
+      },
+      "anthropic_claude_vision": {
+        "rpm": 1000,
+        "tpm": 400000,
+        "daily_capacity_estimate": "~1.44M requests/day",
+        "monthly_capacity_1k_tier": "Sufficient for 1K docs",
+        "monthly_capacity_100k_tier": "Requires rate limit increase request"
+      },
+      "mitigation": [
+        "Multiple API keys rotation",
+        "Request queue with rate limiting middleware",
+        "Tier upgrade to enterprise plans"
+      ]
+    },
+    "latency": {
+      "per_document_latency": "2-5 seconds",
+      "batch_processing_support": "Limited - most APIs process one at a time",
+      "1k_docs_processing_time": "33-83 minutes (sequential), 2-5 min (100 parallel)",
+      "100k_docs_processing_time": "55-138 hours (sequential), 200-500 min (1000 parallel)",
+      "optimization": [
+        "Async batch requests with connection pooling",
+        "Multi-region API endpoints",
+        "Caching for repeated documents"
+      ]
+    },
+    "cost_scaling": {
+      "model": "Linear scaling - problem at high volume",
+      "1k_docs_monthly": {
+        "openai_gpt4v": "$100-300 (avg $0.10-0.30 per doc)",
+        "anthropic_claude": "$150-400 (avg $0.15-0.40 per doc)"
+      },
+      "100k_docs_monthly": {
+        "openai_gpt4v": "$10,000-30,000",
+        "anthropic_claude": "$15,000-40,000"
+      },
+      "cost_growth_factor": "100x at 100x scale",
+      "mitigation": [
+        "Negotiate volume discounts (20-40% at enterprise tier)",
+        "Hybrid approach: LLM for complex docs only",
+        "Cache results for similar documents"
+      ]
+    },
+    "bottlenecks": [
+      "API rate limits at 100K scale without enterprise tier",
+      "Network latency and reliability",
+      "Linear cost scaling becomes prohibitive",
+      "No control over model availability/downtime"
+    ],
+    "scalability_score": {
+      "1k_docs": "9/10 - Ideal for low volume",
+      "10k_docs": "7/10 - Still manageable with optimization",
+      "100k_docs": "4/10 - Rate limits and cost become major issues"
+    }
+  },
+  "approach_2_yolo_ocr_local": {
+    "gpu_requirements": {
+      "1k_docs": {
+        "gpu_count": "1x NVIDIA T4 or equivalent",
+        "vram": "16GB",
+        "processing_capacity": "~100-200 images/hour",
+        "monthly_capacity": "Sufficient with daily batching"
+      },
+      "10k_docs": {
+        "gpu_count": "2-3x NVIDIA T4 or 1x A10G",
+        "vram": "24GB per GPU",
+        "processing_capacity": "~500-1000 images/hour"
+      },
+      "100k_docs": {
+        "gpu_count": "8-10x NVIDIA T4 or 3-4x A100",
+        "vram": "40GB+ for A100 efficiency",
+        "processing_capacity": "~5000-10000 images/hour",
+        "architecture": "Distributed processing cluster"
+      }
+    },
+    "batch_inference": {
+      "yolo_batch_size": "32-64 images in parallel on single GPU",
+      "ocr_batch_size": "16-32 images (depends on text density)",
+      "throughput_single_gpu": "150-250 docs/hour",
+      "throughput_optimized": [
+        "TensorRT optimization: +40% speed",
+        "ONNX Runtime: +30% speed",
+        "Mixed precision (FP16): +50% speed"
+      ]
+    },
+    "autoscaling": {
+      "kubernetes_gpu_nodes": {
+        "node_pool_config": "GPU node pool with autoscaling",
+        "min_nodes": 1,
+        "max_nodes": 20,
+        "scale_up_trigger": "Queue depth > 1000 or latency > 5min",
+        "scale_down_trigger": "Queue empty for 10min",
+        "pod_spec": "1 GPU per pod, resource limits enforced"
+      },
+      "cloud_providers": {
+        "aws": "EKS with GPU node groups (g4dn.xlarge, p3.2xlarge)",
+        "aliyun": "ACK with GPU instances (ecs.gn6i, ecs.gn7)",
+        "gcp": "GKE with T4/A100 nodes"
+      },
+      "cost_optimization": [
+        "Spot/Preemptible instances for batch workloads (60-70% savings)",
+        "Reserved instances for baseline capacity (40% savings)",
+        "Scale to zero during off-peak hours"
+      ]
+    },
+    "cost_scaling": {
+      "model": "Better economies of scale - infrastructure amortization",
+      "1k_docs_monthly": {
+        "infrastructure": "$150-250/month (1x GPU instance)",
+        "storage": "$10-20/month",
+        "networking": "$5-10/month",
+        "total": "$165-280/month",
+        "per_doc": "$0.165-0.280"
+      },
+      "10k_docs_monthly": {
+        "infrastructure": "$400-600/month (2-3x GPU instances)",
+        "storage": "$50-80/month",
+        "networking": "$20-40/month",
+        "total": "$470-720/month",
+        "per_doc": "$0.047-0.072"
+      },
+      "100k_docs_monthly": {
+        "infrastructure": "$2,500-4,000/month (8-10x GPU cluster with spot)",
+        "storage": "$300-500/month",
+        "networking": "$100-200/month",
+        "devops": "$500-1000/month (maintenance, monitoring)",
+        "total": "$3,400-5,700/month",
+        "per_doc": "$0.034-0.057"
+      },
+      "cost_growth_factor": "20x at 100x scale (vs 100x for LLM API)",
+      "breakeven_point": "~15,000-25,000 docs/month vs Vision LLM"
+    },
+    "bottlenecks": [
+      "GPU availability and provisioning time (3-10 min for autoscaling)",
+      "Model deployment and warm-up latency",
+      "Storage I/O for high-volume processing",
+      "DevOps complexity and maintenance overhead"
+    ],
+    "scalability_score": {
+      "1k_docs": "5/10 - Over-engineered, higher cost than API",
+      "10k_docs": "8/10 - Cost-effective, good control",
+      "100k_docs": "9/10 - Excellent scaling, 5-8x cheaper than API"
+    }
+  },
+  "infrastructure_comparison": {
+    "aws": {
+      "vision_llm_api": {
+        "architecture": "Lambda + Bedrock or direct API calls",
+        "pros": ["Serverless", "Zero infrastructure", "Pay-per-use"],
+        "cons": ["Rate limits", "No custom models", "Higher per-request cost"],
+        "best_for": "1K-10K docs/month"
+      },
+      "yolo_ocr_local": {
+        "architecture": "EKS + GPU node groups + SQS + S3",
+        "components": [
+          "EKS cluster with GPU nodes (g4dn.xlarge @ $0.526/hr spot)",
+          "SQS for job queue",
+          "S3 for document storage",
+          "CloudWatch for monitoring",
+          "Auto Scaling Groups for GPU nodes"
+        ],
+        "pros": ["Full control", "Cost-effective at scale", "Custom models"],
+        "cons": ["Complex setup", "DevOps overhead", "Cold start latency"],
+        "best_for": "20K+ docs/month"
+      },
+      "serverless_gpu": {
+        "options": ["AWS Batch with GPU", "SageMaker Serverless Inference"],
+        "limitations": "SageMaker serverless doesn't support GPU yet",
+        "workaround": "SageMaker async inference with auto-scaling"
+      }
+    },
+    "aliyun": {
+      "vision_llm_api": {
+        "architecture": "Function Compute + DashScope (Qwen-VL)",
+        "pros": ["Domestic latency", "Chinese docs support", "Competitive pricing"],
+        "cons": ["Model capabilities lag GPT-4V/Claude", "Rate limits"],
+        "best_for": "China-based processing, 1K-10K docs"
+      },
+      "yolo_ocr_local": {
+        "architecture": "ACK + GPU instances + MNS + OSS",
+        "components": [
+          "ACK (Alibaba Container Service for Kubernetes)",
+          "ECS GPU instances (ecs.gn6i-c4g1.xlarge @ ¥4.5/hr spot)",
+          "MNS (Message Service) for queue",
+          "OSS for storage",
+          "ARMS for monitoring"
+        ],
+        "pros": ["Lower GPU costs than AWS (20-30%)", "Good China peering"],
+        "cons": ["Less mature GPU ecosystem", "Documentation mostly Chinese"],
+        "best_for": "20K+ docs/month, China deployments"
+      }
+    },
+    "scalability_winner": {
+      "1k_to_10k": "AWS/Aliyun - Vision LLM API wins (simplicity, speed to market)",
+      "10k_to_50k": "Hybrid - Vision LLM for complex, YOLO+OCR for simple",
+      "50k_to_100k_plus": "AWS/Aliyun - YOLO+OCR Local wins (cost, control)"
+    }
+  },
+  "queue_based_architecture": {
+    "rationale": "Decouple ingestion from processing for elastic scaling",
+    "components": {
+      "ingestion_api": {
+        "role": "Accept document upload, validate, push to queue",
+        "technology": "FastAPI/Express on serverless (Lambda/Function Compute)",
+        "scaling": "Automatic based on HTTP requests"
+      },
+      "message_queue": {
+        "options": [
+          "Redis Streams (simple, in-memory, good for <100K/month)",
+          "RabbitMQ (feature-rich, persistent, good for <500K/month)",
+          "AWS SQS / Aliyun MNS (managed, scalable, best for >100K/month)",
+          "Kafka (overkill unless >1M/month or need event sourcing)"
+        ],
+        "recommendation": "SQS/MNS for 100K scale",
+        "queue_depth_monitoring": "Alert when depth > 10,000 (backlog forming)"
+      },
+      "worker_pool": {
+        "role": "Poll queue, process documents, write results to DB",
+        "technology": "Kubernetes Deployment with HPA (Horizontal Pod Autoscaler)",
+        "scaling_metrics": [
+          "Queue depth (scale up when >5000)",
+          "CPU/GPU utilization (scale up when >70%)",
+          "Processing latency (scale up when >10min p95)"
+        ],
+        "concurrency": "Each worker processes 1 doc at a time, 10-100 workers"
+      },
+      "result_storage": {
+        "options": [
+          "PostgreSQL for structured results",
+          "MongoDB for semi-structured (OCR text, bounding boxes)",
+          "S3/OSS for raw outputs (annotated images)"
+        ],
+        "recommendation": "PostgreSQL + S3 for hybrid storage"
+      }
+    },
+    "async_processing_flow": [
+      "1. User uploads document → API returns job_id immediately",
+      "2. API pushes job to queue with priority (normal/high)",
+      "3. Worker polls queue → processes document → updates job status",
+      "4. User polls GET /jobs/{job_id} or receives webhook callback",
+      "5. Result cached in DB, viewable via API"
+    ],
+    "advantages": [
+      "Handles traffic spikes (queue absorbs burst)",
+      "Retry failed jobs automatically",
+      "Priority processing (high-priority docs jump queue)",
+      "Independent scaling of API and workers",
+      "Observability (queue metrics show system health)"
+    ]
+  },
+  "bottleneck_analysis": {
+    "1k_to_10k_scale": {
+      "bottleneck": "Development velocity and time-to-market",
+      "recommendation": "Use Vision LLM API to validate product-market fit quickly",
+      "risk": "Premature optimization with complex infrastructure"
+    },
+    "10k_to_50k_scale": {
+      "bottleneck": "Cost and API rate limits start to hurt",
+      "recommendation": "Hybrid approach - classify docs, route complex to LLM, simple to YOLO+OCR",
+      "architecture": [
+        "Classifier model (fast, cheap): Determine doc complexity",
+        "Simple docs (invoices, receipts): YOLO + OCR (70% of volume)",
+        "Complex docs (contracts, forms): Vision LLM (30% of volume)",
+        "Cost savings: 50-60% vs pure LLM approach"
+      ]
+    },
+    "50k_to_100k_plus_scale": {
+      "bottleneck": "LLM API cost becomes prohibitive, need full control",
+      "recommendation": "YOLO + OCR Local on Kubernetes GPU cluster",
+      "architecture": [
+        "EKS/ACK with GPU node pool (g4dn.xlarge spot instances)",
+        "SQS/MNS for job queue with DLQ for failures",
+        "Auto-scaling: min 2 nodes (baseline), max 20 nodes (peak)",
+        "Monitoring: Prometheus + Grafana for GPU metrics",
+        "Cost: $0.034-0.057 per doc vs $0.10-0.40 for LLM"
+      ],
+      "additional_optimizations": [
+        "Model quantization (INT8) for 2x speed, minimal accuracy loss",
+        "TensorRT compilation for 40% latency reduction",
+        "Result caching with Redis (avoid reprocessing duplicates)",
+        "CDN for serving processed results (CloudFront/Aliyun CDN)"
+      ]
+    }
+  },
+  "architecture_recommendation_for_10x_growth": {
+    "scenario": "Planning for 100K → 1M docs/month",
+    "phase_1_foundation": {
+      "timeline": "Month 0-3",
+      "goal": "Build scalable hybrid architecture",
+      "steps": [
+        "Deploy queue-based architecture (SQS + EKS/ACK)",
+        "Implement both Vision LLM and YOLO+OCR pipelines",
+        "Build classifier to route docs intelligently",
+        "Setup monitoring (CloudWatch/ARMS + Prometheus)",
+        "Load testing to validate 200K docs/month capacity"
+      ]
+    },
+    "phase_2_optimization": {
+      "timeline": "Month 3-6",
+      "goal": "Reduce cost and improve latency",
+      "steps": [
+        "Profile GPU utilization, right-size instances",
+        "Implement aggressive caching (30% hit rate = 30% savings)",
+        "Optimize models (TensorRT, quantization)",
+        "Negotiate LLM API volume discounts",
+        "Multi-region deployment for global users"
+      ]
+    },
+    "phase_3_scale_out": {
+      "timeline": "Month 6-12",
+      "goal": "Handle 1M docs/month",
+      "steps": [
+        "Multi-cluster deployment (separate clusters per region)",
+        "Database sharding for result storage",
+        "Advanced auto-scaling (predictive scaling based on time patterns)",
+        "Chaos engineering to validate fault tolerance",
+        "Consider fine-tuning smaller vision models to cut LLM dependency"
+      ]
+    },
+    "projected_cost_at_1m_docs": {
+      "pure_llm_api": "$100,000-400,000/month (prohibitive)",
+      "hybrid_approach": "$30,000-60,000/month (80% YOLO, 20% LLM)",
+      "pure_local": "$20,000-40,000/month (infrastructure + DevOps)",
+      "recommendation": "Hybrid approach balances cost, quality, and flexibility"
+    }
+  },
+  "decision_matrix": {
+    "criteria": [
+      "Initial setup complexity",
+      "Operational overhead",
+      "Cost at scale",
+      "Latency/throughput",
+      "Model customization",
+      "Vendor lock-in"
+    ],
+    "vision_llm_api": {
+      "setup_complexity": "Low (1-2 weeks)",
+      "operational_overhead": "Very Low",
+      "cost_at_100k": "$10K-40K/month",
+      "latency": "2-5s per doc",
+      "customization": "None (black box)",
+      "vendor_lock_in": "High",
+      "verdict": "Best for <15K docs/month or prototyping"
+    },
+    "yolo_ocr_local": {
+      "setup_complexity": "High (4-8 weeks)",
+      "operational_overhead": "Medium (needs DevOps)",
+      "cost_at_100k": "$3.4K-5.7K/month",
+      "latency": "1-3s per doc (optimized)",
+      "customization": "Full (train custom models)",
+      "vendor_lock_in": "None",
+      "verdict": "Best for >50K docs/month or tight budget"
+    },
+    "hybrid_approach": {
+      "setup_complexity": "Medium-High (6-10 weeks)",
+      "operational_overhead": "Medium",
+      "cost_at_100k": "$6K-15K/month",
+      "latency": "1-5s per doc (mixed)",
+      "customization": "Partial (for local pipeline)",
+      "vendor_lock_in": "Medium",
+      "verdict": "Best balance for 15K-200K docs/month"
+    }
+  },
+  "final_recommendation": {
+    "current_stage_1k_docs": {
+      "approach": "Vision LLM API (OpenAI GPT-4V or Anthropic Claude)",
+      "rationale": "Fastest time to market, validate product before heavy infra investment",
+      "action_items": [
+        "Implement async job queue (Redis Streams sufficient)",
+        "Setup rate limiting and retry logic",
+        "Track per-document cost metrics",
+        "Build prototype classifier for future hybrid routing"
+      ]
+    },
+    "growth_stage_10k_to_50k": {
+      "approach": "Hybrid - Classifier + YOLO+OCR + Vision LLM",
+      "rationale": "Cost starts to matter, but still need LLM quality for complex docs",
+      "action_items": [
+        "Deploy YOLO+OCR on 2-4 GPU instances",
+        "Train/deploy doc complexity classifier",
+        "Route 60-80% to local, 20-40% to LLM",
+        "Migrate to SQS/MNS for queue",
+        "Setup comprehensive monitoring"
+      ]
+    },
+    "scale_stage_100k_plus": {
+      "approach": "YOLO+OCR Local as primary, LLM as fallback",
+      "rationale": "Cost efficiency critical, have resources for infrastructure",
+      "action_items": [
+        "Full EKS/ACK deployment with auto-scaling GPU cluster",
+        "Advanced model optimization (TensorRT, quantization)",
+        "Multi-region for global latency",
+        "Result caching with Redis cluster",
+        "Consider fine-tuning custom vision models",
+        "Reserve LLM for <10% of edge cases"
+      ]
+    }
+  }
+}

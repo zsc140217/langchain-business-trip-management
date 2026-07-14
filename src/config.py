@@ -11,6 +11,7 @@ load_dotenv()
 # API配置
 DASHSCOPE_API_KEY = os.getenv("DASHSCOPE_API_KEY")
 QWEATHER_API_KEY = os.getenv("QWEATHER_API_KEY")
+QWEATHER_API_HOST = os.getenv("QWEATHER_API_HOST")
 
 # 服务配置
 HOST = os.getenv("HOST", "0.0.0.0")

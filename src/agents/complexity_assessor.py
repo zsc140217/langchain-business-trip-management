@@ -6,8 +6,6 @@
 src/main/java/com/jblmj/aiagent/service/ComplexityAssessor.java
 """
 from enum import Enum
-from langchain.chains import LLMChain
-from langchain.prompts import PromptTemplate
 from typing import Optional
 
 
@@ -34,7 +32,6 @@ class ComplexityAssessor:
 
     def __init__(self, llm):
         self.llm = llm
-        self.llm_chain = self._create_llm_chain()
 
         # 意图关键词组
         self.intent_groups = [
@@ -160,7 +157,9 @@ class ComplexityAssessor:
 复杂度："""
 
         try:
-            response = self.llm_chain.run(query=query, prompt=prompt)
+            from langchain_core.messages import HumanMessage
+            messages = [HumanMessage(content=prompt)]
+            response = self.llm.invoke(messages).content
             response = response.strip().upper()
 
             if "SIMPLE" in response:
@@ -239,7 +238,9 @@ class ComplexityAssessor:
 意图数量："""
 
         try:
-            response = self.llm_chain.run(query=query, prompt=prompt)
+            from langchain_core.messages import HumanMessage
+            messages = [HumanMessage(content=prompt)]
+            response = self.llm.invoke(messages).content
             # 提取数字
             import re
             numbers = re.findall(r'\d+', response)
@@ -313,14 +314,6 @@ class ComplexityAssessor:
         """
         intent_keywords = ["天气", "温度", "客户", "公司", "路线", "交通", "酒店", "住宿", "补贴", "报销"]
         return any(keyword in text for keyword in intent_keywords)
-
-    def _create_llm_chain(self):
-        """创建LLM链"""
-        prompt = PromptTemplate(
-            input_variables=["query"],
-            template="{prompt}"
-        )
-        return LLMChain(llm=self.llm, prompt=prompt)
 
 
 # 测试代码

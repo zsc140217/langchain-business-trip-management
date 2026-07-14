@@ -1,19 +1,32 @@
 """
-工作流编排器
-中央路由引擎，负责所有查询的分发和执行
+工作流编排器（第二层兜底执行器）
+
+【角色变更说明】2026-06-28
+- 旧角色：中央路由引擎，负责所有查询的分发和执行
+- 新角色：第二层兜底执行器，仅当综合分析层判断需要更多工具时调用
+
+在修正后的三层架构中：
+- 第零层：IntentDetector - 意图识别，直接工具调用
+- 第一层：RAG检索 - 检索企业知识库文档
+- 第二层：SynthesisLayer - LLM综合分析（工具结果+RAG文档）
+  └─ 如果信息不足 → 调用本编排器（WorkflowOrchestrator）兜底
 
 对应Spring AI的：
 src/main/java/com/jblmj/aiagent/app/WorkflowOrchestrator.java
 """
-from agents.complexity_assessor import ComplexityAssessor, QueryComplexity
-from agents.task_decomposer import TaskDecomposer, SubTask
+from src.agents.complexity_assessor import ComplexityAssessor, QueryComplexity
+from src.agents.task_decomposer import TaskDecomposer, SubTask
 from typing import Optional, Dict
 import asyncio
 
 
 class WorkflowOrchestrator:
     """
-    工作流编排器
+    工作流编排器（兜底执行器）
+
+    【新角色】（2026-06-28修正）
+    作为第二层的兜底执行器，当SynthesisLayer判断信息不足时调用。
+    处理需要额外工具调用或复杂任务分解的场景。
 
     核心功能：
     1. 智能路由：根据查询复杂度选择处理策略

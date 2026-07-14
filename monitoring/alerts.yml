@@ -1,0 +1,102 @@
+﻿# Prometheus告警规则
+groups:
+  - name: travel_agent_alerts
+    interval: 30s
+    rules:
+      # 错误率告警
+      - alert: HighErrorRate
+        expr: |
+          (
+            rate(travel_agent_requests_total{status="error"}[5m])
+            /
+            rate(travel_agent_requests_total[5m])
+          ) > 0.05
+        for: 2m
+        labels:
+          severity: critical
+          category: reliability
+        annotations:
+          summary: "高错误率检测 (实例: {{ $labels.instance }})"
+          description: "错误率为 {{ $value | humanizePercentage }}，超过5%阈值"
+
+      # 高延迟告警
+      - alert: HighLatency
+        expr: |
+          histogram_quantile(0.95,
+            rate(travel_agent_request_duration_seconds_bucket[5m])
+          ) > 10
+        for: 3m
+        labels:
+          severity: warning
+          category: performance
+        annotations:
+          summary: "高延迟检测 (实例: {{ $labels.instance }})"
+          description: "P95延迟为 {{ $value }}秒，超过10秒阈值"
+
+      # 成本超标告警
+      - alert: HighDailyCost
+        expr: |
+          increase(travel_agent_cost_total_usd[1d]) > 50
+        for: 5m
+        labels:
+          severity: warning
+          category: cost
+        annotations:
+          summary: "每日成本超标 (实例: {{ $labels.instance }})"
+          description: "24小时成本为 ${{ $value }}，超过$50阈值"
+
+      # 内存告警
+      - alert: HighMemoryUsage
+        expr: travel_agent_system_memory_usage_percent > 90
+        for: 5m
+        labels:
+          severity: warning
+          category: resource
+        annotations:
+          summary: "内存使用率过高 (实例: {{ $labels.instance }})"
+          description: "内存使用率为 {{ $value }}%，超过90%"
+
+      # CPU告警
+      - alert: HighCPUUsage
+        expr: travel_agent_system_cpu_usage_percent > 90
+        for: 5m
+        labels:
+          severity: warning
+          category: resource
+        annotations:
+          summary: "CPU使用率过高 (实例: {{ $labels.instance }})"
+          description: "CPU使用率为 {{ $value }}%，超过90%"
+
+      # 服务不可用告警
+      - alert: ServiceDown
+        expr: up{job="travel-agent-api"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          category: availability
+        annotations:
+          summary: "服务不可用 (实例: {{ $labels.instance }})"
+          description: "API服务已停止响应超过1分钟"
+
+      # 缓存命中率低告警
+      - alert: LowCacheHitRate
+        expr: travel_agent_cache_hit_rate < 30
+        for: 10m
+        labels:
+          severity: info
+          category: performance
+        annotations:
+          summary: "缓存命中率低 (实例: {{ $labels.instance }})"
+          description: "缓存命中率为 {{ $value }}%，低于30%"
+
+      # 审批超时告警（Phase 4 P1）
+      - alert: ApprovalPendingTimeout
+        expr: travel_agent_pending_approval_max_hours > 24
+        for: 5m
+        labels:
+          severity: warning
+          category: approval
+        annotations:
+          summary: "审批超时检测"
+          description: "手动审批单待处理超过 {{  }}小时，阈值24小时"
+

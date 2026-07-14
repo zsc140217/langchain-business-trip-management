@@ -231,7 +231,7 @@ if __name__ == "__main__":
             print(f"\n❓ 问题：{question}")
             result = rag_chain.invoke({"query": question})
 
-            print(f"💡 回答：{result['result']}")
+            print(f"[提示] 回答：{result['result']}")
             print(f"📚 来源文档数：{len(result['source_documents'])}")
 
         print("\n✅ RAG链测试成功！")
@@ -240,7 +240,7 @@ if __name__ == "__main__":
         print("\n4️⃣ 测试LCEL版本...")
         rag_chain_lcel = create_rag_chain_lcel(llm, retriever)
         answer = rag_chain_lcel.invoke("去杭州出差住宿标准是多少")
-        print(f"💡 LCEL回答：{answer}")
+        print(f"[提示] LCEL回答：{answer}")
 
         print("\n✅ 所有测试通过！")
 
