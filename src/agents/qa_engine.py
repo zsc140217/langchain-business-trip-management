@@ -152,7 +152,13 @@ class QAEngine:
             logger.info(f"[QAEngine] 路由决策: {query_type} - {decision.get('reason', '')}")
 
             # 2. 路由到对应执行器
-            if query_type == "simple":
+            if query_type == "approval":
+                # 审批域 - 返回特殊标记让 OrchestratorAgent 转发
+                self.stats["approval"] = self.stats.get("approval", 0) + 1
+                logger.info(f"[QAEngine] 检测到审批意图，转发到审批域")
+                return "[ROUTE_TO_APPROVAL]"  # 特殊标记
+
+            elif query_type == "simple":
                 self.stats["simple"] += 1
                 return self._execute_simple(query, decision)
 
@@ -168,7 +174,8 @@ class QAEngine:
                     self.stats["complex"] += 1
                     return self.complex_engine.execute(query, context)
 
-                return self.planning_engine.execute(query, user_id, conversation_id)
+                # 传递 context 参数，避免 planning_engine 重复加载记忆
+                return self.planning_engine.execute(query, user_id, conversation_id, context=context or "")
 
             elif query_type == "open":
                 self.stats["open"] += 1
@@ -195,6 +202,9 @@ class QAEngine:
         Returns:
             路由决策字典 {"type": "simple/complex/planning/open", "tool": "...", "reason": "..."}
         """
+        # 获取可用工具列表
+        tool_list = "\n".join([f"- {name}: {tool.description}" for name, tool in self.tools.items()])
+
         prompt = f"""你是一个路由决策助手，负责判断用户查询应该走哪个通道。
 
 用户查询：{query}
@@ -203,36 +213,56 @@ class QAEngine:
         if context:
             prompt += f"\n上下文信息：\n{context}\n"
 
-        prompt += """
+        prompt += f"""
+可用工具列表：
+{tool_list}
+
 请分析查询，返回 JSON 格式的路由决策。
 
 分类标准：
-1. **simple** - 单一意图，一个工具能回答
+1. **approval** - 报销/审批申请（优先级最高）
+   示例："我去北京3天花了800" → 提交报销申请
+   示例："帮我报销上海出差的费用" → 审批申请
+   示例："申请北京出差报销" → 审批申请
+
+   **严格判断条件（必须同时满足）：**
+   - 包含出差相关信息（地点、天数、金额等）
+   - 明确表达报销/审批意图（直接陈述花费、提到"报销"/"审批"/"申请"等关键词）
+   - 不是单纯的政策咨询（如"北京住宿标准是多少"不算）
+   - 不是日常对话（如"我去过北京"不算）
+
+   特征：用户希望提交报销申请或查询审批状态
+
+2. **simple** - 单一意图，一个工具能回答
    示例："北京住宿标准是多少" → search_policy
+   示例："内江的天气" → query_weather
    特征：明确的单一问题，不涉及多步骤
 
-2. **complex** - 多步骤，可分解为明确子任务
+3. **complex** - 多步骤，可分解为明确子任务
    示例："去杭州出差3天，查天气查酒店算费用"
    特征：多个意图，需要多个工具，但步骤明确
 
-3. **planning** - 需要完整差旅方案
+4. **planning** - 需要完整差旅方案
    示例："帮我安排下周去深圳出差"
    特征：要求"安排"、"规划"、"方案"
 
-4. **open** - 比较/推荐/评价类问题
+5. **open** - 比较/推荐/评价类问题
    示例："飞机和高铁哪个划算"、"夏天适合去哪里出差"
    特征：需要推理和比较，没有明确的执行步骤
 
 只返回 JSON（不要 markdown 代码块）：
-{
-  "type": "simple/complex/planning/open",
+{{
+  "type": "approval/simple/complex/planning/open",
   "tool": "工具名(仅 simple 需要)",
   "reason": "判断原因"
-}
+}}
 """
 
         try:
-            response = self.llm.invoke([HumanMessage(content=prompt)])
+            response = self.llm.invoke([HumanMessage(content=prompt)], config={
+                "run_name": "qa_route_decision",
+                "tags": ["layer=qa", "step=routing", "domain=qa_domain"]
+            })
             content = response.content.strip()
 
             # 尝试解析 JSON
@@ -310,14 +340,119 @@ class QAEngine:
             tool = self.tools[tool_name]
             logger.info(f"[QAEngine] 调用工具: {tool_name}")
 
-            # 调用工具（传入查询作为参数）
-            result = tool.execute(query=query)
+            # 使用 LLM 提取工具参数
+            params = self._extract_tool_params(query, tool_name, tool.description)
 
-            return result
+            # 调用工具
+            result = tool.execute(**params)
+
+            # 使用 LLM 生成自然语言回答
+            answer = self._generate_answer(query, result)
+            return answer
 
         except Exception as e:
             logger.error(f"[QAEngine] 工具 {tool_name} 执行失败: {e}")
             return f"工具执行失败：{str(e)}"
+
+    def _extract_tool_params(self, query: str, tool_name: str, tool_desc: str) -> dict:
+        """
+        使用 LLM 从用户查询中提取工具参数
+
+        Args:
+            query: 用户查询
+            tool_name: 工具名称
+            tool_desc: 工具描述
+
+        Returns:
+            参数字典
+        """
+        # 特定工具的参数提取规则
+        if tool_name == "query_weather":
+            prompt = f"""从用户查询中提取城市名称。
+
+用户查询：{query}
+
+只返回城市名称，不要其他内容。如果查询中没有明确的城市，返回"北京"。"""
+
+            response = self.llm.invoke([HumanMessage(content=prompt)], config={
+                "run_name": "extract_city_param",
+                "tags": ["layer=qa", "step=param_extraction", "tool=query_weather"]
+            })
+            city = response.content.strip()
+            return {"city": city}
+
+        elif tool_name == "search_policy":
+            # 政策查询工具直接使用原始查询
+            return {"query": query}
+
+        elif tool_name == "search_hotels":
+            prompt = f"""从用户查询中提取酒店搜索参数。
+
+用户查询：{query}
+
+返回 JSON（不要 markdown 代码块）：
+{{
+  "city": "城市名称",
+  "min_price": null,
+  "max_price": null,
+  "min_star": null
+}}"""
+            response = self.llm.invoke([HumanMessage(content=prompt)], config={
+                "run_name": "extract_hotel_params",
+                "tags": ["layer=qa", "step=param_extraction", "tool=search_hotels"]
+            })
+            return self._parse_json_response(response.content.strip())
+
+        elif tool_name == "search_flights":
+            prompt = f"""从用户查询中提取航班搜索参数。
+
+用户查询：{query}
+
+返回 JSON（不要 markdown 代码块）：
+{{
+  "departure_city": "出发城市",
+  "arrival_city": "到达城市",
+  "date": null
+}}"""
+            response = self.llm.invoke([HumanMessage(content=prompt)], config={
+                "run_name": "extract_flight_params",
+                "tags": ["layer=qa", "step=param_extraction", "tool=search_flights"]
+            })
+            return self._parse_json_response(response.content.strip())
+
+        else:
+            # 默认：将查询作为 query 参数
+            return {"query": query}
+
+    def _generate_answer(self, query: str, tool_result: str) -> str:
+        """
+        使用 LLM 将工具结果转换为自然语言回答
+
+        Args:
+            query: 用户查询
+            tool_result: 工具返回的原始结果
+
+        Returns:
+            自然语言回答
+        """
+        prompt = f"""你是一个智能助手，需要根据工具返回的信息回答用户问题。
+
+用户问题：{query}
+
+工具返回的信息：
+{tool_result}
+
+请用自然、友好的语言回答用户的问题。要求：
+1. 提取关键信息，不要照搬原文
+2. 语言简洁清晰
+3. 如果信息不完整，说明情况并建议用户如何获取更多信息
+"""
+
+        response = self.llm.invoke([HumanMessage(content=prompt)], config={
+            "run_name": "generate_answer_from_tool",
+            "tags": ["layer=qa", "step=answer_generation"]
+        })
+        return response.content.strip()
 
     def get_stats(self) -> dict:
         """

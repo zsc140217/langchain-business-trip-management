@@ -253,4 +253,4 @@ if __name__ == "__main__":
         else:
             print("没有Skill能处理该查询")
 
-    print("\n✅ WeatherQuerySkill测试完成！")
+    print("\n[OK] WeatherQuerySkill测试完成！")

@@ -20,6 +20,15 @@ import sys
 from pathlib import Path
 from pydantic import BaseModel
 
+# 添加项目根目录和 src 目录到 sys.path（修复导入路径）
+_PROJECT_ROOT = str(Path(__file__).resolve().parent.parent.parent)
+_SRC_DIR = str(Path(__file__).resolve().parent.parent)
+_API_DIR = str(Path(__file__).resolve().parent)
+
+for path in [_PROJECT_ROOT, _SRC_DIR, _API_DIR]:
+    if path not in sys.path:
+        sys.path.insert(0, path)
+
 # 导入所有模块的chain/agent
 from chains import (
 get_simple_rag_chain,
@@ -142,10 +151,10 @@ async def health_check():
 
     env_status = {}
     for var in required_env_vars:
-        env_status[var] = "✓" if os.getenv(var) else "✗ (REQUIRED)"
+        env_status[var] = "[CHECK]" if os.getenv(var) else "✗ (REQUIRED)"
 
     for var in optional_env_vars:
-        env_status[var] = "✓" if os.getenv(var) else "○ (optional)"
+        env_status[var] = "[CHECK]" if os.getenv(var) else "○ (optional)"
 
     health_status["environment"] = env_status
 
@@ -336,11 +345,11 @@ def main():
     host = os.getenv("HOST", "0.0.0.0")
 
     print("=" * 80)
-    print("🚀 LangChain Business Trip Management API")
+    print("[ROCKET] LangChain Business Trip Management API")
     print("=" * 80)
-    print(f"📍 服务地址: http://{host}:{port}")
-    print(f"📖 API文档: http://{host}:{port}/docs")
-    print(f"🏥 健康检查: http://{host}:{port}/health")
+    print(f"[PIN] 服务地址: http://{host}:{port}")
+    print(f"[BOOK] API文档: http://{host}:{port}/docs")
+    print(f"[HOSPITAL] 健康检查: http://{host}:{port}/health")
     print(f"📦 模块列表: http://{host}:{port}/modules")
     print("=" * 80)
     print("\n[新功能] 已部署的模块:")
@@ -351,6 +360,7 @@ def main():
     print("  5. Sequential Chain → /sequential-chain/playground")
     print("  6. Parallel Chain   → /parallel-chain/playground")
     print("  7. Memory System    → /memory-chain/playground")
+    print("  8. Invoice Recognition → /invoice/recognize (POST)")
     print("=" * 80)
 
     # 检查环境变量
@@ -486,3 +496,13 @@ async def chat_sync(request: ChatRequest):
          )
      except Exception as e:
          raise HTTPException(status_code=500, detail=str(e))
+
+
+# ============================================================================
+# 发票识别路由 (2026-07-23)
+# ============================================================================
+
+from src.api.invoice_api import router as invoice_router
+
+# 注册发票识别路由
+app.include_router(invoice_router)

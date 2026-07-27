@@ -105,8 +105,8 @@ if __name__ == "__main__":
 
         # 清理
         backend.clear("test_chat_001")
-        print("\n✅ 测试完成")
+        print("\n[OK] 测试完成")
 
     except ConnectionError as e:
-        print(f"⚠️ {e}")
+        print(f"[WARNING] {e}")
         print("提示：请先启动Redis服务器")

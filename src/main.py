@@ -87,12 +87,12 @@ async def startup_event():
     """
     global rag_chain, llm, retriever
 
-    print("🚀 正在启动LangChain企业差旅智能体...")
+    print("[ROCKET] 正在启动LangChain企业差旅智能体...")
 
     try:
         # 检查环境变量
         if not os.getenv("DASHSCOPE_API_KEY"):
-            print("⚠️  警告：未找到DASHSCOPE_API_KEY，请配置.env文件")
+            print("[WARNING]  警告：未找到DASHSCOPE_API_KEY，请配置.env文件")
             return
 
         # 1. 加载文档
@@ -107,17 +107,17 @@ async def startup_event():
         retriever = get_retriever(vectorstore, k=3)
 
         # 4. 创建LLM
-        print("🤖 初始化LLM...")
+        print("[ROBOT] 初始化LLM...")
         llm = get_llm(temperature=0.3)
 
         # 5. 创建RAG链
         print("⛓️  创建RAG链...")
         rag_chain = create_rag_chain(llm, retriever)
 
-        print("✅ 启动成功！")
+        print("[OK] 启动成功！")
 
     except Exception as e:
-        print(f"❌ 启动失败：{e}")
+        print(f"[ERROR] 启动失败：{e}")
         import traceback
         traceback.print_exc()
 

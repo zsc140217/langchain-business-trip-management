@@ -34,7 +34,7 @@ def demo_basic_rag():
         if i < len(queries):
             print("\n" + "=" * 60 + "\n")
     
-    print("\n✅ 演示完成！")
+    print("\n[OK] 演示完成！")
 
 
 if __name__ == "__main__":

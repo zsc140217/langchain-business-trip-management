@@ -1,0 +1,11 @@
+{
+  "test1_hotel": {
+    "error": "HTTPConnectionPool(host='localhost', port=8001): Read timed out. (read timeout=60)"
+  },
+  "test2_approval": {
+    "answer": "您的报销申请已自动通过！金额：¥800",
+    "route": "approval_domain",
+    "user_id": "test_user",
+    "conversation_id": null
+  }
+}

@@ -153,7 +153,7 @@ if __name__ == "__main__":
             'conversation_count': 2
         }
         backend.save_profile('test_user_001', profile_data)
-        print("✅ 保存用户画像成功")
+        print("[OK] 保存用户画像成功")
 
         # 获取用户画像
         profile = backend.get_profile('test_user_001')
@@ -168,7 +168,7 @@ if __name__ == "__main__":
             '北京的天气怎么样？',
             '北京明天晴天，气温15-25度'
         )
-        print("\n✅ 保存查询历史成功")
+        print("\n[OK] 保存查询历史成功")
 
         # 获取查询历史
         history = backend.get_query_history('test_user_001', limit=5)
@@ -182,10 +182,10 @@ if __name__ == "__main__":
 
         # 清理测试数据
         backend.delete_profile('test_user_001')
-        print("\n✅ 测试完成")
+        print("\n[OK] 测试完成")
 
         backend.close()
 
     except ConnectionError as e:
-        print(f"⚠️ {e}")
+        print(f"[WARNING] {e}")
         print("提示：请先启动PostgreSQL服务器")

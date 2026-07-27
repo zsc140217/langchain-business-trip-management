@@ -232,9 +232,9 @@ if __name__ == "__main__":
             result = rag_chain.invoke({"query": question})
 
             print(f"[提示] 回答：{result['result']}")
-            print(f"📚 来源文档数：{len(result['source_documents'])}")
+            print(f"[BOOKS] 来源文档数：{len(result['source_documents'])}")
 
-        print("\n✅ RAG链测试成功！")
+        print("\n[OK] RAG链测试成功！")
 
         # 7. 测试LCEL版本
         print("\n4️⃣ 测试LCEL版本...")
@@ -242,9 +242,9 @@ if __name__ == "__main__":
         answer = rag_chain_lcel.invoke("去杭州出差住宿标准是多少")
         print(f"[提示] LCEL回答：{answer}")
 
-        print("\n✅ 所有测试通过！")
+        print("\n[OK] 所有测试通过！")
 
     except Exception as e:
-        print(f"\n❌ 测试失败：{e}")
+        print(f"\n[ERROR] 测试失败：{e}")
         import traceback
         traceback.print_exc()

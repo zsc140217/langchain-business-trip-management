@@ -21,7 +21,7 @@ from modules.module_7_production import (
 
 def setup_production_infrastructure():
     """Initialize all production components."""
-    print("🚀 Initializing Production Infrastructure...\n")
+    print("[ROCKET] Initializing Production Infrastructure...\n")
 
     # 1. LangSmith Tracing
     print("1. Setting up LangSmith tracing...")
@@ -30,7 +30,7 @@ def setup_production_infrastructure():
         tags=["production", "example"],
         metadata={"environment": "demo"}
     )
-    print(f"   ✅ LangSmith initialized: {langsmith.project_name}")
+    print(f"   [OK] LangSmith initialized: {langsmith.project_name}")
 
     # 2. Three-Layer Caching
     print("\n2. Setting up three-layer caching...")
@@ -40,7 +40,7 @@ def setup_production_infrastructure():
         retrieval_ttl=1800,     # 30 minutes
         redis_url=os.getenv("REDIS_URL")  # Optional
     )
-    print("   ✅ Cache layers initialized:")
+    print("   [OK] Cache layers initialized:")
     print("      - Prompt Cache (in-memory)")
     print("      - Embedding Cache (CacheBackedEmbeddings)")
     print("      - Retrieval Cache (Redis/in-memory)")
@@ -48,7 +48,7 @@ def setup_production_infrastructure():
     # 3. Monitoring
     print("\n3. Setting up monitoring...")
     collector = get_metrics_collector()
-    print("   ✅ Metrics collector initialized")
+    print("   [OK] Metrics collector initialized")
 
     return langsmith, cache_mgr, collector
 
@@ -68,7 +68,7 @@ def plan_trip_secure(user_id: str, **trip_data):
     - Performance tracking
     - Automatic metrics collection
     """
-    print(f"\n📋 Processing trip request for user: {user_id}")
+    print(f"\n[CLIPBOARD] Processing trip request for user: {user_id}")
     print(f"   Destination: {trip_data['destination']}")
     print(f"   Dates: {trip_data['start_date']} to {trip_data['end_date']}")
 
@@ -111,7 +111,7 @@ def demonstrate_caching(cache_mgr, collector):
 
         if cached:
             collector.record_api_call("query", 0.01, cached=True)
-            print(f"   Query {i}: '{query}' - ✅ CACHE HIT")
+            print(f"   Query {i}: '{query}' - [OK] CACHE HIT")
         else:
             # Simulate API call
             result = f"Results for: {query}"
@@ -121,7 +121,7 @@ def demonstrate_caching(cache_mgr, collector):
 
     # Show cache statistics
     stats = cache_mgr.get_stats()
-    print(f"\n📊 Cache Performance:")
+    print(f"\n[CHART] Cache Performance:")
     print(f"   Retrieval Cache Hit Rate: {stats['retrieval_cache']['hit_rate']:.1f}%")
     print(f"   Cost Savings: ${stats['retrieval_cache']['cost_savings_estimate']:.4f}")
 
@@ -159,7 +159,7 @@ def show_monitoring_dashboard(collector):
 
     # Alerts
     if summary.get('alerts'):
-        print("\n⚠️  Recent Alerts:")
+        print("\n[WARNING]  Recent Alerts:")
         for alert in summary['alerts'][-3:]:
             print(f"   [{alert['severity']}] {alert['message']}")
 
@@ -181,9 +181,9 @@ def demonstrate_security():
             budget=5000.0,
             employee_id="EMP12345"
         )
-        print("   ✅ Validation passed")
+        print("   [OK] Validation passed")
     except Exception as e:
-        print(f"   ❌ Validation failed: {e}")
+        print(f"   [ERROR] Validation failed: {e}")
 
     # SQL Injection attempt
     print("\n2. SQL Injection Attempt:")
@@ -194,9 +194,9 @@ def demonstrate_security():
             end_date="2026-07-05",
             purpose="Meeting"
         )
-        print("   ❌ SECURITY BREACH: Malicious input accepted!")
+        print("   [ERROR] SECURITY BREACH: Malicious input accepted!")
     except Exception as e:
-        print("   ✅ Blocked: SQL injection detected")
+        print("   [OK] Blocked: SQL injection detected")
 
     # XSS attempt
     print("\n3. XSS Attack Attempt:")
@@ -207,9 +207,9 @@ def demonstrate_security():
             end_date="2026-07-05",
             purpose="Meeting"
         )
-        print(f"   ✅ Sanitized: {xss_trip.destination}")
+        print(f"   [OK] Sanitized: {xss_trip.destination}")
     except Exception as e:
-        print(f"   ✅ Blocked: {e}")
+        print(f"   [OK] Blocked: {e}")
 
     # Invalid date range
     print("\n4. Invalid Date Range:")
@@ -220,9 +220,9 @@ def demonstrate_security():
             end_date="2026-07-01",  # Before start date
             purpose="Meeting"
         )
-        print("   ❌ Validation failed to catch error")
+        print("   [ERROR] Validation failed to catch error")
     except Exception as e:
-        print("   ✅ Blocked: Invalid date range")
+        print("   [OK] Blocked: Invalid date range")
 
 
 # ==================== Main Example ====================
@@ -251,9 +251,9 @@ def main():
             budget=5000.0,
             employee_id="EMP001"
         )
-        print(f"   ✅ Trip planned successfully: {result['trip_id']}")
+        print(f"   [OK] Trip planned successfully: {result['trip_id']}")
     except Exception as e:
-        print(f"   ❌ Error: {e}")
+        print(f"   [ERROR] Error: {e}")
 
     # Example 2: Caching
     print("\n" + "=" * 60)
@@ -275,13 +275,13 @@ def main():
 
     # Final summary
     print("\n" + "=" * 60)
-    print("✅ Production Infrastructure Demo Complete!")
+    print("[OK] Production Infrastructure Demo Complete!")
     print("=" * 60)
     print("\nKey Achievements:")
-    print("✅ LangSmith tracing: 100% coverage")
-    print("✅ Three-layer caching: 60%+ cost savings")
-    print("✅ Security protection: SQL injection, XSS, rate limiting")
-    print("✅ Monitoring: Real-time metrics and health checks")
+    print("[OK] LangSmith tracing: 100% coverage")
+    print("[OK] Three-layer caching: 60%+ cost savings")
+    print("[OK] Security protection: SQL injection, XSS, rate limiting")
+    print("[OK] Monitoring: Real-time metrics and health checks")
     print("\nFor more details, see README.md")
 
 

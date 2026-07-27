@@ -1,0 +1,75 @@
+{
+  "config": {
+    "concurrency": 10,
+    "duration": 0,
+    "total_requests": 50,
+    "use_real_llm": false
+  },
+  "start_time": "2026-07-26 09:55:21",
+  "end_time": "2026-07-26 09:55:22",
+  "total_duration_sec": 1.09,
+  "total_requests": 50,
+  "successful_requests": 50,
+  "failed_requests": 0,
+  "success_rate": 100.0,
+  "overall_qps": 45.8,
+  "peak_qps": 50,
+  "latency_min": 15.01,
+  "latency_max": 17.0,
+  "latency_mean": 15.8,
+  "latency_median": 15.58,
+  "latency_p95": 17.0,
+  "latency_p99": 17.0,
+  "latency_std": 0.69,
+  "by_category": {
+    "intent": {
+      "count": 18,
+      "success": 18,
+      "success_rate": 100.0,
+      "avg_latency": 16.05,
+      "p95_latency": 17.0,
+      "p99_latency": 17.0
+    },
+    "chitchat": {
+      "count": 18,
+      "success": 18,
+      "success_rate": 100.0,
+      "avg_latency": 15.85,
+      "p95_latency": 17.0,
+      "p99_latency": 17.0
+    },
+    "simple": {
+      "count": 10,
+      "success": 10,
+      "success_rate": 100.0,
+      "avg_latency": 15.4,
+      "p95_latency": 15.58,
+      "p99_latency": 15.58
+    },
+    "medium": {
+      "count": 2,
+      "success": 2,
+      "success_rate": 100.0,
+      "avg_latency": 15.5,
+      "p95_latency": 15.58,
+      "p99_latency": 15.58
+    },
+    "complex": {
+      "count": 2,
+      "success": 2,
+      "success_rate": 100.0,
+      "avg_latency": 15.5,
+      "p95_latency": 15.58,
+      "p99_latency": 15.58
+    }
+  },
+  "error_distribution": {},
+  "time_series": [
+    {
+      "second": 0,
+      "qps": 50,
+      "success": 50,
+      "avg_latency": 15.8
+    }
+  ]
+}

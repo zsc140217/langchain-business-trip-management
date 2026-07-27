@@ -312,9 +312,9 @@ if __name__ == "__main__":
             else:
                 print(f"{key}: {value}")
 
-        print("\n✅ 测试完成！")
+        print("\n[OK] 测试完成！")
 
     except Exception as e:
-        print(f"\n❌ 测试失败: {e}")
+        print(f"\n[ERROR] 测试失败: {e}")
         import traceback
         traceback.print_exc()

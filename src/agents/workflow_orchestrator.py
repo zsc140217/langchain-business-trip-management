@@ -209,7 +209,7 @@ class WorkflowOrchestrator:
             return self._integrate_results(query, tasks, all_results)
 
         except Exception as e:
-            print(f"❌ COMPLEX查询处理失败：{e}")
+            print(f"[ERROR] COMPLEX查询处理失败：{e}")
             print("降级为RAG查询")
             return self._handle_rag_query(query, chat_id)
 
@@ -385,9 +385,9 @@ if __name__ == "__main__":
             print(f"\n最终结果：{result}\n")
             print(f"{'='*60}\n")
 
-        print("✅ 工作流编排器测试完成！")
+        print("[OK] 工作流编排器测试完成！")
 
     except Exception as e:
-        print(f"❌ 测试失败：{e}")
+        print(f"[ERROR] 测试失败：{e}")
         import traceback
         traceback.print_exc()

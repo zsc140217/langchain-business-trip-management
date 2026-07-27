@@ -83,7 +83,7 @@ def run_agent_simple(query: str, tools: List, llm=None, verbose: bool = True) ->
         if not hasattr(response, 'tool_calls') or not response.tool_calls:
             # 没有工具调用，返回最终答案
             if verbose:
-                print(f"\n✅ Agent 完成推理，返回最终答案")
+                print(f"\n[OK] Agent 完成推理，返回最终答案")
             return {
                 "output": response.content,
                 "intermediate_steps": intermediate_steps
@@ -118,7 +118,7 @@ def run_agent_simple(query: str, tools: List, llm=None, verbose: bool = True) ->
                 except Exception as e:
                     error_msg = f"工具执行错误: {str(e)}"
                     if verbose:
-                        print(f"   ❌ {error_msg}")
+                        print(f"   [ERROR] {error_msg}")
                     messages.append(ToolMessage(
                         content=error_msg,
                         tool_call_id=tool_call['id']
@@ -126,7 +126,7 @@ def run_agent_simple(query: str, tools: List, llm=None, verbose: bool = True) ->
             else:
                 error_msg = f"未找到工具: {tool_name}"
                 if verbose:
-                    print(f"   ❌ {error_msg}")
+                    print(f"   [ERROR] {error_msg}")
                 messages.append(ToolMessage(
                     content=error_msg,
                     tool_call_id=tool_call['id']
@@ -134,7 +134,7 @@ def run_agent_simple(query: str, tools: List, llm=None, verbose: bool = True) ->
 
     # 达到最大迭代次数
     if verbose:
-        print(f"\n⚠️  达到最大迭代次数 ({max_iterations})")
+        print(f"\n[WARNING]  达到最大迭代次数 ({max_iterations})")
 
     return {
         "output": "抱歉，任务太复杂，无法在限定步骤内完成。",

@@ -127,7 +127,7 @@ class SynthesisLayer:
 
         except Exception as e:
             # 降级处理：如果LLM调用失败，使用规则兜底
-            print(f"⚠️ 综合分析失败：{e}，使用规则降级")
+            print(f"[WARNING] 综合分析失败：{e}，使用规则降级")
             return self._fallback_analysis(context)
 
     def _parse_llm_response(self, response: str) -> Dict[str, Any]:

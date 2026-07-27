@@ -38,7 +38,7 @@ def tools_node(state: TravelAgentState) -> Dict[str, Any]:
     tool_calls = state.get("tool_calls", [])
 
     if not tool_calls:
-        logger.warning("⚠️  工具节点被调用但没有tool_calls")
+        logger.warning("[WARNING]  工具节点被调用但没有tool_calls")
         return {"messages": [], "tool_calls": []}
 
     logger.info(f"[工具] 工具执行节点：执行 {len(tool_calls)} 个工具")
@@ -60,7 +60,7 @@ def tools_node(state: TravelAgentState) -> Dict[str, Any]:
             # 检查工具是否存在
             if tool_name not in tool_map:
                 error_msg = f"工具 '{tool_name}' 不存在。可用工具：{list(tool_map.keys())}"
-                logger.error(f"❌ {error_msg}")
+                logger.error(f"[ERROR] {error_msg}")
 
                 tool_messages.append(ToolMessage(
                     content=error_msg,
@@ -73,7 +73,7 @@ def tools_node(state: TravelAgentState) -> Dict[str, Any]:
             tool_func = tool_map[tool_name]
             result = tool_func.invoke(tool_args)
 
-            logger.info(f"✅ 工具执行成功：{tool_name} → {str(result)[:100]}...")
+            logger.info(f"[OK] 工具执行成功：{tool_name} → {str(result)[:100]}...")
 
             tool_messages.append(ToolMessage(
                 content=str(result),
@@ -83,7 +83,7 @@ def tools_node(state: TravelAgentState) -> Dict[str, Any]:
 
         except Exception as e:
             error_msg = f"工具执行失败：{str(e)}"
-            logger.error(f"❌ {tool_name} - {error_msg}")
+            logger.error(f"[ERROR] {tool_name} - {error_msg}")
 
             tool_messages.append(ToolMessage(
                 content=error_msg,
@@ -91,7 +91,7 @@ def tools_node(state: TravelAgentState) -> Dict[str, Any]:
                 name=tool_name
             ))
 
-    logger.info(f"✅ 工具执行完成，返回 {len(tool_messages)} 个结果")
+    logger.info(f"[OK] 工具执行完成，返回 {len(tool_messages)} 个结果")
 
     return {
         "messages": tool_messages,

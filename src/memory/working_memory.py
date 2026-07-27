@@ -381,4 +381,4 @@ if __name__ == "__main__":
         print(f"  实体数: {conv['entities']}")
         print(f"  当前意图: {conv['current_intent']}")
 
-    print("\n✅ 测试完成")
+    print("\n[OK] 测试完成")

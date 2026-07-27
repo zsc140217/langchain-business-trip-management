@@ -1,0 +1,17 @@
+{
+  "invoice_code": "245120000002",
+  "invoice_number": "0202537619",
+  "date": "2024-09-25",
+  "amount": 113855.15,
+  "tax": 14801.17,
+  "tax_rate": 0.13,
+  "total": 128656.32,
+  "seller_name": "四川川海工程管理咨询有限公司",
+  "seller_tax_id": "91511002572793472P",
+  "buyer_name": "内江市天润商贸有限公司",
+  "confidence": 1.0,
+  "warnings": [],
+  "need_review": false,
+  "model": "qianfan-ocr",
+  "enable_thinking": true
+}

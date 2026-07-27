@@ -321,7 +321,7 @@ Answer:"""
 
         try:
             answer = self.call_llm(prompt, temperature=0.5)
-            return answer + "\n\n⚠️ Note: This answer is not based on your company's specific policy documents. Please verify with official sources."
+            return answer + "\n\n[WARNING] Note: This answer is not based on your company's specific policy documents. Please verify with official sources."
         except Exception as e:
             logger.error(f"Fallback answer failed: {e}")
             return "I apologize, but I'm unable to answer your policy question at this time. Please contact your HR department or refer to the official travel policy documentation."

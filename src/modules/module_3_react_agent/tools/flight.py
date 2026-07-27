@@ -93,9 +93,9 @@ def search_flights(departure_city: str, arrival_city: str, date: Optional[str] =
     try:
         flight_date = datetime.strptime(date, "%Y-%m-%d")
         if flight_date < datetime.now().replace(hour=0, minute=0, second=0, microsecond=0):
-            return f"❌ 无法查询过去的日期：{date}"
+            return f"[ERROR] 无法查询过去的日期：{date}"
     except ValueError:
-        return f"❌ 日期格式错误，请使用YYYY-MM-DD格式（如2024-06-15）"
+        return f"[ERROR] 日期格式错误，请使用YYYY-MM-DD格式（如2024-06-15）"
 
     # 查询航班
     route_key = (departure_city, arrival_city)
@@ -103,7 +103,7 @@ def search_flights(departure_city: str, arrival_city: str, date: Optional[str] =
 
     if not flights:
         return (
-            f"❌ 抱歉，暂无{departure_city}到{arrival_city}的直飞航班\n"
+            f"[ERROR] 抱歉，暂无{departure_city}到{arrival_city}的直飞航班\n"
             f"建议：\n"
             f"1. 尝试查询其他日期\n"
             f"2. 考虑中转航班\n"
@@ -115,7 +115,7 @@ def search_flights(departure_city: str, arrival_city: str, date: Optional[str] =
 
     # 格式化输出
     result_lines = [
-        f"✈️  {departure_city} → {arrival_city} 航班查询结果",
+        f"[PLANE]  {departure_city} → {arrival_city} 航班查询结果",
         f"📅 日期：{date}",
         f"🔢 共找到 {len(sorted_flights)} 个航班\n"
     ]
@@ -123,12 +123,12 @@ def search_flights(departure_city: str, arrival_city: str, date: Optional[str] =
     for idx, flight in enumerate(sorted_flights, 1):
         result_lines.append(
             f"【航班{idx}】\n"
-            f"  ✈️  {flight['flight_no']} - {flight['airline']}\n"
+            f"  [PLANE]  {flight['flight_no']} - {flight['airline']}\n"
             f"  🕐 {flight['departure']} → {flight['arrival']} ({flight['duration']})\n"
             f"  💰 ¥{flight['price']} ({flight['seat_class']})\n"
         )
 
-    result_lines.append("ℹ️  (模拟数据，实际价格以航司官网为准)")
+    result_lines.append("[INFO]  (模拟数据，实际价格以航司官网为准)")
 
     return "\n".join(result_lines)
 
@@ -175,7 +175,7 @@ def get_flight_price(departure_city: str, arrival_city: str, flight_class: Optio
     flights = MOCK_FLIGHTS.get(route_key, [])
 
     if not flights:
-        return f"❌ 抱歉，暂无{departure_city}到{arrival_city}的航班信息"
+        return f"[ERROR] 抱歉，暂无{departure_city}到{arrival_city}的航班信息"
 
     # 根据舱位调整价格
     class_multiplier = {
@@ -200,15 +200,15 @@ def get_flight_price(departure_city: str, arrival_city: str, flight_class: Optio
     if today_weekday in [4, 5, 6]:  # 周五、周六、周日
         trend = "📈 周末价格通常较高，建议工作日出行可节省10-20%"
     else:
-        trend = "📊 工作日价格适中，提前7天预订可享受更多优惠"
+        trend = "[CHART] 工作日价格适中，提前7天预订可享受更多优惠"
 
     return (
         f"💰 {departure_city} → {arrival_city} 价格查询\n"
         f"🎫 舱位：{flight_class}\n\n"
         f"💵 价格区间：¥{int(min_price)} - ¥{int(max_price)}\n"
-        f"📊 平均价格：¥{int(avg_price)}\n\n"
+        f"[CHART] 平均价格：¥{int(avg_price)}\n\n"
         f"🏆 最优推荐：\n"
-        f"  ✈️  {cheapest_flight['flight_no']} - {cheapest_flight['airline']}\n"
+        f"  [PLANE]  {cheapest_flight['flight_no']} - {cheapest_flight['airline']}\n"
         f"  🕐 {cheapest_flight['departure']} → {cheapest_flight['arrival']}\n"
         f"  💰 ¥{int(min_price)}\n\n"
         f"{trend}\n\n"
@@ -217,7 +217,7 @@ def get_flight_price(departure_city: str, arrival_city: str, flight_class: Optio
         f"  • 避开节假日高峰期\n"
         f"  • 选择早班或晚班航班\n"
         f"  • 关注航司会员日促销\n\n"
-        f"ℹ️  (模拟数据，实际价格以航司官网为准)"
+        f"[INFO]  (模拟数据，实际价格以航司官网为准)"
     )
 
 
@@ -290,5 +290,5 @@ if __name__ == "__main__":
     print(f"描述：{get_flight_price.description[:50]}...")
 
     print("\n" + "=" * 60)
-    print("✅ 航班工具测试完成")
+    print("[OK] 航班工具测试完成")
     print("=" * 60)

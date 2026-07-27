@@ -85,7 +85,7 @@ def answer_node(state: TravelAgentState) -> Dict[str, Any]:
         response = llm.invoke(messages)
         answer = response.content
 
-        logger.info(f"✅ 答案生成完成（{len(answer)} 字符）")
+        logger.info(f"[OK] 答案生成完成（{len(answer)} 字符）")
 
         return {"answer": answer}
 
@@ -125,4 +125,4 @@ if __name__ == "__main__":
     print(f"\n生成的答案：")
     print(result["answer"])
     
-    print("\n✅ 回答生成节点测试完成！")
+    print("\n[OK] 回答生成节点测试完成！")

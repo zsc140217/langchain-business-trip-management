@@ -1,0 +1,205 @@
+{
+  "summary": {
+    "total_calls": 22,
+    "total_tokens": 8167,
+    "input_tokens": 6202,
+    "output_tokens": 1965,
+    "total_cost_cny": 0.48,
+    "avg_cost_per_call": 0.022,
+    "breakdown_by_purpose": {
+      "simple_reasoning": {
+        "calls": 10,
+        "tokens": 3421,
+        "cost": 0.21
+      },
+      "complex_reasoning": {
+        "calls": 8,
+        "tokens": 3289,
+        "cost": 0.18
+      },
+      "tool_interpretation": {
+        "calls": 4,
+        "tokens": 1457,
+        "cost": 0.09
+      }
+    }
+  },
+  "calls": [
+    {
+      "timestamp": "2026-07-27T10:46:21.658906",
+      "model": "qwen-max",
+      "input_tokens": 254,
+      "output_tokens": 105,
+      "cost_cny": 0.0228,
+      "purpose": "simple_reasoning"
+    },
+    {
+      "timestamp": "2026-07-27T10:46:25.995702",
+      "model": "qwen-max",
+      "input_tokens": 247,
+      "output_tokens": 116,
+      "cost_cny": 0.0238,
+      "purpose": "simple_reasoning"
+    },
+    {
+      "timestamp": "2026-07-27T10:46:29.952711",
+      "model": "qwen-max",
+      "input_tokens": 242,
+      "output_tokens": 87,
+      "cost_cny": 0.0201,
+      "purpose": "simple_reasoning"
+    },
+    {
+      "timestamp": "2026-07-27T10:46:35.915711",
+      "model": "qwen-max",
+      "input_tokens": 246,
+      "output_tokens": 89,
+      "cost_cny": 0.0205,
+      "purpose": "simple_reasoning"
+    },
+    {
+      "timestamp": "2026-07-27T10:46:41.184653",
+      "model": "qwen-max",
+      "input_tokens": 250,
+      "output_tokens": 93,
+      "cost_cny": 0.0212,
+      "purpose": "simple_reasoning"
+    },
+    {
+      "timestamp": "2026-07-27T10:46:45.500003",
+      "model": "qwen-max",
+      "input_tokens": 241,
+      "output_tokens": 90,
+      "cost_cny": 0.0204,
+      "purpose": "simple_reasoning"
+    },
+    {
+      "timestamp": "2026-07-27T10:46:50.473559",
+      "model": "qwen-max",
+      "input_tokens": 249,
+      "output_tokens": 91,
+      "cost_cny": 0.0209,
+      "purpose": "simple_reasoning"
+    },
+    {
+      "timestamp": "2026-07-27T10:46:55.093082",
+      "model": "qwen-max",
+      "input_tokens": 244,
+      "output_tokens": 121,
+      "cost_cny": 0.0243,
+      "purpose": "simple_reasoning"
+    },
+    {
+      "timestamp": "2026-07-27T10:46:58.772866",
+      "model": "qwen-max",
+      "input_tokens": 243,
+      "output_tokens": 83,
+      "cost_cny": 0.0197,
+      "purpose": "simple_reasoning"
+    },
+    {
+      "timestamp": "2026-07-27T10:47:02.686968",
+      "model": "qwen-max",
+      "input_tokens": 244,
+      "output_tokens": 86,
+      "cost_cny": 0.0201,
+      "purpose": "simple_reasoning"
+    },
+    {
+      "timestamp": "2026-07-27T10:47:05.475489",
+      "model": "qwen-max",
+      "input_tokens": 342,
+      "output_tokens": 62,
+      "cost_cny": 0.0211,
+      "purpose": "complex_reasoning"
+    },
+    {
+      "timestamp": "2026-07-27T10:47:09.419409",
+      "model": "qwen-max",
+      "input_tokens": 284,
+      "output_tokens": 90,
+      "cost_cny": 0.0222,
+      "purpose": "complex_reasoning"
+    },
+    {
+      "timestamp": "2026-07-27T10:47:12.743103",
+      "model": "qwen-max",
+      "input_tokens": 320,
+      "output_tokens": 61,
+      "cost_cny": 0.0201,
+      "purpose": "complex_reasoning"
+    },
+    {
+      "timestamp": "2026-07-27T10:47:16.801672",
+      "model": "qwen-max",
+      "input_tokens": 278,
+      "output_tokens": 95,
+      "cost_cny": 0.0225,
+      "purpose": "complex_reasoning"
+    },
+    {
+      "timestamp": "2026-07-27T10:47:21.281331",
+      "model": "qwen-max",
+      "input_tokens": 269,
+      "output_tokens": 105,
+      "cost_cny": 0.0234,
+      "purpose": "complex_reasoning"
+    },
+    {
+      "timestamp": "2026-07-27T10:47:24.995419",
+      "model": "qwen-max",
+      "input_tokens": 355,
+      "output_tokens": 80,
+      "cost_cny": 0.0238,
+      "purpose": "complex_reasoning"
+    },
+    {
+      "timestamp": "2026-07-27T10:47:28.201391",
+      "model": "qwen-max",
+      "input_tokens": 497,
+      "output_tokens": 69,
+      "cost_cny": 0.0282,
+      "purpose": "complex_reasoning"
+    },
+    {
+      "timestamp": "2026-07-27T10:47:33.441223",
+      "model": "qwen-max",
+      "input_tokens": 291,
+      "output_tokens": 91,
+      "cost_cny": 0.0226,
+      "purpose": "complex_reasoning"
+    },
+    {
+      "timestamp": "2026-07-27T10:47:37.280650",
+      "model": "qwen-max",
+      "input_tokens": 271,
+      "output_tokens": 89,
+      "cost_cny": 0.0215,
+      "purpose": "tool_interpretation"
+    },
+    {
+      "timestamp": "2026-07-27T10:47:41.594638",
+      "model": "qwen-max",
+      "input_tokens": 295,
+      "output_tokens": 102,
+      "cost_cny": 0.024,
+      "purpose": "tool_interpretation"
+    },
+    {
+      "timestamp": "2026-07-27T10:47:44.308891",
+      "model": "qwen-max",
+      "input_tokens": 252,
+      "output_tokens": 68,
+      "cost_cny": 0.0182,
+      "purpose": "tool_interpretation"
+    },
+    {
+      "timestamp": "2026-07-27T10:47:47.818097",
+      "model": "qwen-max",
+      "input_tokens": 288,
+      "output_tokens": 92,
+      "cost_cny": 0.0226,
+      "purpose": "tool_interpretation"
+    }
+  ]
+}

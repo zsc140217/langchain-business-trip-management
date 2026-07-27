@@ -141,15 +141,15 @@ class FeishuCallbackHandler:
         # 根据状态显示不同颜色
         if status == "approved":
             card_color = "green"
-            status_emoji = "✅"
+            status_emoji = "[OK]"
             status_text = "已通过"
         elif status == "rejected":
             card_color = "red"
-            status_emoji = "❌"
+            status_emoji = "[ERROR]"
             status_text = "已拒绝"
         else:
             card_color = "grey"
-            status_emoji = "📋"
+            status_emoji = "[CLIPBOARD]"
             status_text = "已处理"
 
         # 更新后的卡片

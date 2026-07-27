@@ -369,7 +369,7 @@ def create_fusion_retriever(
         k=k_rrf
     )
 
-    logger.info("✅ 融合检索器创建成功")
+    logger.info("[OK] 融合检索器创建成功")
 
     return fusion_retriever
 
@@ -444,9 +444,9 @@ if __name__ == "__main__":
                 print(f"   来源: {len(sources)}个检索器")
 
         print(f"\n{'='*60}")
-        print("✅ 融合检索器测试成功！")
+        print("[OK] 融合检索器测试成功！")
 
     except Exception as e:
-        print(f"\n❌ 测试失败: {e}")
+        print(f"\n[ERROR] 测试失败: {e}")
         import traceback
         traceback.print_exc()

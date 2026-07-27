@@ -1,4 +1,4 @@
-# 企业差旅 Agent 项目面试问题汇总
+﻿# 企业差旅 Agent 项目面试问题汇总
 
 文档版本: v1.0
 创建日期: 2026-07-13
@@ -303,3 +303,154 @@ Agent 评测维度包括哪些？如何量化评估：
 建议准备时间: 2-3 周
 
 **祝你面试顺利！💪**
+
+---
+
+## 十二、复盘学习笔记
+
+### 学习日志
+
+- **日期**: 2026-07-15
+- **时长**: 约 2 小时
+- **形式**: 问答模拟 + 代码溯源 + 追问扩展
+
+---
+
+### Q11: 工具生态扩展 ✅ **已学习**
+
+**核心回答思路：**
+
+新增"高铁订餐 API"需要改三处：
+1. 在 `src/mcp/trip_tools_server.py` 加一个 `@mcp.tool()` 装饰器函数，docstring 写清楚"高铁餐食预订"而非笼统的"订餐"，减少 LLM 误匹配概率
+2. LLM 通过 MCP 的 `list_tools` 发现机制自动感知新工具，零配置注册
+3. 选错工具（把"订餐"理解成"酒店餐饮"）靠 LangSmith 全链路追踪发现——trace 里看 tool name 是否匹配意图，不匹配一眼就能看到
+
+**面试官追问方向：**
+- 不能用 LangSmith（内网环境）怎么做？→ 自己写 Tool Call 审计日志表，按 TraceID 和时间范围检索
+
+---
+
+### Q15: TraceID 异步传递 ✅ **已学习**
+
+**问题本质：**
+
+TraceID 存在线程局部存储（Python 的 `contextvars`）里。线程 A 设置 TraceID 后把任务丢到线程池的工作线程 B 上——B 的小牌子是空的，没有 TraceID，所有日志和调用链断开。
+
+**生产环境 TraceID 断裂的两个最常见根因：**
+
+1. **默认线程池陷阱**：`concurrent.futures.ThreadPoolExecutor` 的 worker 线程拿不到提交方的 context。修复方案是用自定义 executor（`TraceAwareExecutor`），在 `submit()` 时自动捕获调用线程的 context 注入到 worker 线程
+2. **入口未解析**：API 入口处没有从 HTTP Header（`X-Request-Id`）里读取 TraceID 并写到 context，导致整条链根本没有根
+
+**完整方案三步走：**
+1. API 中间件统一从请求头提取或生成 TraceID，写入 `contextvars`
+2. 自定义 `TraceAwareExecutor` 自动传播 context 到工作线程
+3. 所有 `ThreadPoolExecutor` 调用的地方传入自定义 executor，不留死角
+
+**TraceID vs SpanID 的区别：**
+- TraceID：整个请求生命周期唯一不变，所有并行分支共享
+- SpanID：每个线程/每个 span 唯一，用于区分树形结构的不同节点
+
+---
+
+### Q17: 回调丢失处理 ✅ **已学习**
+
+**三级超时梯度方案：**
+
+| 层级 | 粒度 | 手段 | 代码依据 |
+|------|------|------|----------|
+| 第一层 | 秒级 | Redis Stream PEL 扫描 + 自动重投 | Stream 消息未 ACK 则重试 |
+| 第二层 | 分钟级 | 定时轮询 `pending` 审批 + 重新发送飞书卡片 | `WorkingMemory.get_pending_approvals()` |
+| 第三层 | 小时级 | 上报 Prometheus/飞书告警，值班运维介入 | `track_approval_metric()` |
+
+**幂等性保障：**
+`process_approval_result()` 入口处检查 `current_status != "pending"` —— 如果已经是 `approved/rejected`，直接返回"该审批已处理"，天然幂等，重投安全。
+
+---
+
+### Q19: 预算数据 T+1 同步超预算 ✅ **已学习**
+
+**核心方案：T+1 做权威对账 + Redis 做实时防重**
+
+```
+有效余额 = 权威(T+1)余额 - 今日已批(Redis 实时)
+```
+
+**Redis 实时扣减实现：**
+- 审批通过时 `INCRBY department_key amount`，设 TTL 到次日凌晨自动过期
+- Redis 原子操作天然防并发，单线程模型不会出现超扣
+
+**降级策略：**
+- Redis 不可用时降级为"保守模式"——直接用 T+1 余额，但该笔审批打上"待预算确认"标记走人工复核
+- 被 Redis 拒绝的单子进入待审批队列，等 T+1 更新后重新跑预算检查，如果余额恢复则自动通过
+
+**面试官追问：**
+- "为什么用 Redis 而不是消息队列？" → Redis INCRBY 是原子操作，消息队列两条消息同时到达 MySQL 还是有并发超的风险
+
+---
+
+### Q24: 检索结果冲突处理 ✅ **已学习**
+
+**核心思路：不信任谁，让 LLM 自己推理**
+
+检索出三个冲突文档（普通员工标准 / 高管标准 / 展会临时政策），流程如下：
+
+1. **Cross-encoder reranker**：query 和每个 doc 拼接计算相关性分，排精不是二选一淘汰
+2. **全部喂给 LLM**：Top3 文档连同各自的 score、source 一并格式化进 prompt
+3. **LLM 自行推理**：用户身份是"高管"→ 高管标准优先级高；展会临时政策看日期是否落在期间；最终回答综合引用
+
+**前置保障机制：**
+- Query Rewriting：改写"高管"→ `user_level=executive`，改写后检索结果天然倾向高管标准
+- Self-RAG 分类器：只有 FACTUAL 类查询走完整链路，不会误判为开放闲聊
+
+---
+
+### Q25: 四通道路由决策 ✅ **已学习**
+
+**三级级联门控架构（非并列选择）：**
+
+```
+用户查询
+  │
+  ▼
+Layer 0: 意图识别器（规则匹配，<5ms，零LLM成本）
+  │  ~30%流量直接调工具返回
+  │
+  └→ 无明确意图
+        │
+        ▼
+     Layer 1: Self-RAG 分类器（QueryClassifier）
+        │  CHITCHAT→直接LLM（又拦~40%）
+        │  GRAPH→GraphRAG检索
+        │  FACTUAL→进下一层
+        │
+        └→ FACTUAL
+              │
+              ▼
+           Layer 2: 复杂度评估器（80%规则+20%LLM）
+              │
+              ├─ SIMPLE → 单次RAG检索
+              ├─ MEDIUM → 多次工具调用
+              └─ COMPLEX→ 任务分解+编排并行执行
+```
+
+**复杂度判断链条（`ComplexityAssessor._assess_by_rule()`）：**
+
+1. 长度 < 10 字 → SIMPLE
+2. 包含规划关键词（规划/安排/行程） → COMPLEX
+3. 连接词（并/和/还有）两边都有意图关键词 → COMPLEX
+4. 意图数 ≥ 2 → COMPLEX
+5. 单意图 + 多实体 → MEDIUM
+6. 以上都不满足 → SIMPLE
+
+**LLM 二次确认**：只有规则判为 COMPLEX 时才走 LLM，防止"上海和广州天气对比"误判成 COMPLEX
+
+**并行执行机制**：WorkflowOrchestrator 通过入参-出参的依赖分析判断工具是否可以并行。无依赖关系的工具（天气查 city vs 政策查 city 互不依赖对方输出）走线程池并行
+
+---
+
+### 新增统计
+
+文档版本: v2.0
+已复盘（含答题思路）: Q11, Q15, Q17, Q19, Q24, Q25 = 6 题
+覆盖领域: 工具生态 & MCP、可观测性 & TraceID、异步可靠性 & 回调、预算一致性 & 防超、检索推理 & RAG、路由架构 & 门控
+

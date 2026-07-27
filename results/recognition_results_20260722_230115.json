@@ -1,0 +1,32 @@
+[
+  {
+    "file_path": "E:\\Desktop\\langchain-business-trip-management\\train_data\\zzsfp\\imgs\\b0.jpg",
+    "error": "API 调用失败: 401 - {\"error\":{\"code\":\"invalid_model\",\"message\":\"The model does not exist or you do not have access to it.\",\"type\":\"invalid_request_error\"},\"id\":\"as-r24djmq98i\"}",
+    "confidence": 0.0,
+    "need_review": true
+  },
+  {
+    "file_path": "E:\\Desktop\\langchain-business-trip-management\\train_data\\zzsfp\\imgs\\b1.jpg",
+    "error": "API 调用失败: 401 - {\"error\":{\"code\":\"invalid_model\",\"message\":\"The model does not exist or you do not have access to it.\",\"type\":\"invalid_request_error\"},\"id\":\"as-3jfm7fn8xf\"}",
+    "confidence": 0.0,
+    "need_review": true
+  },
+  {
+    "file_path": "E:\\Desktop\\langchain-business-trip-management\\train_data\\zzsfp\\imgs\\b10.jpg",
+    "error": "API 调用失败: 401 - {\"error\":{\"code\":\"invalid_model\",\"message\":\"The model does not exist or you do not have access to it.\",\"type\":\"invalid_request_error\"},\"id\":\"as-m3phfnc0d6\"}",
+    "confidence": 0.0,
+    "need_review": true
+  },
+  {
+    "file_path": "E:\\Desktop\\langchain-business-trip-management\\train_data\\zzsfp\\imgs\\b11.jpg",
+    "error": "API 调用失败: 401 - {\"error\":{\"code\":\"invalid_model\",\"message\":\"The model does not exist or you do not have access to it.\",\"type\":\"invalid_request_error\"},\"id\":\"as-nnx5pn5anm\"}",
+    "confidence": 0.0,
+    "need_review": true
+  },
+  {
+    "file_path": "E:\\Desktop\\langchain-business-trip-management\\train_data\\zzsfp\\imgs\\b12.jpg",
+    "error": "API 调用失败: 401 - {\"error\":{\"code\":\"invalid_model\",\"message\":\"The model does not exist or you do not have access to it.\",\"type\":\"invalid_request_error\"},\"id\":\"as-svzjqibjwm\"}",
+    "confidence": 0.0,
+    "need_review": true
+  }
+]

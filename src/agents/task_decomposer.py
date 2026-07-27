@@ -188,7 +188,7 @@ class TaskDecomposer:
             return tasks
 
         except Exception as e:
-            print(f"❌ 任务分解失败：{e}")
+            print(f"[ERROR] 任务分解失败：{e}")
             print("降级为单个RAG任务")
             return self._create_fallback_tasks(query)
 
@@ -308,13 +308,13 @@ class TaskDecomposer:
                 result = await executor_func(task)
                 task.result = result
                 task.success = True
-                print(f"  ✅ 任务{task.id}完成")
+                print(f"  [OK] 任务{task.id}完成")
                 return task.id, result
             except Exception as e:
                 task.success = False
                 error_msg = f"执行失败: {str(e)}"
                 task.result = error_msg
-                print(f"  ❌ 任务{task.id}失败: {e}")
+                print(f"  [ERROR] 任务{task.id}失败: {e}")
                 return task.id, error_msg
 
         # 并行执行所有任务
@@ -384,9 +384,9 @@ if __name__ == "__main__":
                     task_ids = [t.id for t in batch]
                     print(f"  批次{i}：并行执行任务{task_ids}")
 
-        print("\n✅ 任务分解器测试完成！")
+        print("\n[OK] 任务分解器测试完成！")
 
     except Exception as e:
-        print(f"❌ 测试失败：{e}")
+        print(f"[ERROR] 测试失败：{e}")
         import traceback
         traceback.print_exc()

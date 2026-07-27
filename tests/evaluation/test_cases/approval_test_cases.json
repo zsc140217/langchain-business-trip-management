@@ -1,0 +1,324 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "total_cases": 20,
+    "description": "审批引擎测试用例集",
+    "evaluation_metrics": [
+      "accuracy",
+      "consistency",
+      "rule_coverage"
+    ],
+    "approval_levels": {
+      "auto": "自动通过",
+      "manager": "经理审批",
+      "director": "总监审批",
+      "vp": "VP审批",
+      "cfo": "CFO审批"
+    }
+  },
+  "test_cases": [
+    {
+      "id": "APPROVAL_001",
+      "input": {
+        "user_level": "staff",
+        "destination": "上海",
+        "duration": 2,
+        "estimated_cost": 2000
+      },
+      "expected_approval_level": "manager",
+      "rules_triggered": [
+        "在预算内",
+        "普通员工需经理审批"
+      ],
+      "explanation": "符合标准流程"
+    },
+    {
+      "id": "APPROVAL_002",
+      "input": {
+        "user_level": "manager",
+        "destination": "北京",
+        "duration": 1,
+        "estimated_cost": 1000
+      },
+      "expected_approval_level": "auto",
+      "rules_triggered": [
+        "经理级别",
+        "低金额",
+        "短期出差"
+      ],
+      "explanation": "自动通过条件满足"
+    },
+    {
+      "id": "APPROVAL_003",
+      "input": {
+        "user_level": "staff",
+        "destination": "纽约",
+        "duration": 7,
+        "estimated_cost": 30000
+      },
+      "expected_approval_level": "vp",
+      "rules_triggered": [
+        "国际出差",
+        "高金额",
+        "长期"
+      ],
+      "explanation": "需要高层审批"
+    },
+    {
+      "id": "APPROVAL_004",
+      "input": {
+        "user_level": "director",
+        "destination": "深圳",
+        "duration": 3,
+        "estimated_cost": 5000
+      },
+      "expected_approval_level": "auto",
+      "rules_triggered": [
+        "总监级别",
+        "国内出差",
+        "标准范围"
+      ],
+      "explanation": "符合自动审批规则"
+    },
+    {
+      "id": "APPROVAL_005",
+      "input": {
+        "user_level": "staff",
+        "destination": "杭州",
+        "duration": 2,
+        "estimated_cost": 8000,
+        "over_budget_ratio": 0.35
+      },
+      "expected_approval_level": "cfo",
+      "rules_triggered": [
+        "超预算30%以上"
+      ],
+      "explanation": "需CFO特批"
+    },
+    {
+      "id": "APPROVAL_006",
+      "input": {
+        "user_level": "staff",
+        "destination": "测试城市",
+        "duration": 2,
+        "estimated_cost": 2000
+      },
+      "expected_approval_level": "manager",
+      "rules_triggered": [
+        "规则_6"
+      ],
+      "explanation": "测试说明_6，需根据实际场景填充",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "APPROVAL_007",
+      "input": {
+        "user_level": "staff",
+        "destination": "测试城市",
+        "duration": 2,
+        "estimated_cost": 2000
+      },
+      "expected_approval_level": "manager",
+      "rules_triggered": [
+        "规则_7"
+      ],
+      "explanation": "测试说明_7，需根据实际场景填充",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "APPROVAL_008",
+      "input": {
+        "user_level": "staff",
+        "destination": "测试城市",
+        "duration": 2,
+        "estimated_cost": 2000
+      },
+      "expected_approval_level": "manager",
+      "rules_triggered": [
+        "规则_8"
+      ],
+      "explanation": "测试说明_8，需根据实际场景填充",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "APPROVAL_009",
+      "input": {
+        "user_level": "staff",
+        "destination": "测试城市",
+        "duration": 2,
+        "estimated_cost": 2000
+      },
+      "expected_approval_level": "manager",
+      "rules_triggered": [
+        "规则_9"
+      ],
+      "explanation": "测试说明_9，需根据实际场景填充",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "APPROVAL_010",
+      "input": {
+        "user_level": "staff",
+        "destination": "测试城市",
+        "duration": 2,
+        "estimated_cost": 2000
+      },
+      "expected_approval_level": "manager",
+      "rules_triggered": [
+        "规则_10"
+      ],
+      "explanation": "测试说明_10，需根据实际场景填充",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "APPROVAL_011",
+      "input": {
+        "user_level": "staff",
+        "destination": "测试城市",
+        "duration": 2,
+        "estimated_cost": 2000
+      },
+      "expected_approval_level": "manager",
+      "rules_triggered": [
+        "规则_11"
+      ],
+      "explanation": "测试说明_11，需根据实际场景填充",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "APPROVAL_012",
+      "input": {
+        "user_level": "staff",
+        "destination": "测试城市",
+        "duration": 2,
+        "estimated_cost": 2000
+      },
+      "expected_approval_level": "manager",
+      "rules_triggered": [
+        "规则_12"
+      ],
+      "explanation": "测试说明_12，需根据实际场景填充",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "APPROVAL_013",
+      "input": {
+        "user_level": "staff",
+        "destination": "测试城市",
+        "duration": 2,
+        "estimated_cost": 2000
+      },
+      "expected_approval_level": "manager",
+      "rules_triggered": [
+        "规则_13"
+      ],
+      "explanation": "测试说明_13，需根据实际场景填充",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "APPROVAL_014",
+      "input": {
+        "user_level": "staff",
+        "destination": "测试城市",
+        "duration": 2,
+        "estimated_cost": 2000
+      },
+      "expected_approval_level": "manager",
+      "rules_triggered": [
+        "规则_14"
+      ],
+      "explanation": "测试说明_14，需根据实际场景填充",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "APPROVAL_015",
+      "input": {
+        "user_level": "staff",
+        "destination": "测试城市",
+        "duration": 2,
+        "estimated_cost": 2000
+      },
+      "expected_approval_level": "manager",
+      "rules_triggered": [
+        "规则_15"
+      ],
+      "explanation": "测试说明_15，需根据实际场景填充",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "APPROVAL_016",
+      "input": {
+        "user_level": "staff",
+        "destination": "测试城市",
+        "duration": 2,
+        "estimated_cost": 2000
+      },
+      "expected_approval_level": "manager",
+      "rules_triggered": [
+        "规则_16"
+      ],
+      "explanation": "测试说明_16，需根据实际场景填充",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "APPROVAL_017",
+      "input": {
+        "user_level": "staff",
+        "destination": "测试城市",
+        "duration": 2,
+        "estimated_cost": 2000
+      },
+      "expected_approval_level": "manager",
+      "rules_triggered": [
+        "规则_17"
+      ],
+      "explanation": "测试说明_17，需根据实际场景填充",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "APPROVAL_018",
+      "input": {
+        "user_level": "staff",
+        "destination": "测试城市",
+        "duration": 2,
+        "estimated_cost": 2000
+      },
+      "expected_approval_level": "manager",
+      "rules_triggered": [
+        "规则_18"
+      ],
+      "explanation": "测试说明_18，需根据实际场景填充",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "APPROVAL_019",
+      "input": {
+        "user_level": "staff",
+        "destination": "测试城市",
+        "duration": 2,
+        "estimated_cost": 2000
+      },
+      "expected_approval_level": "manager",
+      "rules_triggered": [
+        "规则_19"
+      ],
+      "explanation": "测试说明_19，需根据实际场景填充",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "APPROVAL_020",
+      "input": {
+        "user_level": "staff",
+        "destination": "测试城市",
+        "duration": 2,
+        "estimated_cost": 2000
+      },
+      "expected_approval_level": "manager",
+      "rules_triggered": [
+        "规则_20"
+      ],
+      "explanation": "测试说明_20，需根据实际场景填充",
+      "note": "此为模板，需根据实际业务场景填充"
+    }
+  ]
+}

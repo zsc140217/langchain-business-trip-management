@@ -268,16 +268,18 @@ class BaseEvaluator:
             logger.debug(f"Calling LLM for {self.metric_name} evaluation")
 
             # 调用LLM - 兼容不同的LangChain版本
-            if hasattr(self.llm, 'predict'):
-                response = self.llm.predict(prompt, temperature=self.temperature)
-            elif hasattr(self.llm, 'invoke'):
+            if hasattr(self.llm, 'invoke'):
+                # ChatModel调用方式
                 from langchain_core.messages import HumanMessage
                 message = HumanMessage(content=prompt)
-                result = self.llm.invoke([message], temperature=self.temperature)
+                result = self.llm.invoke([message])
                 response = result.content if hasattr(result, 'content') else str(result)
+            elif hasattr(self.llm, 'predict'):
+                # 旧版LLM调用方式
+                response = self.llm.predict(prompt)
             else:
                 # 直接调用
-                result = self.llm([prompt], temperature=self.temperature)
+                result = self.llm(prompt)
                 response = result.content if hasattr(result, 'content') else str(result)
 
             logger.debug(f"LLM response: {response[:200]}...")

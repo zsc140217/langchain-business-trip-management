@@ -1,0 +1,95 @@
+{
+  "description": "简单推理能力测试用例 - 单步逻辑推理",
+  "test_cases": [
+    {
+      "id": "reasoning_simple_001",
+      "query": "我是L5员工，出差上海住宿标准是多少？",
+      "expected_reasoning": "L5 → 高级经理 → 省外标准500元/天",
+      "expected_answer": "500元/天",
+      "expected_keywords": ["500", "元", "天"],
+      "difficulty": "SIMPLE",
+      "category": "职级标准查询"
+    },
+    {
+      "id": "reasoning_simple_002",
+      "query": "张三属于销售部，销售部的经理是谁？",
+      "expected_reasoning": "张三 → 销售部 → 查询部门经理",
+      "expected_answer": "李明",
+      "expected_keywords": ["李明", "经理"],
+      "difficulty": "SIMPLE",
+      "category": "组织架构查询"
+    },
+    {
+      "id": "reasoning_simple_003",
+      "query": "北京属于省外吗？",
+      "expected_reasoning": "北京 → 直辖市 → 属于省外",
+      "expected_answer": "是的，北京属于省外",
+      "expected_keywords": ["北京", "省外"],
+      "difficulty": "SIMPLE",
+      "category": "地域判断"
+    },
+    {
+      "id": "reasoning_simple_004",
+      "query": "L3员工的职级是什么？",
+      "expected_reasoning": "L3 → 映射职级表 → 初级经理",
+      "expected_answer": "初级经理",
+      "expected_keywords": ["初级", "经理"],
+      "difficulty": "SIMPLE",
+      "category": "职级查询"
+    },
+    {
+      "id": "reasoning_simple_005",
+      "query": "出差深圳的餐补标准是多少？",
+      "expected_reasoning": "深圳 → 省外 → 餐补标准100元/天",
+      "expected_answer": "100元/天",
+      "expected_keywords": ["100", "元", "天"],
+      "difficulty": "SIMPLE",
+      "category": "餐补标准查询"
+    },
+    {
+      "id": "reasoning_simple_006",
+      "query": "销售部有多少人？",
+      "expected_reasoning": "查询知识图谱 → 统计销售部员工数",
+      "expected_answer": "40人",
+      "expected_keywords": ["40", "人"],
+      "difficulty": "SIMPLE",
+      "category": "部门统计"
+    },
+    {
+      "id": "reasoning_simple_007",
+      "query": "高级经理的省外住宿标准是多少？",
+      "expected_reasoning": "高级经理 → 省外住宿 → 500元/天",
+      "expected_answer": "500元/天",
+      "expected_keywords": ["500", "元"],
+      "difficulty": "SIMPLE",
+      "category": "职级标准查询"
+    },
+    {
+      "id": "reasoning_simple_008",
+      "query": "张三的直属上级是谁？",
+      "expected_reasoning": "查询知识图谱 → 张三的REPORTS_TO关系",
+      "expected_answer": "李明",
+      "expected_keywords": ["李明"],
+      "difficulty": "SIMPLE",
+      "category": "汇报关系查询"
+    },
+    {
+      "id": "reasoning_simple_009",
+      "query": "市内出差有住宿补贴吗？",
+      "expected_reasoning": "市内出差 → 查询政策 → 无住宿补贴",
+      "expected_answer": "市内出差不提供住宿补贴",
+      "expected_keywords": ["市内", "不提供", "无"],
+      "difficulty": "SIMPLE",
+      "category": "政策查询"
+    },
+    {
+      "id": "reasoning_simple_010",
+      "query": "交通费有上限吗？",
+      "expected_reasoning": "交通费 → 查询政策 → 实报实销，需提供票据",
+      "expected_answer": "交通费实报实销，需提供发票",
+      "expected_keywords": ["实报实销", "发票", "票据"],
+      "difficulty": "SIMPLE",
+      "category": "政策查询"
+    }
+  ]
+}

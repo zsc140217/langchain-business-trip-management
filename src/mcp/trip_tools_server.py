@@ -1,4 +1,4 @@
-"""MCP Server for trip tools (hotel/flight/weather)."""
+﻿"""MCP Server for trip tools (hotel/flight/weather)."""
 import logging, os, sys
 from typing import Optional
 from datetime import datetime, timedelta

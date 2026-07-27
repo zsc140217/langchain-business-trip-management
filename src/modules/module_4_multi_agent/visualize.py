@@ -138,13 +138,13 @@ Transition Flow:
         print("\n[4] Generating PNG visualization...")
         output_path = "multi_agent_graph.png"
         graph.visualize(output_path)
-        print(f"✓ PNG saved to {output_path}")
+        print(f"[CHECK] PNG saved to {output_path}")
     except Exception as e:
         print(f"ℹ PNG generation skipped: {e}")
         print("  Install pygraphviz for PNG export: pip install pygraphviz")
 
     print("\n" + "="*80)
-    print("✅ Visualization completed!")
+    print("[OK] Visualization completed!")
     print("="*80)
     print("\nVisualization options:")
     print("1. Copy Mermaid code to https://mermaid.live")
@@ -156,6 +156,6 @@ if __name__ == "__main__":
     try:
         visualize_graph()
     except Exception as e:
-        print(f"\n❌ Visualization failed: {e}")
+        print(f"\n[ERROR] Visualization failed: {e}")
         import traceback
         traceback.print_exc()

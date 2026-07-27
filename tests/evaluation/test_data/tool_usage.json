@@ -1,0 +1,176 @@
+{
+  "description": "工具使用能力测试用例 - 工具选择、参数构造、结果解读",
+  "test_cases": [
+    {
+      "id": "tool_selection_001",
+      "query": "销售部有多少人？",
+      "expected_tool": "GraphRetriever",
+      "reason": "需要查询知识图谱中的组织架构信息",
+      "difficulty": "SIMPLE",
+      "category": "工具选择",
+      "test_type": "tool_selection"
+    },
+    {
+      "id": "tool_selection_002",
+      "query": "差旅报销的标准是什么？",
+      "expected_tool": "VectorRetriever",
+      "reason": "需要从政策文档中检索标准规定",
+      "difficulty": "SIMPLE",
+      "category": "工具选择",
+      "test_type": "tool_selection"
+    },
+    {
+      "id": "tool_selection_003",
+      "query": "张三属于哪个部门？",
+      "expected_tool": "GraphRetriever",
+      "reason": "需要查询知识图谱中的员工-部门关系",
+      "difficulty": "SIMPLE",
+      "category": "工具选择",
+      "test_type": "tool_selection"
+    },
+    {
+      "id": "tool_selection_004",
+      "query": "L5员工出差有什么补贴政策？",
+      "expected_tool": "VectorRetriever",
+      "reason": "需要检索政策文档中的职级补贴规定",
+      "difficulty": "SIMPLE",
+      "category": "工具选择",
+      "test_type": "tool_selection"
+    },
+    {
+      "id": "tool_parameters_001",
+      "query": "查询销售部经理李明的出差记录",
+      "expected_tool_call": {
+        "tool_name": "GraphRetriever",
+        "parameters": {
+          "query_type": "cypher",
+          "entity_mentions": ["李明", "销售部", "出差"]
+        }
+      },
+      "key_parameters": ["李明", "出差"],
+      "difficulty": "MEDIUM",
+      "category": "工具参数",
+      "test_type": "tool_parameters"
+    },
+    {
+      "id": "tool_parameters_002",
+      "query": "技术部有哪些员工？",
+      "expected_tool_call": {
+        "tool_name": "GraphRetriever",
+        "parameters": {
+          "entity_mentions": ["技术部", "员工"]
+        }
+      },
+      "key_parameters": ["技术部", "员工"],
+      "difficulty": "SIMPLE",
+      "category": "工具参数",
+      "test_type": "tool_parameters"
+    },
+    {
+      "id": "tool_parameters_003",
+      "query": "L4员工省外出差的住宿标准",
+      "expected_tool_call": {
+        "tool_name": "VectorRetriever",
+        "parameters": {
+          "query": "L4 省外 住宿标准"
+        }
+      },
+      "key_parameters": ["L4", "省外", "住宿"],
+      "difficulty": "MEDIUM",
+      "category": "工具参数",
+      "test_type": "tool_parameters"
+    },
+    {
+      "id": "tool_parameters_004",
+      "query": "张三和李四谁的职级更高？",
+      "expected_tool_call": {
+        "tool_name": "GraphRetriever",
+        "parameters": {
+          "entity_mentions": ["张三", "李四", "职级"]
+        }
+      },
+      "key_parameters": ["张三", "李四", "职级"],
+      "difficulty": "MEDIUM",
+      "category": "工具参数",
+      "test_type": "tool_parameters"
+    },
+    {
+      "id": "tool_interpretation_001",
+      "query": "销售部有多少人？",
+      "mock_tool_result": {
+        "tool_name": "GraphRetriever",
+        "result": [
+          {"e.name": "张三"},
+          {"e.name": "李四"},
+          {"e.name": "王五"}
+        ]
+      },
+      "expected_answer": "销售部有3人",
+      "interpretation_requirements": [
+        "统计总数",
+        "明确部门名称"
+      ],
+      "difficulty": "SIMPLE",
+      "category": "工具结果解读",
+      "test_type": "tool_interpretation"
+    },
+    {
+      "id": "tool_interpretation_002",
+      "query": "去年出差次数最多的是谁？",
+      "mock_tool_result": {
+        "tool_name": "GraphRetriever",
+        "result": [
+          {"name": "张三", "trip_count": 15},
+          {"name": "李四", "trip_count": 12},
+          {"name": "王五", "trip_count": 8}
+        ]
+      },
+      "expected_answer": "张三出差次数最多，共15次",
+      "interpretation_requirements": [
+        "找出最大值",
+        "说明次数"
+      ],
+      "difficulty": "MEDIUM",
+      "category": "工具结果解读",
+      "test_type": "tool_interpretation"
+    },
+    {
+      "id": "tool_interpretation_003",
+      "query": "技术部和销售部哪个部门人更多？",
+      "mock_tool_result": {
+        "tool_name": "GraphRetriever",
+        "result": {
+          "技术部": 8,
+          "销售部": 5
+        }
+      },
+      "expected_answer": "技术部人更多，有8人，销售部有5人",
+      "interpretation_requirements": [
+        "对比两个数值",
+        "给出结论"
+      ],
+      "difficulty": "MEDIUM",
+      "category": "工具结果解读",
+      "test_type": "tool_interpretation"
+    },
+    {
+      "id": "tool_interpretation_004",
+      "query": "L5员工有哪些？",
+      "mock_tool_result": {
+        "tool_name": "GraphRetriever",
+        "result": [
+          {"name": "王经理", "level": "L5", "department": "销售部"},
+          {"name": "李总监", "level": "L5", "department": "技术部"}
+        ]
+      },
+      "expected_answer": "L5员工有2位：销售部的王经理、技术部的李总监",
+      "interpretation_requirements": [
+        "列举所有人",
+        "包含部门信息"
+      ],
+      "difficulty": "MEDIUM",
+      "category": "工具结果解读",
+      "test_type": "tool_interpretation"
+    }
+  ]
+}

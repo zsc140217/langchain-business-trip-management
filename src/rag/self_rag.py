@@ -196,9 +196,9 @@ if __name__ == "__main__":
             if result['sources']:
                 print(f"来源文档数：{len(result['sources'])}")
 
-        print("\n✅ Self-RAG测试成功！")
+        print("\n[OK] Self-RAG测试成功！")
 
     except Exception as e:
-        print(f"\n❌ 测试失败：{e}")
+        print(f"\n[ERROR] 测试失败：{e}")
         import traceback
         traceback.print_exc()

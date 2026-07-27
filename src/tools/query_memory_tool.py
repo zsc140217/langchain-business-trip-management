@@ -169,4 +169,4 @@ if __name__ == "__main__":
     result = tool.execute(query="测试")
     print(result)
 
-    print("\n✅ 测试完成")
+    print("\n[OK] 测试完成")

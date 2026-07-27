@@ -1,0 +1,8 @@
+{
+  "test1_hotel": {
+    "error": "'gbk' codec can't encode character '\\u2713' in position 7: illegal multibyte sequence"
+  },
+  "test2_approval": {
+    "error": "'gbk' codec can't encode character '\\u2713' in position 7: illegal multibyte sequence"
+  }
+}

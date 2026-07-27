@@ -1,0 +1,97 @@
+{
+  "description": "复杂推理能力测试用例 - 多步计算和复杂逻辑",
+  "test_cases": [
+    {
+      "id": "reasoning_complex_001",
+      "query": "张三去北京出差3天，住宿500元/天，餐补100元/天，交通费800元，总共能报多少？",
+      "expected_reasoning": "步骤1: 计算住宿费 = 500 × 3 = 1500元\n步骤2: 计算餐补 = 100 × 3 = 300元\n步骤3: 交通费 = 800元\n步骤4: 总计 = 1500 + 300 + 800 = 2600元",
+      "expected_answer": "2600元",
+      "expected_numbers": ["1500", "300", "800", "2600"],
+      "reasoning_steps": 4,
+      "difficulty": "COMPLEX",
+      "category": "费用计算",
+      "requires_tool": false
+    },
+    {
+      "id": "reasoning_complex_002",
+      "query": "销售部去年出差次数最多的3个员工，他们的总出差天数是多少？",
+      "expected_reasoning": "步骤1: 查询销售部所有员工\n步骤2: 统计每个员工的出差次数\n步骤3: 排序取Top 3\n步骤4: 查询这3人的出差记录\n步骤5: 计算总天数",
+      "expected_answer": "需要实际查询知识图谱",
+      "expected_keywords": ["天", "出差"],
+      "reasoning_steps": 5,
+      "difficulty": "COMPLEX",
+      "category": "多步查询统计",
+      "requires_tool": true,
+      "expected_tool": "GraphRetriever"
+    },
+    {
+      "id": "reasoning_complex_003",
+      "query": "如果L4员工去上海出差5天，每天住宿400元，是否符合标准？如果不符合，超标多少？",
+      "expected_reasoning": "步骤1: 识别职级 L4 → 中级经理\n步骤2: 识别目的地 上海 → 省外\n步骤3: 查询标准 中级经理省外住宿 = 400元/天\n步骤4: 对比实际 400 = 400，符合标准\n步骤5: 结论：符合，不超标",
+      "expected_answer": "符合标准，不超标",
+      "expected_keywords": ["符合", "标准", "400"],
+      "reasoning_steps": 5,
+      "difficulty": "COMPLEX",
+      "category": "标准校验",
+      "requires_tool": false
+    },
+    {
+      "id": "reasoning_complex_004",
+      "query": "李明管理的团队中，谁去北京出差的次数最多？",
+      "expected_reasoning": "步骤1: 查询李明的下属\n步骤2: 查询每个下属的出差记录\n步骤3: 筛选目的地为北京的\n步骤4: 统计次数\n步骤5: 找到最多的员工",
+      "expected_answer": "需要实际查询知识图谱",
+      "expected_keywords": ["北京", "次数"],
+      "reasoning_steps": 5,
+      "difficulty": "COMPLEX",
+      "category": "嵌套查询",
+      "requires_tool": true,
+      "expected_tool": "GraphRetriever"
+    },
+    {
+      "id": "reasoning_complex_005",
+      "query": "计算所有L5员工去年的平均出差天数",
+      "expected_reasoning": "步骤1: 查询所有L5员工\n步骤2: 查询每个L5员工的出差记录\n步骤3: 计算每人的总天数\n步骤4: 求平均值",
+      "expected_answer": "需要实际查询知识图谱",
+      "expected_keywords": ["平均", "天数", "L5"],
+      "reasoning_steps": 4,
+      "difficulty": "COMPLEX",
+      "category": "聚合统计",
+      "requires_tool": true,
+      "expected_tool": "GraphRetriever"
+    },
+    {
+      "id": "reasoning_complex_006",
+      "query": "张三上个月去上海住宿花了2400元，他是L3员工，超标了吗？超标多少？",
+      "expected_reasoning": "步骤1: 识别职级 L3 → 初级经理\n步骤2: 识别目的地 上海 → 省外\n步骤3: 查询标准 初级经理省外住宿 = 300元/天\n步骤4: 推算天数 2400 / 300 = 8天\n步骤5: 标准总额 300 × 8 = 2400元\n步骤6: 对比 2400 = 2400，不超标",
+      "expected_answer": "不超标",
+      "expected_keywords": ["不超标", "2400", "300"],
+      "reasoning_steps": 6,
+      "difficulty": "COMPLEX",
+      "category": "反向推理",
+      "requires_tool": false
+    },
+    {
+      "id": "reasoning_complex_007",
+      "query": "如果一个L5员工去深圳出差7天，住宿每天600元，餐补每天150元，交通费1200元，总费用是多少？能报销多少？",
+      "expected_reasoning": "步骤1: 计算住宿总费用 = 600 × 7 = 4200元\n步骤2: 计算餐补总费用 = 150 × 7 = 1050元\n步骤3: 交通费 = 1200元\n步骤4: 总费用 = 4200 + 1050 + 1200 = 6450元\n步骤5: L5省外住宿标准 = 500元/天，应报销 500 × 7 = 3500元\n步骤6: 餐补标准 = 100元/天，应报销 100 × 7 = 700元\n步骤7: 交通费实报实销 = 1200元\n步骤8: 可报销总额 = 3500 + 700 + 1200 = 5400元\n步骤9: 自费 = 6450 - 5400 = 1050元",
+      "expected_answer": "总费用6450元，可报销5400元，自费1050元",
+      "expected_numbers": ["6450", "5400", "1050"],
+      "reasoning_steps": 9,
+      "difficulty": "COMPLEX",
+      "category": "复杂计算",
+      "requires_tool": false
+    },
+    {
+      "id": "reasoning_complex_008",
+      "query": "销售部和市场部，哪个部门去年的出差总费用更高？",
+      "expected_reasoning": "步骤1: 查询销售部所有员工的出差记录\n步骤2: 汇总销售部出差总费用\n步骤3: 查询市场部所有员工的出差记录\n步骤4: 汇总市场部出差总费用\n步骤5: 对比两个部门的总费用",
+      "expected_answer": "需要实际查询知识图谱",
+      "expected_keywords": ["部门", "费用", "对比"],
+      "reasoning_steps": 5,
+      "difficulty": "COMPLEX",
+      "category": "跨部门对比",
+      "requires_tool": true,
+      "expected_tool": "GraphRetriever"
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+Traceback (most recent call last):
+  File "E:\Desktop\langchain-business-trip-management\test_backend_system.py", line 229, in <module>
+    main()
+  File "E:\Desktop\langchain-business-trip-management\test_backend_system.py", line 194, in main
+    test_chat_qa(employee_token)
+  File "E:\Desktop\langchain-business-trip-management\test_backend_system.py", line 87, in test_chat_qa
+    print(f"  回答: {data['answer'][:100]}...")
+UnicodeEncodeError: 'gbk' codec can't encode character '\xa5' in position 21: illegal multibyte sequence
+============================================================
+ 后端系统完整测试
+ 测试时间: 2026-07-15 23:17:52
+============================================================
+
+============================================================
+ 1. 健康检查
+============================================================
+状态: healthy
+组件状态:
+  [OK] orchestrator
+  [OK] memory_service
+  [OK] feishu_client
+
+============================================================
+ 2. 用户登录
+============================================================
+
+测试登录: employee (普通员工)
+  [OK] 登录成功
+    - 姓名: 张三
+    - 部门: 销售部
+    - 职位: 销售专员
+    - 高管: 否
+
+测试登录: executive (高管)
+  [OK] 登录成功
+    - 姓名: 李总
+    - 部门: 管理层
+    - 职位: 销售总监
+    - 高管: 是
+
+测试登录: admin (管理员)
+  [OK] 登录成功
+    - 姓名: 系统管理员
+    - 部门: IT部
+    - 职位: 系统管理员
+    - 高管: 否
+
+============================================================
+ 3. Q&A域测试
+============================================================
+
+查询: 北京的住宿标准是多少？
+  路由: fast_path
+  回答: [1] 第十一条 出差人员应当在职务级别对应的住宿标准限额内，选择安全、经济、便捷的宾馆或各地定点接待宾馆住宿。
+来源: data\knowledge_base\01_差旅管理办法.txt
+
+[2] ...
+
+查询: 高管的交通标准是什么？
+  路由: fast_path
+  回答: [1] 第六条 出差人员应当按规定等级乘坐交通工具。乘坐交通工具的等级见下表：
+
+<table><tr><td>交通工具级别</td><td>飞机</td><td>轮船(不包括旅游船)</td><td...
+
+查询: 报销需要哪些材料？
+  路由: approval_domain
+
+[FAIL] 测试过程出错: 'gbk' codec can't encode character '\xa5' in position 21: illegal multibyte sequence

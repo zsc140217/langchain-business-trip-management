@@ -222,9 +222,9 @@ if __name__ == "__main__":
 
             print(f"Result:\n{result}")
 
-        print("\n✅ PolicyWorkerAgent test completed!")
+        print("\n[OK] PolicyWorkerAgent test completed!")
 
     except Exception as e:
-        print(f"❌ Test failed: {e}")
+        print(f"[ERROR] Test failed: {e}")
         import traceback
         traceback.print_exc()

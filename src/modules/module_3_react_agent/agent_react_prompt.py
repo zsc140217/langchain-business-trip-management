@@ -33,7 +33,7 @@ Thought: 用户想知道北京的实时天气，我需要使用 query_weather �
 Action: query_weather
 参数: {{"city": "北京"}}
 
-Observation: 📍 北京实时天气：晴天，25°C
+Observation: [PIN] 北京实时天气：晴天，25°C
 
 Thought: 我已经获得了北京的天气信息，可以给出最终答案了
 Final Answer: 北京今天天气晴朗，气温25°C，适合出行。
@@ -148,7 +148,7 @@ def run_react_agent_with_prompt(
                 final_answer = response_text.split("最终答案：")[-1].strip()
 
             if verbose:
-                print(f"\n✅ Agent 完成，返回最终答案")
+                print(f"\n[OK] Agent 完成，返回最终答案")
 
             return {
                 "output": final_answer,
@@ -160,13 +160,13 @@ def run_react_agent_with_prompt(
 
         if not action_name:
             if verbose:
-                print(f"\n⚠️  未找到有效的Action，继续下一轮")
+                print(f"\n[WARNING]  未找到有效的Action，继续下一轮")
             current_input = "请明确指定要使用的工具。格式：Action: 工具名\\n参数: {{...}}"
             continue
 
         # 执行工具
         if action_name not in tool_map:
-            observation = f"❌ 错误：工具 '{action_name}' 不存在。可用工具：{', '.join(tool_map.keys())}"
+            observation = f"[ERROR] 错误：工具 '{action_name}' 不存在。可用工具：{', '.join(tool_map.keys())}"
             if verbose:
                 print(f"\n{observation}")
         else:
@@ -182,11 +182,11 @@ def run_react_agent_with_prompt(
                 intermediate_steps.append((action_name, action_args, tool_result))
 
                 if verbose:
-                    print(f"\n📊 工具结果:")
+                    print(f"\n[CHART] 工具结果:")
                     print(tool_result[:300] + "..." if len(tool_result) > 300 else tool_result)
 
             except Exception as e:
-                observation = f"Observation: ❌ 工具执行错误：{str(e)}"
+                observation = f"Observation: [ERROR] 工具执行错误：{str(e)}"
                 if verbose:
                     print(f"\n{observation}")
 
@@ -195,7 +195,7 @@ def run_react_agent_with_prompt(
 
     # 达到最大迭代次数
     if verbose:
-        print(f"\n⚠️  达到最大迭代次数 ({max_iterations})")
+        print(f"\n[WARNING]  达到最大迭代次数 ({max_iterations})")
 
     return {
         "output": "抱歉，任务太复杂，无法在限定步骤内完成。请尝试简化问题。",

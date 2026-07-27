@@ -77,7 +77,7 @@ def test_individual_tools():
     })
     print(result)
 
-    print("\n✅ 单个工具测试完成\n")
+    print("\n[OK] 单个工具测试完成\n")
 
 
 def test_agent_single_tool():
@@ -117,13 +117,13 @@ def test_agent_single_tool():
                 tools=test_case["tools"],
                 verbose=False  # 简化输出
             )
-            print(f"✅ 回答：\n{result['output']}")
-            print(f"\n📊 推理步骤数：{len(result.get('intermediate_steps', []))}")
+            print(f"[OK] 回答：\n{result['output']}")
+            print(f"\n[CHART] 推理步骤数：{len(result.get('intermediate_steps', []))}")
 
         except Exception as e:
-            print(f"❌ 执行失败：{str(e)}")
+            print(f"[ERROR] 执行失败：{str(e)}")
 
-    print("\n✅ Agent单工具调用测试完成\n")
+    print("\n[OK] Agent单工具调用测试完成\n")
 
 
 def test_agent_multi_tool():
@@ -158,7 +158,7 @@ def test_agent_multi_tool():
     for idx, test_case in enumerate(test_cases, 1):
         print_subsection(f"3.{idx} {test_case['description']}")
         print(f"❓ 问题：{test_case['query']}")
-        print(f"📋 预期调用工具：{', '.join(test_case['expected_tools'])}\n")
+        print(f"[CLIPBOARD] 预期调用工具：{', '.join(test_case['expected_tools'])}\n")
 
         try:
             result = run_react_agent(
@@ -167,8 +167,8 @@ def test_agent_multi_tool():
                 verbose=False
             )
 
-            print(f"✅ 回答：\n{result['output']}")
-            print(f"\n📊 推理步骤数：{len(result.get('intermediate_steps', []))}")
+            print(f"[OK] 回答：\n{result['output']}")
+            print(f"\n[CHART] 推理步骤数：{len(result.get('intermediate_steps', []))}")
 
             # 显示实际调用的工具
             if result.get('intermediate_steps'):
@@ -176,9 +176,9 @@ def test_agent_multi_tool():
                 print(f"[工具] 实际调用工具：{', '.join(called_tools)}")
 
         except Exception as e:
-            print(f"❌ 执行失败：{str(e)}")
+            print(f"[ERROR] 执行失败：{str(e)}")
 
-    print("\n✅ Agent多工具协作测试完成\n")
+    print("\n[OK] Agent多工具协作测试完成\n")
 
 
 def test_error_handling():
@@ -221,16 +221,16 @@ def test_error_handling():
             )
 
             if "抱歉" in result['output'] or "无法" in result['output'] or "没有" in result['output']:
-                print(f"✅ 正确处理错误情况")
+                print(f"[OK] 正确处理错误情况")
                 print(f"回答：{result['output'][:200]}...")
             else:
-                print(f"⚠️  可能未正确处理错误")
+                print(f"[WARNING]  可能未正确处理错误")
                 print(f"回答：{result['output']}")
 
         except Exception as e:
-            print(f"❌ 执行异常（但这是预期的）：{str(e)[:100]}...")
+            print(f"[ERROR] 执行异常（但这是预期的）：{str(e)[:100]}...")
 
-    print("\n✅ 错误处理测试完成\n")
+    print("\n[OK] 错误处理测试完成\n")
 
 
 def test_tool_metadata():
@@ -252,7 +252,7 @@ def test_tool_metadata():
         print(f"  参数：{tool.args}")
         print()
 
-    print("✅ 工具元数据测试完成\n")
+    print("[OK] 工具元数据测试完成\n")
 
 
 def main():
@@ -263,11 +263,11 @@ def main():
 
     # 检查环境变量
     if not os.getenv("DASHSCOPE_API_KEY"):
-        print("\n❌ 错误：未找到DASHSCOPE_API_KEY环境变量")
+        print("\n[ERROR] 错误：未找到DASHSCOPE_API_KEY环境变量")
         print("请在.env文件中配置：DASHSCOPE_API_KEY=your_key")
         return
 
-    print("\n✅ 环境变量检查通过")
+    print("\n[OK] 环境变量检查通过")
     print(f"📦 LLM模型：通义千问（qwen-plus）")
 
     # 运行测试
@@ -295,12 +295,12 @@ def main():
         print("  🎉 所有测试完成")
         print("=" * 70)
 
-        print("\n📚 测试总结：")
-        print("  ✅ 单个工具功能正常")
-        print("  ✅ Agent能够正确调用单个工具")
-        print("  ✅ Agent能够协调多个工具完成复杂任务")
-        print("  ✅ 错误处理机制有效")
-        print("  ✅ 工具元数据完整")
+        print("\n[BOOKS] 测试总结：")
+        print("  [OK] 单个工具功能正常")
+        print("  [OK] Agent能够正确调用单个工具")
+        print("  [OK] Agent能够协调多个工具完成复杂任务")
+        print("  [OK] 错误处理机制有效")
+        print("  [OK] 工具元数据完整")
 
         print("\n[提示] 下一步：")
         print("  1. 查看README.md了解详细文档")
@@ -309,9 +309,9 @@ def main():
         print("  4. 集成LangSmith监控Agent行为")
 
     except KeyboardInterrupt:
-        print("\n\n⚠️  测试被用户中断")
+        print("\n\n[WARNING]  测试被用户中断")
     except Exception as e:
-        print(f"\n\n❌ 测试失败：{str(e)}")
+        print(f"\n\n[ERROR] 测试失败：{str(e)}")
         import traceback
         traceback.print_exc()
 

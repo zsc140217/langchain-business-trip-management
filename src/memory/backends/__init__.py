@@ -51,7 +51,7 @@ def create_backends(backend_type: str = None) -> Tuple[ShortTermBackend, LongTer
             return short_term, long_term
 
         except ImportError as e:
-            print(f"⚠️ 缺少依赖: {e}")
+            print(f"[WARNING] 缺少依赖: {e}")
             print("请安装: pip install redis psycopg2-binary")
             print("回退到文件存储后端...")
             short_term = FileShortTermBackend()
@@ -59,7 +59,7 @@ def create_backends(backend_type: str = None) -> Tuple[ShortTermBackend, LongTer
             return short_term, long_term
 
         except ConnectionError as e:
-            print(f"⚠️ 连接失败: {e}")
+            print(f"[WARNING] 连接失败: {e}")
             print("请确保Redis和PostgreSQL服务已启动")
             print("回退到文件存储后端...")
             short_term = FileShortTermBackend()
@@ -85,4 +85,4 @@ if __name__ == "__main__":
     print(f"   短期记忆: {type(short).__name__}")
     print(f"   长期记忆: {type(long).__name__}")
 
-    print("\n✅ 测试完成")
+    print("\n[OK] 测试完成")

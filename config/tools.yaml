@@ -1,0 +1,193 @@
+# Tool Configuration
+# Centralized configuration for all tools in the system
+
+tools:
+  # Weather Query Tool
+  query_weather:
+    enabled: true
+    cache_ttl: 1800  # 30 minutes
+    max_retries: 3
+    timeout: 30
+    health_check:
+      enabled: true
+      interval: 60
+    description: "Query current weather for a specified city"
+    parameters:
+      - name: city
+        type: string
+        required: true
+        description: "City name"
+    channel: mcp
+
+  # Flight Search Tool
+  search_flights:
+    enabled: true
+    cache_ttl: 900  # 15 minutes
+    max_retries: 3
+    timeout: 30
+    health_check:
+      enabled: true
+      interval: 60
+    description: "Search available flights"
+    parameters:
+      - name: departure_city
+        type: string
+        required: true
+        description: "Departure city"
+      - name: arrival_city
+        type: string
+        required: true
+        description: "Arrival city"
+      - name: date
+        type: string
+        required: true
+        description: "Travel date (YYYY-MM-DD)"
+    channel: mcp
+
+  # Hotel Search Tool
+  search_hotels:
+    enabled: true
+    cache_ttl: 900  # 15 minutes
+    max_retries: 3
+    timeout: 30
+    health_check:
+      enabled: true
+      interval: 60
+    description: "Search available hotels"
+    parameters:
+      - name: city
+        type: string
+        required: true
+        description: "City name"
+      - name: max_price
+        type: number
+        required: false
+        description: "Maximum price per night"
+      - name: min_star
+        type: number
+        required: false
+        description: "Minimum star rating"
+    channel: mcp
+
+  # Policy Search Tool
+  search_policy:
+    enabled: true
+    cache_ttl: 3600  # 1 hour (policies change infrequently)
+    max_retries: 2
+    timeout: 45
+    health_check:
+      enabled: true
+      interval: 120
+    description: "Search company travel policies"
+    parameters:
+      - name: query
+        type: string
+        required: true
+        description: "Search query"
+    channel: local
+
+  # Graph Query Tool
+  query_graph:
+    enabled: true
+    cache_ttl: 1800  # 30 minutes
+    max_retries: 3
+    timeout: 30
+    health_check:
+      enabled: true
+      interval: 60
+    description: "Query knowledge graph"
+    parameters:
+      - name: query
+        type: string
+        required: true
+        description: "Graph query"
+    channel: local
+
+  # Check Approval Status Tool
+  check_approval_status:
+    enabled: true
+    cache_ttl: 60  # 1 minute (status changes frequently)
+    max_retries: 3
+    timeout: 15
+    health_check:
+      enabled: true
+      interval: 30
+    description: "Check approval request status"
+    parameters:
+      - name: approval_id
+        type: string
+        required: true
+        description: "Approval request ID"
+    channel: local
+
+  # Cancel Approval Tool
+  cancel_approval:
+    enabled: true
+    cache_ttl: 0  # No caching for write operations
+    max_retries: 2
+    timeout: 20
+    health_check:
+      enabled: true
+      interval: 60
+    description: "Cancel approval request"
+    parameters:
+      - name: approval_id
+        type: string
+        required: true
+        description: "Approval request ID"
+    channel: local
+
+  # Memory Query Tool
+  query_memory:
+    enabled: true
+    cache_ttl: 300  # 5 minutes
+    max_retries: 2
+    timeout: 20
+    health_check:
+      enabled: true
+      interval: 60
+    description: "Query conversation memory"
+    parameters:
+      - name: query
+        type: string
+        required: true
+        description: "Memory query"
+    channel: local
+
+# Global timeout settings
+timeouts:
+  global:
+    default: 30
+    max: 120
+
+  # Tool-specific overrides
+  tools:
+    query_weather:
+      call: 10
+      total: 30
+    search_policy:
+      call: 15
+      total: 45
+
+# Health check settings
+health_check:
+  enabled: true
+  interval: 60  # Check every 60 seconds
+  failure_threshold: 3  # Mark as unhealthy after 3 consecutive failures
+  success_threshold: 2  # Mark as healthy after 2 consecutive successes
+
+# Channel configuration
+channels:
+  mcp:
+    enabled: true
+    server_script: "src/mcp/trip_tools_server.py"
+    startup_timeout: 10
+  http:
+    enabled: false
+    base_url: "http://localhost:8000"
+  grpc:
+    enabled: false
+    host: "localhost"
+    port: 50051
+  local:
+    enabled: true

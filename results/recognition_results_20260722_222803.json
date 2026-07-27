@@ -1,0 +1,32 @@
+[
+  {
+    "file_path": "E:\\Desktop\\langchain-business-trip-management\\train_data\\zzsfp\\imgs\\b0.jpg",
+    "error": "API 调用失败: 404 - {\"error\":{\"code\":\"no_such_model\",\"message\":\"API name not exist\",\"type\":\"invalid_request_error\"},\"id\":\"as-wkbjvhaeu8\"}",
+    "confidence": 0.0,
+    "need_review": true
+  },
+  {
+    "file_path": "E:\\Desktop\\langchain-business-trip-management\\train_data\\zzsfp\\imgs\\b1.jpg",
+    "error": "API 调用失败: 404 - {\"error\":{\"code\":\"no_such_model\",\"message\":\"API name not exist\",\"type\":\"invalid_request_error\"},\"id\":\"as-zqaswjxvaz\"}",
+    "confidence": 0.0,
+    "need_review": true
+  },
+  {
+    "file_path": "E:\\Desktop\\langchain-business-trip-management\\train_data\\zzsfp\\imgs\\b10.jpg",
+    "error": "API 调用失败: 404 - {\"error\":{\"code\":\"no_such_model\",\"message\":\"API name not exist\",\"type\":\"invalid_request_error\"},\"id\":\"as-weawjy42h8\"}",
+    "confidence": 0.0,
+    "need_review": true
+  },
+  {
+    "file_path": "E:\\Desktop\\langchain-business-trip-management\\train_data\\zzsfp\\imgs\\b11.jpg",
+    "error": "API 调用失败: 404 - {\"error\":{\"code\":\"no_such_model\",\"message\":\"API name not exist\",\"type\":\"invalid_request_error\"},\"id\":\"as-n637ybvwky\"}",
+    "confidence": 0.0,
+    "need_review": true
+  },
+  {
+    "file_path": "E:\\Desktop\\langchain-business-trip-management\\train_data\\zzsfp\\imgs\\b12.jpg",
+    "error": "API 调用失败: 404 - {\"error\":{\"code\":\"no_such_model\",\"message\":\"API name not exist\",\"type\":\"invalid_request_error\"},\"id\":\"as-8c5zxausn1\"}",
+    "confidence": 0.0,
+    "need_review": true
+  }
+]

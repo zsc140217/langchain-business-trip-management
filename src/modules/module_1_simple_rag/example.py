@@ -150,7 +150,7 @@ def demo_with_sources():
     result = rag_chain.invoke(question)
 
     print(f"[提示] 答案：{result['answer']}\n")
-    print(f"📚 参考了 {len(result['source_documents'])} 个文档：")
+    print(f"[BOOKS] 参考了 {len(result['source_documents'])} 个文档：")
 
     for i, doc in enumerate(result['source_documents'], 1):
         print(f"\n【来源 {i}】")

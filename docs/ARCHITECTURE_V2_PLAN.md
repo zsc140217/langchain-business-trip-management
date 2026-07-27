@@ -470,17 +470,20 @@ class BaseTool:
 
 #### 工具清单
 
-| 工具 | 域 | 底层 | 状态 |
-|---|---|---|---|
-| search_policy | Q&A | FusionRetriever | 已有，需封装 |
-| query_graph | Q&A | GraphRetriever + Neo4j | 已有，需封装 |
-| search_weather | Q&A | WeatherTool | 已有 Module 3 |
-| search_hotel | Q&A | HotelTool | 已有 Module 3 |
-| calculate_expense | Q&A | 调用 search_policy + 计算 | 新建 |
-| query_memory | 通用 | MemoryService | 新建 |
-| submit_reimbursement | 审批 | LangGraph 审批工作流 | 已有 API |
-| check_approval_status | 审批 | MemoryService + 工作记忆 | 新建 |
-| cancel_approval | 审批 | LangGraph 审批工作流 | 新建 |
+| 工具 | 域 | 底层 | 数据源 | 状态 |
+|---|---|---|---|---|
+| search_policy | Q&A | FusionRetriever | FAISS + Neo4j | ✅ 已有 |
+| query_graph | Q&A | GraphRetriever + Neo4j | Neo4j | ✅ 已有 |
+| search_weather | Q&A | QWeatherClient | 和风天气API | ✅ 已有 (真实API) |
+| search_hotel | Q&A | FliggyClient | 飞猪AI CLI | ✅ 2026-07-15 (真实API) |
+| search_flight | Q&A | FliggyClient | 飞猪AI CLI | ✅ 2026-07-15 (真实API) |
+| get_hotel_details | Q&A | Mock | 内存 | ✅ Fallback |
+| get_flight_price | Q&A | Mock | 内存 | ✅ Fallback |
+| calculate_expense | Q&A | search_policy + 计算 | - | ⏳ 待实现 |
+| query_memory | 通用 | MemoryService | PostgreSQL | ✅ 已有 |
+| submit_reimbursement | 审批 | LangGraph 审批工作流 | - | ✅ 已有 |
+| check_approval_status | 审批 | MemoryService + 工作记忆 | PostgreSQL | ✅ 已有 |
+| cancel_approval | 审批 | WorkingMemory + FeishuClient | - | ✅ 已实现 (2026-07-15) |
 
 #### 4.4.1 MCP 工具架构
 
@@ -504,6 +507,129 @@ class BaseTool:
 | src/agents/intelligent_router.py | _handle_tool_call 用 adapter |
 
 传输: stdio 子进程。演进: 改 MCP server 即换真实 API。
+
+#### 4.4.2 飞猪AI集成（2026-07-15）✅
+
+**集成方式**: CLI Skill + MCP封装
+
+**背景**: 
+- 飞猪AI提供官方CLI工具（`@fly-ai/flyai-cli`）
+- 支持8种搜索命令（keyword-search, search-flight, search-hotel等）
+- 标准化JSON输出，自动处理认证和错误
+
+**架构选择**: Skill vs API
+
+| 方式 | 优势 | 劣势 | 适用场景 |
+|------|------|------|---------|
+| **Skill (CLI)** | ✅ 官方封装好所有细节<br>✅ 标准化输出<br>✅ 自动认证管理<br>✅ 支持自然语言查询 | ⚠️ CLI启动有开销<br>⚠️ 依赖Node.js环境 | 复杂API、官方提供CLI |
+| **直接API** | ✅ 低延迟<br>✅ 精细控制 | ❌ 需要自己处理认证<br>❌ 需要自己解析响应 | 简单RESTful API |
+
+**决策**: 飞猪AI使用Skill方式（CLI），因为：
+1. 官方提供完善的CLI工具
+2. 支持8种搜索命令，功能丰富
+3. 自动处理认证和错误
+4. 标准化JSON输出
+
+**新增文件**:
+| 文件 | 说明 | 行数 |
+|---|---|---|
+| src/clients/fliggy_client.py | 飞猪AI客户端封装 | ~300行 |
+| src/clients/__init__.py | 客户端模块初始化 | 3行 |
+| test_fliggy_integration.py | 集成测试脚本 | ~110行 |
+
+**修改文件**:
+| 文件 | 改动 | 说明 |
+|---|---|---|
+| .env | 添加 FLYAI_API_KEY | API密钥配置 |
+| src/mcp/trip_tools_server.py | 集成FliggyClient | 酒店/航班搜索使用真实API |
+
+**数据流程**:
+```
+用户查询 "北京的酒店"
+    ↓
+MCP Tools Server (trip_tools_server.py)
+    ↓
+FliggyClient.search_hotels()
+    ├─ 构建查询: "北京的酒店，入住2026-07-16，退房2026-07-17"
+    ├─ 执行CLI: flyai keyword-search --query "..."
+    ├─ 解析JSON响应
+    ├─ 标准化格式
+    └─ 返回酒店列表
+    ↓
+成功 → 返回飞猪真实数据（标注"飞猪数据"）
+失败 → 降级到Mock数据（标注"模拟数据"）
+```
+
+**飞猪API返回格式**:
+```json
+{
+  "status": 0,
+  "message": "success",
+  "data": {
+    "itemList": [
+      {
+        "info": {
+          "title": "潮漫龙合酒店",
+          "star": "3",
+          "price": null,
+          "rate": null,
+          "jumpUrl": "https://a.feizhu.com/...",
+          "picUrl": "https://img.alicdn.com/..."
+        }
+      }
+    ]
+  }
+}
+```
+
+**标准化后的格式**:
+```python
+{
+    "name": "潮漫龙合酒店",
+    "star": 3,
+    "price": 0,  # null转为0
+    "rating": 0,
+    "address": "",
+    "facilities": [],
+    "jumpUrl": "https://a.feizhu.com/...",
+    "picUrl": "https://img.alicdn.com/..."
+}
+```
+
+**成本控制**:
+- 免费额度: 5000次调用
+- 调用追踪: FliggyClient自动计数
+- 配额查询: `get_quota_info()`
+- 月成本: **¥0**（前3-4个月）
+
+**降级策略**:
+1. **优先真实API**: 如果FlyAI CLI可用，调用真实数据
+2. **自动Fallback**: CLI失败/不可用 → Mock数据
+3. **透明标识**: 返回结果明确标注数据来源
+4. **日志记录**: 所有降级都有日志
+
+**安装步骤**:
+```bash
+# 1. 安装FlyAI CLI
+npm i -g @fly-ai/flyai-cli
+
+# 2. 配置API密钥
+flyai config set FLYAI_API_KEY "your-key"
+
+# 3. 验证安装
+flyai keyword-search --query "北京的酒店"
+
+# 4. 运行测试
+python test_fliggy_integration.py
+```
+
+**集成验证** (2026-07-15):
+- ✅ FlyAI CLI安装成功
+- ✅ API密钥配置成功
+- ✅ 调用测试成功（返回10家北京酒店真实数据）
+- ✅ FliggyClient实现完成
+- ✅ MCP Server集成完成
+- ✅ 降级机制验证通过
 
 
 ### 4.5 Planning Skill
@@ -1095,17 +1221,21 @@ cli = lark.ws.Client(
 
 ---
 
-## 十三、当前状态快照 (2026-07-14)
+## 十三、当前状态快照 (2026-07-15)
 
 **已完成**: 
 - Module 1-6 (100%)
 - Phase 1 工具系统 (100%)
-- Phase 2 Q&A域 (100%, 记忆层已集成) ✅ **更新**
+- Phase 2 Q&A域 (100%, 记忆层已集成) ✅
 - Phase 3 审批域 (100%, 完整实现) ✅
 - Phase 4 P0 监控指标+追踪 (100%) ✅
 - Phase 4 P1 持久化+告警 (100%) ✅
-- Phase 4 P2 收尾 (100%) ✅ **更新**
+- Phase 4 P2 收尾 (100%) ✅
 - Phase 4 P3 飞书回调系统 (100%) ✅
+- **飞猪AI集成 (100%) ✅ 2026-07-15**
+- **P0 用户认证系统 (100%) ✅ 2026-07-15**
+- **P0 会话管理系统 (100%) ✅ 2026-07-15**
+- **P0 记忆系统集成 (100%) ✅ 2026-07-15**
 
 **测试状态**: 
 - Phase 1: 工具注册表 (6个工具) ✅
@@ -1122,32 +1252,63 @@ cli = lark.ws.Client(
   - SubmitReimbursementTool: 10/10 ✅
   - E2E 自动审批(800元): 通过 ✅
   - E2E 人工审批(2500元): 通过 ✅
-- Phase 4 P3: 飞书回调系统集成测试 ✅ **新增**
+- Phase 4 P3: 飞书回调系统集成测试 ✅
   - 长连接建立: 通过 ✅
   - 卡片发送: 通过 (Message ID: om_x100b6a546756dcb0b20830e2ddbcd90) ✅
   - 回调接收: 通过 (完整事件数据接收) ✅
   - 审批处理: 通过 (Mock引擎成功处理) ✅
   - 单实例验证: 通过 (多实例问题已修复) ✅
+- **P0 用户认证与记忆系统集成测试 (100%) ✅ 2026-07-15**
+  - 用户认证: 3/3 通过 ✅
+    - 员工登录成功 ✅
+    - 高管登录成功 ✅
+    - 错误密码拒绝 ✅
+  - 会话管理: 2/2 通过 ✅
+    - 创建新会话 ✅
+    - 获取会话列表 ✅
+  - 记忆系统: 3/3 通过 ✅
+    - user_profiles表验证 ✅
+    - query_history表验证 ✅
+    - extracted_entities表验证 ✅
+  - 审批阈值: 2/2 通过 ✅
+    - 员工阈值计算（550元/天） ✅
+    - 高管阈值计算（670元/天） ✅
 
 **架构实现**:
 ```
+用户认证 → JWT Token
+   ↓
 用户查询
    ↓
 OrchestratorAgent (统一入口)
+   ├─ 用户身份验证 (JWT) ✅
+   ├─ 会话管理 (conversations表) ✅
+   ├─ 记忆加载 (三层记忆架构) ✅
+   │   ├─ 短期记忆 (内存 + 文件) ✅
+   │   ├─ 工作记忆 (extracted_entities表) ✅
+   │   └─ 长期记忆 (user_profiles表) ✅
    ├─ 快路径 (天气/航班/酒店/政策) → 工具直接调用
+   │   ├─ search_weather → QWeatherClient (真实API) ✅
+   │   ├─ search_hotel → FliggyClient (真实API) ✅ 2026-07-15
+   │   ├─ search_flight → FliggyClient (真实API) ✅ 2026-07-15
+   │   └─ search_policy → FusionRetriever ✅
    ├─ 审批域 (报销/申请/审批) → ApprovalEngine ✅
-   │   ├─ 自动审批 (< 1000元) ✅
+   │   ├─ 用户等级区分 (is_executive字段) ✅
+   │   ├─ 动态审批阈值计算 ✅
+   │   │   ├─ 员工: 550元/天 × 天数 × 城市系数 ✅
+   │   │   └─ 高管: 670元/天 × 天数 × 城市系数 ✅
+   │   ├─ 自动审批 (< 阈值) ✅
    │   │   ├─ LLM信息提取 ✅
    │   │   ├─ LangGraph工作流执行 ✅
    │   │   ├─ 工作记忆状态更新 ✅
    │   │   ├─ 飞书审批通过通知 ✅
    │   │   └─ API响应: "您的报销申请已自动通过！金额：¥800" ✅
-   │   ├─ 人工审批 (≥ 1000元) ✅
+   │   ├─ 人工审批 (≥ 阈值) ✅
    │   │   ├─ 生成审批单 ✅
    │   │   ├─ 工作记忆状态设为pending ✅
    │   │   ├─ 飞书卡片推送审批人 ✅
-   │   │   ├─ 长连接接收回调 ✅ **新增**
-   │   │   ├─ 卡片交互处理 ✅ **新增**
+   │   │   ├─ 长连接接收回调 ✅
+   │   │   ├─ 卡片交互处理 ✅
    │   │   └─ API响应: "申请已提交，需要人工审批" ✅
    │   ├─ 审批状态查询 ✅
    │   └─ 统一API集成 (http://localhost:8002/api/unified/chat) ✅
@@ -1175,6 +1336,51 @@ OrchestratorAgent (统一入口)
 - ✅ 多实例问题诊断和解决 (确保单一客户端)
 - ✅ 完整的回调流程验证 (点击按钮 → 接收回调 → 处理审批 → 更新卡片)
 - ✅ 测试脚本完善 (start_feishu_ws.py, send_card_to_chat.py, get_chat_id.py)
+
+**P0 用户认证与记忆系统完成内容** (2026-07-15): **新增**
+- ✅ PostgreSQL数据库Docker部署
+  - 容器名: travel-agent-postgres
+  - 数据库: business_trip
+  - 自动初始化脚本: scripts/init_db.sql
+- ✅ 数据库表结构 (8张核心表)
+  - users: 用户表 (3种角色：员工/高管/管理员)
+  - user_sessions: JWT会话表
+  - user_profiles: 用户画像表 (长期记忆)
+  - conversations: 会话表
+  - messages: 消息表
+  - query_history: 查询历史表
+  - extracted_entities: 工作记忆表
+  - approval_records: 审批记录表
+- ✅ 用户认证系统
+  - UserService: 用户服务层 (注册/登录/Token验证)
+  - UserRepository: 用户数据访问层
+  - JWTHandler: JWT Token生成和验证
+  - PasswordHasher: bcrypt密码加密
+  - AuthMiddleware: FastAPI认证中间件
+- ✅ 测试用户创建
+  - employee: 普通员工 (日均550元，审批阈值动态计算)
+  - executive: 高管 (日均670元，审批阈值动态计算)
+  - admin: 系统管理员 (全部权限)
+- ✅ 会话管理系统
+  - ConversationService: 会话服务层
+  - ConversationRepository: 会话数据访问层
+  - 支持创建会话、发送消息、获取历史
+- ✅ 三层记忆架构集成
+  - 短期记忆: ChatMemory (内存 + data/chat-history/)
+  - 工作记忆: WorkingMemory (内存 + extracted_entities表)
+  - 长期记忆: UserProfile (user_profiles表)
+- ✅ 审批阈值动态计算
+  - ApprovalEngine.calculate_approval_threshold()
+  - 根据is_executive字段区分员工/高管
+  - 支持城市系数 (一线城市 ×1.2)
+- ✅ 集成测试脚本
+  - scripts/create_test_users.py: 创建测试用户
+  - tests/test_p0_integration.py: P0系统集成测试
+  - 测试通过率: 100% (10/10)
+- ✅ 文档交付
+  - docs/P0_USER_AUTH_MEMORY_COMPLETION.md: 完成报告
+  - .env: 数据库和JWT配置
+  - docker-compose.yml: PostgreSQL配置更新
 
 **Phase 3 技术问题解决**:
 1. ✅ UTF-8编码问题 - 添加 `# -*- coding: utf-8 -*-` 声明

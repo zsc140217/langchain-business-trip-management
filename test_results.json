@@ -1,0 +1,11 @@
+{
+  "test1_hotel": {
+    "route": "qa_domain",
+    "has_mask": false,
+    "answer_preview": "非常抱歉，刚才为您查询北京酒店时系统遇到了一点小故障，暂时没能获取到相关结果。\n\n建议您稍后再尝试查询。如果您有具体的区域、预算或星级偏好，可以先告诉我，等系统恢复后我为您进行更精准的推荐。同时，您也可以暂时通过携程、飞猪等旅游预订平台直接搜索查看。"
+  },
+  "test2_approval": {
+    "route": "qa_domain",
+    "answer_preview": "[ROUTE_TO_APPROVAL]"
+  }
+}

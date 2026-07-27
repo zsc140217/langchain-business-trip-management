@@ -1,0 +1,285 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "total_cases": 30,
+    "description": "智能路由测试用例集",
+    "evaluation_metrics": [
+      "accuracy",
+      "precision",
+      "recall",
+      "f1_score"
+    ],
+    "intent_types": {
+      "simple_query": "简单查询 - 使用ReAct",
+      "complex_analysis": "复杂分析 - 使用Planning",
+      "multi_step": "多步骤任务 - 使用ComplexTask"
+    }
+  },
+  "test_cases": [
+    {
+      "id": "ROUTE_001",
+      "query": "我的出差申请审批通过了吗？",
+      "expected_intent": "simple_query",
+      "expected_engine": "ReAct",
+      "reasoning": "查询审批状态，直接调用工具即可",
+      "confidence_threshold": "high"
+    },
+    {
+      "id": "ROUTE_002",
+      "query": "帮我分析一下我们部门今年的差旅费用趋势",
+      "expected_intent": "complex_analysis",
+      "expected_engine": "Planning",
+      "reasoning": "需要数据查询、统计分析、趋势判断等多步骤",
+      "confidence_threshold": "high"
+    },
+    {
+      "id": "ROUTE_003",
+      "query": "帮我规划一个北京-上海-杭州-深圳的出差路线",
+      "expected_intent": "multi_step",
+      "expected_engine": "ComplexTask",
+      "reasoning": "涉及多城市路线规划、费用估算、时间安排",
+      "confidence_threshold": "high"
+    },
+    {
+      "id": "ROUTE_004",
+      "query": "查一下报销政策",
+      "expected_intent": "simple_query",
+      "expected_engine": "ReAct",
+      "reasoning": "简单的知识库查询",
+      "confidence_threshold": "high"
+    },
+    {
+      "id": "ROUTE_005",
+      "query": "比较一下飞机和高铁的成本差异",
+      "expected_intent": "complex_analysis",
+      "expected_engine": "Planning",
+      "reasoning": "需要多维度对比分析",
+      "confidence_threshold": "medium"
+    },
+    {
+      "id": "ROUTE_006",
+      "query": "路由测试查询_6",
+      "expected_intent": "simple_query",
+      "expected_engine": "ReAct",
+      "reasoning": "测试原因_6，需根据实际场景填充",
+      "confidence_threshold": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "ROUTE_007",
+      "query": "路由测试查询_7",
+      "expected_intent": "simple_query",
+      "expected_engine": "ReAct",
+      "reasoning": "测试原因_7，需根据实际场景填充",
+      "confidence_threshold": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "ROUTE_008",
+      "query": "路由测试查询_8",
+      "expected_intent": "simple_query",
+      "expected_engine": "ReAct",
+      "reasoning": "测试原因_8，需根据实际场景填充",
+      "confidence_threshold": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "ROUTE_009",
+      "query": "路由测试查询_9",
+      "expected_intent": "simple_query",
+      "expected_engine": "ReAct",
+      "reasoning": "测试原因_9，需根据实际场景填充",
+      "confidence_threshold": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "ROUTE_010",
+      "query": "路由测试查询_10",
+      "expected_intent": "simple_query",
+      "expected_engine": "ReAct",
+      "reasoning": "测试原因_10，需根据实际场景填充",
+      "confidence_threshold": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "ROUTE_011",
+      "query": "路由测试查询_11",
+      "expected_intent": "simple_query",
+      "expected_engine": "ReAct",
+      "reasoning": "测试原因_11，需根据实际场景填充",
+      "confidence_threshold": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "ROUTE_012",
+      "query": "路由测试查询_12",
+      "expected_intent": "simple_query",
+      "expected_engine": "ReAct",
+      "reasoning": "测试原因_12，需根据实际场景填充",
+      "confidence_threshold": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "ROUTE_013",
+      "query": "路由测试查询_13",
+      "expected_intent": "simple_query",
+      "expected_engine": "ReAct",
+      "reasoning": "测试原因_13，需根据实际场景填充",
+      "confidence_threshold": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "ROUTE_014",
+      "query": "路由测试查询_14",
+      "expected_intent": "simple_query",
+      "expected_engine": "ReAct",
+      "reasoning": "测试原因_14，需根据实际场景填充",
+      "confidence_threshold": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "ROUTE_015",
+      "query": "路由测试查询_15",
+      "expected_intent": "simple_query",
+      "expected_engine": "ReAct",
+      "reasoning": "测试原因_15，需根据实际场景填充",
+      "confidence_threshold": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "ROUTE_016",
+      "query": "路由测试查询_16",
+      "expected_intent": "simple_query",
+      "expected_engine": "ReAct",
+      "reasoning": "测试原因_16，需根据实际场景填充",
+      "confidence_threshold": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "ROUTE_017",
+      "query": "路由测试查询_17",
+      "expected_intent": "simple_query",
+      "expected_engine": "ReAct",
+      "reasoning": "测试原因_17，需根据实际场景填充",
+      "confidence_threshold": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "ROUTE_018",
+      "query": "路由测试查询_18",
+      "expected_intent": "simple_query",
+      "expected_engine": "ReAct",
+      "reasoning": "测试原因_18，需根据实际场景填充",
+      "confidence_threshold": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "ROUTE_019",
+      "query": "路由测试查询_19",
+      "expected_intent": "simple_query",
+      "expected_engine": "ReAct",
+      "reasoning": "测试原因_19，需根据实际场景填充",
+      "confidence_threshold": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "ROUTE_020",
+      "query": "路由测试查询_20",
+      "expected_intent": "simple_query",
+      "expected_engine": "ReAct",
+      "reasoning": "测试原因_20，需根据实际场景填充",
+      "confidence_threshold": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "ROUTE_021",
+      "query": "路由测试查询_21",
+      "expected_intent": "simple_query",
+      "expected_engine": "ReAct",
+      "reasoning": "测试原因_21，需根据实际场景填充",
+      "confidence_threshold": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "ROUTE_022",
+      "query": "路由测试查询_22",
+      "expected_intent": "simple_query",
+      "expected_engine": "ReAct",
+      "reasoning": "测试原因_22，需根据实际场景填充",
+      "confidence_threshold": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "ROUTE_023",
+      "query": "路由测试查询_23",
+      "expected_intent": "simple_query",
+      "expected_engine": "ReAct",
+      "reasoning": "测试原因_23，需根据实际场景填充",
+      "confidence_threshold": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "ROUTE_024",
+      "query": "路由测试查询_24",
+      "expected_intent": "simple_query",
+      "expected_engine": "ReAct",
+      "reasoning": "测试原因_24，需根据实际场景填充",
+      "confidence_threshold": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "ROUTE_025",
+      "query": "路由测试查询_25",
+      "expected_intent": "simple_query",
+      "expected_engine": "ReAct",
+      "reasoning": "测试原因_25，需根据实际场景填充",
+      "confidence_threshold": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "ROUTE_026",
+      "query": "路由测试查询_26",
+      "expected_intent": "simple_query",
+      "expected_engine": "ReAct",
+      "reasoning": "测试原因_26，需根据实际场景填充",
+      "confidence_threshold": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "ROUTE_027",
+      "query": "路由测试查询_27",
+      "expected_intent": "simple_query",
+      "expected_engine": "ReAct",
+      "reasoning": "测试原因_27，需根据实际场景填充",
+      "confidence_threshold": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "ROUTE_028",
+      "query": "路由测试查询_28",
+      "expected_intent": "simple_query",
+      "expected_engine": "ReAct",
+      "reasoning": "测试原因_28，需根据实际场景填充",
+      "confidence_threshold": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "ROUTE_029",
+      "query": "路由测试查询_29",
+      "expected_intent": "simple_query",
+      "expected_engine": "ReAct",
+      "reasoning": "测试原因_29，需根据实际场景填充",
+      "confidence_threshold": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "ROUTE_030",
+      "query": "路由测试查询_30",
+      "expected_intent": "simple_query",
+      "expected_engine": "ReAct",
+      "reasoning": "测试原因_30，需根据实际场景填充",
+      "confidence_threshold": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    }
+  ]
+}

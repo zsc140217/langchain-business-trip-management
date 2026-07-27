@@ -1,11 +1,12 @@
 """
 提交报销申请工具
 Phase 3.3: Tool Layer
+Phase 4: 支持双模式（文本描述 + 发票上传）
 
 用于提交差旅报销申请，路由到 ApprovalEngine 进行审批
 """
 from src.tools.base_tool import BaseTool
-from typing import Optional
+from typing import Optional, List
 import logging
 
 
@@ -14,34 +15,48 @@ logger = logging.getLogger(__name__)
 
 class SubmitReimbursementTool(BaseTool):
     """
-    提交报销申请工具
+    提交报销申请工具（Phase 4: 支持双模式）
 
-    将用户的报销申请提交到审批引擎进行处理
+    模式1（传统文本模式）: 用户通过文本描述报销申请
+    模式2（发票模式）: 用户上传发票图片，自动识别并提交
     """
 
     name: str = "submit_reimbursement"
-    description: str = """提交差旅报销申请。
+    description: str = """提交差旅报销申请（支持两种模式）。
 
+【模式1：传统文本模式】（向后兼容）
 适用场景：
-- 用户要报销出差费用
-- 提交差旅报销申请
-- 申请差旅补贴
+- 用户口头描述报销申请
+- 没有发票图片
 
 输入参数：
 - user_id: 用户ID（必需）
 - query: 报销申请描述，包含目的地、天数、金额等信息（必需）
 - conversation_id: 会话ID（可选）
 
-返回信息：
-- 审批结果（自动通过/待审批）
-- 审批单号
-- 审批状态说明
-
 示例：
 - submit_reimbursement("user123", "我去北京出差3天，花了800元")
   → "审批通过，审批单号：APV20260712001"
-- submit_reimbursement("user456", "报销上海出差费用2500元")
-  → "申请已提交，审批单号：APV20260712002，需要人工审批"
+
+【模式2：发票模式】（Phase 4新增）
+适用场景：
+- 用户已上传发票图片
+- 发票ID存储在工作记忆中
+
+输入参数：
+- user_id: 用户ID（必需）
+- query: 报销申请描述（可选，用于提取出差信息）
+- invoice_ids: 发票ID列表（必需，通过 working memory 或参数传入）
+- conversation_id: 会话ID（可选）
+
+示例：
+- submit_reimbursement("user456", "报销上海出差3天", invoice_ids=["INV001", "INV002"])
+  → "报销申请已提交，申请单号：REI20260723001，总额：¥3500"
+
+返回信息：
+- 审批结果（自动通过/待审批/已提交）
+- 审批单号/申请单号
+- 审批状态说明
 """
 
     cache_enabled: bool = False  # 报销申请不缓存
@@ -110,15 +125,17 @@ class SubmitReimbursementTool(BaseTool):
         user_id: str,
         query: str,
         conversation_id: Optional[str] = None,
+        invoice_ids: Optional[List[str]] = None,
         **kwargs
     ) -> str:
         """
-        执行报销申请提交
+        执行报销申请提交（Phase 4: 支持双模式）
 
         Args:
             user_id: 用户ID
             query: 报销申请描述
             conversation_id: 会话ID（可选）
+            invoice_ids: 发票ID列表（可选，用于发票模式）
             **kwargs: 其他参数
 
         Returns:
@@ -135,21 +152,26 @@ class SubmitReimbursementTool(BaseTool):
         if not conversation_id:
             conversation_id = f"{user_id}_default"
 
-        logger.info(f"[SubmitReimbursementTool] 提交报销申请: user_id={user_id}, query={query}")
+        logger.info(f"[SubmitReimbursementTool] 提交报销申请: user_id={user_id}, query={query}, invoice_ids={invoice_ids}")
 
         try:
             # 延迟初始化
             self._lazy_init()
 
-            # 调用 ApprovalEngine
+            # Phase 4: 判断使用哪种模式
+            use_invoice_mode = bool(invoice_ids)
+
+            # 调用 ApprovalEngine（支持发票模式参数）
             result = self._approval_engine.execute(
                 query=query,
                 user_id=user_id,
-                conversation_id=conversation_id
+                conversation_id=conversation_id,
+                invoice_ids=invoice_ids,
+                use_invoice_mode=use_invoice_mode
             )
 
-            # 格式化返回结果
-            return self._format_result(result)
+            # ApprovalEngine.execute 现在直接返回消息字符串
+            return result
 
         except Exception as e:
             logger.error(f"[SubmitReimbursementTool] 报销申请提交失败: {e}", exc_info=True)
@@ -170,11 +192,11 @@ class SubmitReimbursementTool(BaseTool):
         message = result.get("message", "")
 
         if status == "approved":
-            return f"✅ 审批通过\n\n审批单号：{approval_id}\n{message}"
+            return f"[OK] 审批通过\n\n审批单号：{approval_id}\n{message}"
         elif status == "pending":
             return f"⏳ 待审批\n\n审批单号：{approval_id}\n{message}"
         elif status == "rejected":
-            return f"❌ 审批拒绝\n\n审批单号：{approval_id}\n{message}"
+            return f"[ERROR] 审批拒绝\n\n审批单号：{approval_id}\n{message}"
         else:
             return f"审批单号：{approval_id}\n状态：{status}\n{message}"
 

@@ -14,7 +14,7 @@ class TestBasicGraph:
         """测试图创建"""
         graph = create_basic_graph()
         assert graph is not None
-        print("✅ 图创建成功")
+        print("[OK] 图创建成功")
     
     def test_simple_query(self):
         """测试简单查询流程"""
@@ -32,7 +32,7 @@ class TestBasicGraph:
         assert result["answer"] is not None
         assert len(result["answer"]) > 0
         
-        print(f"✅ 简单查询测试通过")
+        print(f"[OK] 简单查询测试通过")
         print(f"   查询：{query}")
         print(f"   答案长度：{len(result['answer'])} 字符")
     
@@ -56,7 +56,7 @@ class TestBasicGraph:
         # 验证documents是列表
         assert isinstance(result["documents"], list)
         
-        print("✅ 状态流转测试通过")
+        print("[OK] 状态流转测试通过")
     
     def test_no_documents_scenario(self):
         """测试没有检索到文档的场景"""
@@ -71,7 +71,7 @@ class TestBasicGraph:
         assert "answer" in result
         assert result["answer"] is not None
         
-        print("✅ 无文档场景测试通过")
+        print("[OK] 无文档场景测试通过")
     
     def test_multiple_queries(self):
         """测试多个不同查询"""
@@ -90,7 +90,7 @@ class TestBasicGraph:
             assert "answer" in result
             assert result["answer"] is not None
             
-            print(f"✅ 查询测试通过：{query}")
+            print(f"[OK] 查询测试通过：{query}")
 
 
 def test_run_basic_graph_helper():
@@ -100,7 +100,7 @@ def test_run_basic_graph_helper():
     assert result is not None
     assert "answer" in result
     
-    print("✅ 便捷函数测试通过")
+    print("[OK] 便捷函数测试通过")
 
 
 if __name__ == "__main__":
@@ -131,10 +131,10 @@ if __name__ == "__main__":
         test_run_basic_graph_helper()
         
         print("\n" + "=" * 60)
-        print("✅ 所有测试通过！")
+        print("[OK] 所有测试通过！")
         print("=" * 60)
         
     except Exception as e:
-        print(f"\n❌ 测试失败：{e}")
+        print(f"\n[ERROR] 测试失败：{e}")
         import traceback
         traceback.print_exc()

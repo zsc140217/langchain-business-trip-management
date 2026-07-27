@@ -95,7 +95,7 @@ def search_hotels(city: str, min_price: Optional[int] = None, max_price: Optiona
 
     if not hotels:
         return (
-            f"❌ 抱歉，暂无{city}的酒店信息\n"
+            f"[ERROR] 抱歉，暂无{city}的酒店信息\n"
             f"建议：\n"
             f"1. 检查城市名称是否正确\n"
             f"2. 查询邻近城市的酒店\n"
@@ -123,7 +123,7 @@ def search_hotels(city: str, min_price: Optional[int] = None, max_price: Optiona
         filter_str = "、".join(filters)
 
         return (
-            f"❌ 抱歉，{city}没有符合条件的酒店\n"
+            f"[ERROR] 抱歉，{city}没有符合条件的酒店\n"
             f"筛选条件：{filter_str}\n\n"
             f"建议：\n"
             f"1. 放宽价格范围\n"
@@ -142,7 +142,7 @@ def search_hotels(city: str, min_price: Optional[int] = None, max_price: Optiona
     filter_info = f" ({', '.join(filters)})" if filters else ""
 
     result_lines = [
-        f"🏨 {city}酒店查询结果{filter_info}",
+        f"[HOTEL] {city}酒店查询结果{filter_info}",
         f"🔢 共找到 {len(sorted_hotels)} 家酒店\n"
     ]
 
@@ -152,7 +152,7 @@ def search_hotels(city: str, min_price: Optional[int] = None, max_price: Optiona
 
         result_lines.append(
             f"【酒店{idx}】\n"
-            f"  🏨 {hotel['name']}\n"
+            f"  [HOTEL] {hotel['name']}\n"
             f"  {star_display} ({hotel['star']}星级)\n"
             f"  💰 ¥{hotel['price']}/晚\n"
             f"  ⭐ 评分：{hotel['rating']}/5.0\n"
@@ -160,7 +160,7 @@ def search_hotels(city: str, min_price: Optional[int] = None, max_price: Optiona
             f"  [新功能] 设施：{facilities}\n"
         )
 
-    result_lines.append("ℹ️  (模拟数据，实际价格和房态以酒店官网为准)")
+    result_lines.append("[INFO]  (模拟数据，实际价格和房态以酒店官网为准)")
 
     return "\n".join(result_lines)
 
@@ -207,7 +207,7 @@ def get_hotel_details(city: str, hotel_name: str) -> str:
     hotels = MOCK_HOTELS.get(city, [])
 
     if not hotels:
-        return f"❌ 抱歉，暂无{city}的酒店信息"
+        return f"[ERROR] 抱歉，暂无{city}的酒店信息"
 
     # 查找指定酒店
     hotel = None
@@ -219,7 +219,7 @@ def get_hotel_details(city: str, hotel_name: str) -> str:
     if not hotel:
         available_hotels = [h["name"] for h in hotels]
         return (
-            f"❌ 在{city}找不到酒店：{hotel_name}\n\n"
+            f"[ERROR] 在{city}找不到酒店：{hotel_name}\n\n"
             f"您可能想找的酒店：\n" +
             "\n".join([f"  • {name}" for name in available_hotels])
         )
@@ -258,10 +258,10 @@ def get_hotel_details(city: str, hotel_name: str) -> str:
         transport = "🚇 地铁站步行10分钟内\n  🚕 距离市中心约5公里"
 
     return (
-        f"🏨 酒店详细信息\n"
+        f"[HOTEL] 酒店详细信息\n"
         f"{'=' * 50}\n\n"
         f"【基本信息】\n"
-        f"  🏨 名称：{hotel['name']}\n"
+        f"  [HOTEL] 名称：{hotel['name']}\n"
         f"  {star_display} 星级：{hotel['star']}星级酒店\n"
         f"  💰 价格：¥{hotel['price']}/晚起\n"
         f"  ⭐ 评分：{hotel['rating']}/5.0\n\n"
@@ -269,7 +269,7 @@ def get_hotel_details(city: str, hotel_name: str) -> str:
         f"  📍 地址：{hotel['address']}\n"
         f"  🚗 交通：\n  {transport}\n\n"
         f"【酒店设施】\n" +
-        "\n".join([f"  ✓ {facility}" for facility in facilities]) + "\n\n"
+        "\n".join([f"  [CHECK] {facility}" for facility in facilities]) + "\n\n"
         f"【房型信息】\n"
         f"  {room_types}\n\n"
         f"【服务项目】\n"
@@ -281,7 +281,7 @@ def get_hotel_details(city: str, hotel_name: str) -> str:
         f"  • 会员可享受房间升级和积分优惠\n"
         f"  • 长住（7天以上）可申请折扣\n"
         f"  • 企业客户可联系申请协议价\n\n"
-        f"ℹ️  (模拟数据，详细信息以酒店官网为准)"
+        f"[INFO]  (模拟数据，详细信息以酒店官网为准)"
     )
 
 
@@ -359,5 +359,5 @@ if __name__ == "__main__":
     print(f"描述：{get_hotel_details.description[:50]}...")
 
     print("\n" + "=" * 60)
-    print("✅ 酒店工具测试完成")
+    print("[OK] 酒店工具测试完成")
     print("=" * 60)

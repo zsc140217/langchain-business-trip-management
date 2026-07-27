@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-⚠️ DEPRECATED - 此模块已被 OrchestratorAgent 替代
+[WARNING] DEPRECATED - 此模块已被 OrchestratorAgent 替代
 
 请使用: src/agents/orchestrator_agent.py
 

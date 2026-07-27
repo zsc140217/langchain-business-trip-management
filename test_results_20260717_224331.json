@@ -1,0 +1,55 @@
+{
+  "timestamp": "2026-07-17T22:43:31.042313",
+  "total": 8,
+  "passed": 0,
+  "results": [
+    {
+      "group": "A1",
+      "name": "天气查询",
+      "status": "TIMEOUT",
+      "error": "请求超时"
+    },
+    {
+      "group": "A2",
+      "name": "酒店查询",
+      "status": "TIMEOUT",
+      "error": "请求超时"
+    },
+    {
+      "group": "A3",
+      "name": "航班查询",
+      "status": "TIMEOUT",
+      "error": "请求超时"
+    },
+    {
+      "group": "A4",
+      "name": "政策查询",
+      "status": "TIMEOUT",
+      "error": "请求超时"
+    },
+    {
+      "group": "B1",
+      "name": "自动审批",
+      "status": "TIMEOUT",
+      "error": "请求超时"
+    },
+    {
+      "group": "B2",
+      "name": "人工审批",
+      "status": "TIMEOUT",
+      "error": "请求超时"
+    },
+    {
+      "group": "B3",
+      "name": "审批状态查询",
+      "status": "TIMEOUT",
+      "error": "请求超时"
+    },
+    {
+      "group": "C1",
+      "name": "多步骤任务",
+      "status": "TIMEOUT",
+      "error": "请求超时"
+    }
+  ]
+}

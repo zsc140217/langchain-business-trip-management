@@ -247,7 +247,7 @@ if __name__ == "__main__":
         result = rag_chain_with_sources.invoke(question)
 
         print(f"[提示] 答案：{result['answer']}")
-        print(f"\n📚 来源文档数：{len(result['source_documents'])}")
+        print(f"\n[BOOKS] 来源文档数：{len(result['source_documents'])}")
         for i, doc in enumerate(result['source_documents'], 1):
             print(f"\n--- 来源 {i} ---")
             print(doc.page_content[:100] + "...")

@@ -341,7 +341,7 @@ if __name__ == "__main__":
         passed = 0
         for query, expected in test_cases:
             result = assessor.assess(query)
-            status = "✅" if result == expected else "❌"
+            status = "[OK]" if result == expected else "[ERROR]"
             print(f"{status} 查询：{query}")
             print(f"   期望：{expected.value}，实际：{result.value}\n")
             if result == expected:
@@ -350,6 +350,6 @@ if __name__ == "__main__":
         print(f"\n测试结果：{passed}/{len(test_cases)} 通过")
 
     except Exception as e:
-        print(f"❌ 测试失败：{e}")
+        print(f"[ERROR] 测试失败：{e}")
         import traceback
         traceback.print_exc()

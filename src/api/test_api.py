@@ -30,7 +30,7 @@ class Colors:
 
 
 def print_success(msg: str):
-    print(f"{Colors.GREEN}✓{Colors.RESET} {msg}")
+    print(f"{Colors.GREEN}[CHECK]{Colors.RESET} {msg}")
 
 
 def print_error(msg: str):
@@ -61,7 +61,7 @@ def test_health_check():
             # 检查环境变量
             env_status = data.get('environment', {})
             for var, status in env_status.items():
-                if "✓" in status:
+                if "[CHECK]" in status:
                     print_success(f"  {var}: 已配置")
                 elif "✗" in status:
                     print_error(f"  {var}: 未配置 (必需)")

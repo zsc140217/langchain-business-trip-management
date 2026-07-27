@@ -336,7 +336,7 @@ def batch_requests_example():
             try:
                 result = future.result()
                 results.append(result)
-                print(f"✓ {result['question']}")
+                print(f"[CHECK] {result['question']}")
                 print(f"  {result['answer'][:100]}...\n")
             except Exception as e:
                 print(f"✗ 请求失败: {e}\n")

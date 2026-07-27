@@ -46,8 +46,8 @@ class AlertManager:
         severity = webhook.commonLabels.get("severity", "info")
         color = color_map.get(severity, "grey")
 
-        status_emoji = {"firing": "[重要]", "resolved": "✅"}
-        emoji = status_emoji.get(webhook.status, "⚠️")
+        status_emoji = {"firing": "[重要]", "resolved": "[OK]"}
+        emoji = status_emoji.get(webhook.status, "[WARNING]")
 
         content_lines = []
         for idx, alert in enumerate(webhook.alerts, 1):

@@ -226,11 +226,11 @@ def run_all_tests():
         test_weather_comparison()
 
         print("\n" + "="*80)
-        print("✅ ALL TESTS COMPLETED SUCCESSFULLY")
+        print("[OK] ALL TESTS COMPLETED SUCCESSFULLY")
         print("="*80)
 
     except Exception as e:
-        print(f"\n❌ Test failed: {e}")
+        print(f"\n[ERROR] Test failed: {e}")
         import traceback
         traceback.print_exc()
 

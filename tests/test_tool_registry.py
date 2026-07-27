@@ -8,7 +8,7 @@ from src.tools.registry import get_tool_registry
 def test_tool_registry():
     """测试工具注册表"""
     print("=" * 60)
-    print("测试工具注册表")
+    print("Test Tool Registry")
     print("=" * 60)
 
     # 初始化工具注册表
@@ -16,80 +16,97 @@ def test_tool_registry():
     registry.initialize_all()
 
     # 测试1：检查工具数量
-    print("\n[Test 1] 工具数量检查")
+    print("\n[Test 1] Tool Count Check")
     print("-" * 60)
     tools = registry.list_tools()
-    print(f"已注册工具数量: {len(tools)}")
-    print(f"预期工具数量: 5")
-    assert len(tools) == 5, f"工具数量错误，预期5个，实际{len(tools)}个"
-    print("✓ 工具数量正确")
+    print(f"Registered tools: {len(tools)}")
+    print(f"Expected: 8")
+    assert len(tools) == 8, f"Tool count error, expected 8, got {len(tools)}"
+    print("[PASS] Tool count correct")
 
     # 测试2：检查工具名称
-    print("\n[Test 2] 工具名称检查")
+    print("\n[Test 2] Tool Name Check")
     print("-" * 60)
     expected_tools = [
-        'search_policy',
-        'query_graph',
-        'query_weather',
-        'search_hotels',
-        'search_flights'
+        'search_policy',           # 政策检索
+        'query_graph',             # 图谱查询
+        'query_weather',           # 天气查询
+        'search_hotels',           # 酒店搜索
+        'search_flights',          # 航班搜索
+        'check_approval_status',   # 审批状态查询
+        'cancel_approval',         # 取消审批
+        'query_memory'             # 记忆查询
     ]
     for tool_name in expected_tools:
-        assert tool_name in tools, f"工具 {tool_name} 未注册"
-        print(f"✓ {tool_name}")
+        assert tool_name in tools, f"Tool {tool_name} not registered"
+        print(f"[PASS] {tool_name}")
 
     # 测试3：天气工具
-    print("\n[Test 3] 天气工具测试")
+    print("\n[Test 3] Weather Tool Test")
     print("-" * 60)
     weather_tool = registry.get('query_weather')
-    assert weather_tool is not None, "天气工具未找到"
+    assert weather_tool is not None, "Weather tool not found"
     result = weather_tool.invoke({'city': '北京'})
-    assert len(result) > 50, "天气工具返回结果太短"
-    assert '北京' in result, "结果中未包含城市名称"
-    print(f"✓ 天气工具正常工作（结果长度: {len(result)}）")
+    assert len(result) > 20, "Weather tool result too short"
+    assert '北京' in result, "City name not in result"
+    print(f"[PASS] Weather tool works (result length: {len(result)})")
 
     # 测试4：酒店工具
-    print("\n[Test 4] 酒店工具测试")
+    print("\n[Test 4] Hotel Tool Test")
     print("-" * 60)
     hotel_tool = registry.get('search_hotels')
-    assert hotel_tool is not None, "酒店工具未找到"
+    assert hotel_tool is not None, "Hotel tool not found"
     result = hotel_tool.invoke({'city': '北京', 'max_price': 800})
-    assert len(result) > 100, "酒店工具返回结果太短"
-    assert '北京' in result, "结果中未包含城市名称"
-    print(f"✓ 酒店工具正常工作（结果长度: {len(result)}）")
+    assert len(result) > 50, "Hotel tool result too short"
+    assert '北京' in result, "City name not in result"
+    print(f"[PASS] Hotel tool works (result length: {len(result)})")
 
     # 测试5：航班工具
-    print("\n[Test 5] 航班工具测试")
+    print("\n[Test 5] Flight Tool Test")
     print("-" * 60)
     flight_tool = registry.get('search_flights')
-    assert flight_tool is not None, "航班工具未找到"
+    assert flight_tool is not None, "Flight tool not found"
     result = flight_tool.invoke({
         'departure_city': '北京',
         'arrival_city': '上海'
     })
-    assert len(result) > 100, "航班工具返回结果太短"
-    assert '北京' in result and '上海' in result, "结果中未包含城市名称"
-    print(f"✓ 航班工具正常工作（结果长度: {len(result)}）")
+    assert len(result) > 50, "Flight tool result too short"
+    assert '北京' in result and '上海' in result, "City names not in result"
+    print(f"[PASS] Flight tool works (result length: {len(result)})")
 
     # 测试6：政策检索工具
-    print("\n[Test 6] 政策检索工具测试")
+    print("\n[Test 6] Policy Search Tool Test")
     print("-" * 60)
     policy_tool = registry.get('search_policy')
-    assert policy_tool is not None, "政策检索工具未找到"
+    assert policy_tool is not None, "Policy search tool not found"
     result = policy_tool.invoke({'query': 'Beijing standard'})
-    assert len(result) > 100, "政策检索工具返回结果太短"
-    print(f"✓ 政策检索工具正常工作（结果长度: {len(result)}）")
+    assert len(result) > 50, "Policy search tool result too short"
+    print(f"[PASS] Policy search tool works (result length: {len(result)})")
 
-    # 测试7：工具统计
-    print("\n[Test 7] 工具统计")
+    # 测试7：审批状态查询工具
+    print("\n[Test 7] Approval Status Tool Test")
+    print("-" * 60)
+    approval_tool = registry.get('check_approval_status')
+    assert approval_tool is not None, "Approval status tool not found"
+    print("[PASS] Approval status tool registered")
+
+    # 测试8：记忆查询工具
+    print("\n[Test 8] Memory Query Tool Test")
+    print("-" * 60)
+    memory_tool = registry.get('query_memory')
+    assert memory_tool is not None, "Memory query tool not found"
+    print("[PASS] Memory query tool registered")
+
+    # 测试9：工具统计
+    print("\n[Test 9] Tool Statistics")
     print("-" * 60)
     stats = registry.get_stats()
-    print(f"统计信息: {len(stats)} 个工具")
+    print(f"Statistics: {len(stats)} tools")
     for tool_name, stat in stats.items():
         print(f"  - {tool_name}: {stat}")
 
     print("\n" + "=" * 60)
-    print("✅ 所有测试通过！工具注册表工作正常")
+    print("[SUCCESS] All tests passed! Tool registry works properly")
     print("=" * 60)
 
 

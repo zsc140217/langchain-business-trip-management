@@ -50,9 +50,9 @@ def check_approval_node(state: TravelAgentState) -> Dict[str, Any]:
     approval_needed = len(reasons) > 0
 
     if approval_needed:
-        logger.warning(f"⚠️  需要审批，原因：{reasons}")
+        logger.warning(f"[WARNING]  需要审批，原因：{reasons}")
     else:
-        logger.info("✅ 无需审批，继续执行")
+        logger.info("[OK] 无需审批，继续执行")
 
     return {
         "approval_required": approval_needed,

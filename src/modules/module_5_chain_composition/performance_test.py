@@ -67,13 +67,13 @@ class PerformanceTest:
         print("\n[1/2] Running Sequential Chain...")
         seq_result = self.sequential_chain.invoke(test_input)
         seq_time = seq_result["total_time_ms"]
-        print(f"✓ Completed in {seq_time:.0f}ms")
+        print(f"[CHECK] Completed in {seq_time:.0f}ms")
 
         # Test parallel chain
         print("\n[2/2] Running Parallel Chain...")
         par_result = self.parallel_chain.invoke(test_input)
         par_time = par_result["total_time_ms"]
-        print(f"✓ Completed in {par_time:.0f}ms")
+        print(f"[CHECK] Completed in {par_time:.0f}ms")
 
         # Calculate improvement
         time_saved = seq_time - par_time
@@ -184,8 +184,8 @@ class PerformanceTest:
         # Timing comparison table
         table_data = [
             ["Sequential Chain", f"{seq_time:.0f}ms", "100%", "Baseline"],
-            ["Parallel Chain", f"{par_time:.0f}ms", f"{(par_time/seq_time)*100:.1f}%", "✓ Faster"],
-            ["Time Saved", f"{time_saved:.0f}ms", f"{improvement:.1f}%", "✓ Improvement"],
+            ["Parallel Chain", f"{par_time:.0f}ms", f"{(par_time/seq_time)*100:.1f}%", "[CHECK] Faster"],
+            ["Time Saved", f"{time_saved:.0f}ms", f"{improvement:.1f}%", "[CHECK] Improvement"],
         ]
 
         print("\nTiming Comparison:")
@@ -199,7 +199,7 @@ class PerformanceTest:
         print(f"Actual: {improvement:.1f}% time savings")
 
         if improvement >= 50:
-            print("✓ GOAL ACHIEVED - Parallel chain meets 50% target!")
+            print("[CHECK] GOAL ACHIEVED - Parallel chain meets 50% target!")
         elif improvement >= 40:
             print("⚠ CLOSE - Within 10% of target")
         else:
@@ -272,7 +272,7 @@ class PerformanceTest:
         print(f"Actual: {mean_improvement:.1f}% average time savings")
 
         if mean_improvement >= 50:
-            print("✓ GOAL ACHIEVED - Consistently meeting 50% target!")
+            print("[CHECK] GOAL ACHIEVED - Consistently meeting 50% target!")
         elif mean_improvement >= 45:
             print("⚠ CLOSE - Within 5% of target")
         else:
@@ -289,7 +289,7 @@ class PerformanceTest:
         print(f"Parallel CV:   {par_cv:.1f}%")
 
         if par_cv < seq_cv:
-            print("✓ Parallel chain is more consistent")
+            print("[CHECK] Parallel chain is more consistent")
         else:
             print("⚠ Sequential chain is more consistent")
 
@@ -348,7 +348,7 @@ if __name__ == "__main__":
     print("="*70)
     mean_improvement = stats['improvement']['mean_improvement_percent']
     print(f"\nParallel Chain Performance: {mean_improvement:.1f}% faster than Sequential")
-    print(f"Goal Achievement: {'✓ PASSED' if mean_improvement >= 50 else '✗ NEEDS IMPROVEMENT'}")
+    print(f"Goal Achievement: {'[CHECK] PASSED' if mean_improvement >= 50 else '✗ NEEDS IMPROVEMENT'}")
     print("\nKey Insights:")
     print("- Parallel execution significantly reduces total time")
     print("- Best for independent I/O-bound operations")

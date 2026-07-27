@@ -52,6 +52,7 @@ class BaseTool(LangChainBaseTool, ABC):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self._cache: Dict[str, tuple] = {}  # (result, timestamp)
+        self._load_config_if_available()
 
     @traceable(name="tool_invoke")
     def _run(self, **kwargs) -> str:
@@ -126,6 +127,22 @@ class BaseTool(LangChainBaseTool, ABC):
         except Exception as e:
             logger.error(f"{self.name} failed: {e}")
             raise RuntimeError(f"Tool execution failed: {e}") from e
+
+    def execute(self, **kwargs) -> str:
+        """
+        Execute tool (compatibility adapter for legacy code)
+
+        This method provides backward compatibility for code that calls
+        tool.execute() instead of tool.invoke() or tool.run()
+
+        Args:
+            **kwargs: Tool-specific parameters
+
+        Returns:
+            Tool execution result as string
+        """
+        # kwargs is already unpacked, pass it as input_dict to invoke
+        return self.invoke(input_dict=kwargs)
 
     def _execute_with_retry(self, input_dict: Dict[str, Any]) -> str:
         """
@@ -205,6 +222,65 @@ class BaseTool(LangChainBaseTool, ABC):
         """Clear tool cache"""
         self._cache.clear()
         logger.info(f"{self.name}: Cache cleared")
+
+    def _load_config_if_available(self) -> None:
+        """
+        Load configuration from YAML config file if available
+
+        Overrides default configuration with values from config file
+        """
+        try:
+            from src.tools.config_loader import get_config_loader
+            config_loader = get_config_loader()
+            tool_config = config_loader.get_tool_config(self.name)
+
+            if tool_config:
+                # Override configuration from YAML
+                if 'cache_ttl' in tool_config:
+                    self.cache_ttl_seconds = tool_config['cache_ttl']
+                if 'max_retries' in tool_config:
+                    self.max_retries = tool_config['max_retries']
+                if 'timeout' in tool_config:
+                    self.timeout_seconds = float(tool_config['timeout'])
+                if 'cache_ttl' in tool_config and tool_config['cache_ttl'] > 0:
+                    self.cache_enabled = True
+
+                logger.debug(f"{self.name}: Loaded configuration from YAML")
+
+        except Exception as e:
+            # Config loading is optional, don't fail if config not available
+            logger.debug(f"{self.name}: Could not load config (using defaults): {e}")
+
+    def health_check(self) -> bool:
+        """
+        Perform health check on this tool
+
+        Returns:
+            True if tool is healthy, False otherwise
+        """
+        try:
+            # Simple health check: try to initialize/check basic functionality
+            # Subclasses can override for more sophisticated checks
+            return True
+        except Exception as e:
+            logger.error(f"{self.name}: Health check failed: {e}")
+            return False
+
+    def get_stats(self) -> Dict[str, Any]:
+        """
+        Get tool statistics
+
+        Returns:
+            Dictionary of tool statistics
+        """
+        return {
+            "name": self.name,
+            "cache_enabled": self.cache_enabled,
+            "cache_size": len(self._cache),
+            "cache_ttl_seconds": self.cache_ttl_seconds,
+            "max_retries": self.max_retries,
+            "timeout_seconds": self.timeout_seconds
+        }
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}(name='{self.name}')"

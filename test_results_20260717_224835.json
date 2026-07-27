@@ -1,0 +1,87 @@
+{
+  "timestamp": "2026-07-17T22:48:35.141200",
+  "total": 8,
+  "passed": 1,
+  "results": [
+    {
+      "group": "A1",
+      "name": "天气查询",
+      "status": "PARTIAL",
+      "elapsed": 27.713529109954834,
+      "route": "approval_domain",
+      "route_match": false,
+      "keyword_match": true,
+      "answer_preview": "今天北京天气晴朗，气温25°C，体感温度约26°C，伴有2级南风，湿度为75%，整体感觉比较舒适。\n\n目前获取到的信息已涵盖了天气的核心数据。如果您还想了解空气质量、紫外线强度或穿衣指数等更详细的信息"
+    },
+    {
+      "group": "A2",
+      "name": "酒店查询",
+      "status": "PARTIAL",
+      "elapsed": 38.61198687553406,
+      "route": "approval_domain",
+      "route_match": false,
+      "keyword_match": true,
+      "answer_preview": "您好！为您精选了几家不同档次的上海酒店，您可以根据自己的预算和喜好来挑选：\n\n* **高端品质之选**：**上海浦东香格里拉酒店**（5星，评分4.8，约1200元/晚）口碑极佳，体验奢华；**上海锦"
+    },
+    {
+      "group": "A3",
+      "name": "航班查询",
+      "status": "PARTIAL",
+      "elapsed": 41.13450264930725,
+      "route": "approval_domain",
+      "route_match": false,
+      "keyword_match": true,
+      "answer_preview": "您好！为您查询到北京飞往上海的航班，目前有以下4个班次供您参考。为了方便您对比，我按起飞时间为您做了整理：\n\n🌅 **早间出发**\n- **CA1501**：07:30 起飞 - 10:00 抵达，票"
+    },
+    {
+      "group": "A4",
+      "name": "政策查询",
+      "status": "PARTIAL",
+      "elapsed": 0.02256631851196289,
+      "route": "approval_domain",
+      "route_match": false,
+      "keyword_match": true,
+      "answer_preview": "根据检索到的政策文档，北京（内江嘉宏城建集团有限公司省外差旅）的住宿标准为：\n\n* **公司高管**：500元/人·天（单间或标准间）\n* **其他人员**：500元/人·天（单间或标准间）\n\n（注："
+    },
+    {
+      "group": "B1",
+      "name": "自动审批",
+      "status": "PASS",
+      "elapsed": 22.109638929367065,
+      "route": "approval_domain",
+      "route_match": true,
+      "keyword_match": true,
+      "answer_preview": "您的报销申请已自动通过！金额：¥800"
+    },
+    {
+      "group": "B2",
+      "name": "人工审批",
+      "status": "PARTIAL",
+      "elapsed": 7.123344659805298,
+      "route": "approval_domain",
+      "route_match": true,
+      "keyword_match": false,
+      "answer_preview": "申请已提交，金额超过1000元，需要人工审批，请等待审批人处理。"
+    },
+    {
+      "group": "B3",
+      "name": "审批状态查询",
+      "status": "PARTIAL",
+      "elapsed": 25.983176231384277,
+      "route": "approval_domain",
+      "route_match": true,
+      "keyword_match": false,
+      "answer_preview": "您的报销申请已自动通过！金额：¥500"
+    },
+    {
+      "group": "C1",
+      "name": "多步骤任务",
+      "status": "PARTIAL",
+      "elapsed": 23.040360927581787,
+      "route": "approval_domain",
+      "route_match": false,
+      "keyword_match": true,
+      "answer_preview": "您好！根据目前的信息，暂时无法为您估算去杭州出差3天的具体费用。\n\n主要是因为现有的政策文档中没有包含杭州地区的具体差旅费用标准（如住宿、交通、伙食补助等各项限额）。目前仅明确了一点：住宿费需要凭发票"
+    }
+  ]
+}

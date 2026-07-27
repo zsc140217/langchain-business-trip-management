@@ -1,83 +1,84 @@
- @import "tailwindcss";
- 
- @theme {
-   --color-primary-50: #e0f2fe;
-   --color-primary-100: #bae6fd;
-   --color-primary-200: #7dd3fc;
-   --color-primary-300: #38bdf8;
-   --color-primary-400: #0ea5e9;
-   --color-primary-500: #0284c7;
-   --color-primary-600: #0369a1;
-   --color-primary-700: #075985;
-   --color-primary-800: #0c4a6e;
-   --color-primary-900: #082f49;
- 
-   --color-accent-50: #faf5ff;
-   --color-accent-100: #f3e8ff;
-   --color-accent-200: #e9d5ff;
-   --color-accent-300: #d8b4fe;
-   --color-accent-400: #c084fc;
-   --color-accent-500: #a855f7;
-   --color-accent-600: #9333ea;
-   --color-accent-700: #7e22ce;
-   --color-accent-800: #6b21a8;
-   --color-accent-900: #581c87;
- 
-   --color-glow-cyan: #06b6d4;
-   --color-glow-purple: #a855f7;
-   --color-glow-blue: #3b82f6;
- 
-   --shadow-glow-sm: 0 0 10px rgba(6, 182, 212, 0.5);
-   --shadow-glow-md: 0 0 20px rgba(6, 182, 212, 0.6);
-   --shadow-glow-lg: 0 0 30px rgba(6, 182, 212, 0.7);
-   --shadow-glow-purple: 0 0 20px rgba(168, 85, 247, 0.6);
-   --shadow-glow-blue: 0 0 20px rgba(59, 130, 246, 0.6);
-   --shadow-3d: 0 10px 30px -5px rgba(0, 0, 0, 0.3), 0 5px 15px -3px rgba(0, 0, 0, 0.2);
-   --shadow-3d-lg: 0 20px 60px -10px rgba(0, 0, 0, 0.4), 0 10px 30px -5px rgba(0, 0, 0, 0.3);
- 
-   --animate-gradient: gradient 8s ease infinite;
-   --animate-float: float 6s ease-in-out infinite;
-   --animate-glow: glow 2s ease-in-out infinite;
-   --animate-shimmer: shimmer 2s linear infinite;
- 
-   --background-image-gradient-radial: radial-gradient(var(--tw-gradient-stops));
-   --background-image-gradient-conic: conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops));
- }
- 
- @keyframes gradient {
-   0%, 100% {
-     background-size: 200% 200%;
-     background-position: left center;
-   }
-   50% {
-     background-size: 200% 200%;
-     background-position: right center;
-   }
- }
- 
- @keyframes float {
-   0%, 100% { transform: translateY(0px); }
-   50% { transform: translateY(-20px); }
- }
- 
- @keyframes glow {
-   0%, 100% { opacity: 1; }
-   50% { opacity: 0.5; }
- }
- 
- @keyframes shimmer {
-   0% { transform: translateX(-100%); }
-   100% { transform: translateX(100%); }
- }
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Commissioner:wght@300;400;500;600;700&display=swap');
+
+@theme {
+  /* Travel Documents Color Palette */
+  --color-paper: #FFF8F0;
+  --color-paper-dark: #F5EFE7;
+  --color-navy: #1B3A52;
+  --color-navy-light: #2A4A62;
+  --color-navy-lighter: #3A5A72;
+  --color-amber: #D4A574;
+  --color-amber-dark: #B8885E;
+  --color-vermillion: #C94D3C;
+  --color-ink: #2C3E50;
+  --color-stamp-red: #A63A2F;
+
+  /* Shadows */
+  --shadow-document: 0 1px 3px rgba(27, 58, 82, 0.12), 0 4px 16px rgba(27, 58, 82, 0.08);
+  --shadow-stamp: 0 2px 8px rgba(166, 58, 47, 0.3);
+  --shadow-elevated: 4px 4px 0 rgba(27, 58, 82, 0.1), 8px 8px 0 rgba(27, 58, 82, 0.05);
+
+  /* Animations */
+  --animate-stamp: stamp-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --animate-paper-slide: paper-slide 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  --animate-fade-in: fade-in 0.6s ease-out;
+}
+
+@keyframes stamp-in {
+  0% {
+    transform: scale(0) rotate(-15deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1) rotate(-7deg);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1) rotate(-5deg);
+    opacity: 1;
+  }
+}
+
+@keyframes paper-slide {
+  from {
+    transform: translateX(-100%) rotate(-2deg);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 @layer base {
   body {
-    @apply bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white min-h-screen;
+    @apply bg-[var(--color-paper)] text-[var(--color-navy)];
+    font-family: 'Commissioner', sans-serif;
     margin: 0;
     font-synthesis: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-image:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+    background-attachment: fixed;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
   }
 
   #root {
@@ -85,43 +86,159 @@
   }
 }
 
- @utility glass-card {
-   background-color: rgba(255, 255, 255, 0.05);
-   backdrop-filter: blur(16px);
-   -webkit-backdrop-filter: blur(16px);
-   border: 1px solid rgba(255, 255, 255, 0.1);
-   border-radius: 1rem;
-   box-shadow: var(--shadow-3d);
- }
- 
- @utility glass-card-hover {
-   background-color: rgba(255, 255, 255, 0.05);
-   backdrop-filter: blur(16px);
-   -webkit-backdrop-filter: blur(16px);
-   border: 1px solid rgba(255, 255, 255, 0.1);
-   border-radius: 1rem;
-   box-shadow: var(--shadow-3d);
-   transition: all 300ms;
- 
-   &:hover {
-     background-color: rgba(255, 255, 255, 0.1);
-     box-shadow: var(--shadow-glow-md);
-     scale: 1.02;
-   }
- }
- 
- @utility gradient-text {
-   background-image: linear-gradient(to right, #22d3ee, #3b82f6, #9333ea);
-   -webkit-background-clip: text;
-   background-clip: text;
-   color: transparent;
- }
- 
- @utility glow-border {
-   border: 2px solid transparent;
-   background-clip: border-box;
-   background-image: linear-gradient(to right, #06b6d4, #3b82f6, #9333ea);
- }
+/* Travel Document Components */
+@utility travel-doc {
+  background-color: white;
+  border: 2px solid var(--color-navy);
+  box-shadow: var(--shadow-elevated);
+  position: relative;
+}
+
+@utility passport-header {
+  background: linear-gradient(135deg,
+    var(--color-navy) 0%,
+    var(--color-navy-light) 50%,
+    var(--color-navy) 100%
+  );
+  color: var(--color-amber);
+  padding: 0.75rem 1.5rem;
+  border-top: 3px solid var(--color-amber);
+  border-bottom: 1px solid var(--color-amber);
+  font-family: 'Playfair Display', serif;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+@utility ticket-edge-left {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 12px;
+    background-image: radial-gradient(circle, var(--color-paper) 2px, transparent 2px);
+    background-size: 6px 12px;
+    background-position: -3px 0;
+  }
+}
+
+@utility ticket-edge-right {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 12px;
+    background-image: radial-gradient(circle, var(--color-paper) 2px, transparent 2px);
+    background-size: 6px 12px;
+    background-position: 9px 0;
+  }
+}
+
+@utility stamp {
+  position: relative;
+  border: 3px solid var(--color-stamp-red);
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  transform: rotate(-5deg);
+  box-shadow: var(--shadow-stamp);
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border: 1px dashed var(--color-stamp-red);
+    border-radius: 4px;
+    opacity: 0.5;
+  }
+}
+
+@utility diagonal-stripes {
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    rgba(27, 58, 82, 0.03) 10px,
+    rgba(27, 58, 82, 0.03) 20px
+  );
+}
+
+@utility corner-fold {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 24px 24px 0;
+    border-color: transparent var(--color-paper-dark) transparent transparent;
+    filter: drop-shadow(-1px 1px 2px rgba(0, 0, 0, 0.1));
+  }
+}
+
+@utility barcode {
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--color-navy),
+    var(--color-navy) 2px,
+    transparent 2px,
+    transparent 4px,
+    var(--color-navy) 4px,
+    var(--color-navy) 5px,
+    transparent 5px,
+    transparent 8px,
+    var(--color-navy) 8px,
+    var(--color-navy) 9px,
+    transparent 9px,
+    transparent 10px
+  );
+  height: 40px;
+  opacity: 0.15;
+}
+
+@utility ticket-tear-top {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 8px;
+    background-image:
+      linear-gradient(135deg, transparent 5px, white 5px, white 8px, transparent 8px),
+      linear-gradient(225deg, transparent 5px, white 5px, white 8px, transparent 8px);
+    background-size: 12px 12px;
+    background-repeat: repeat-x;
+  }
+}
+
+@utility fold-line {
+  border-top: 2px dashed rgba(27, 58, 82, 0.2);
+  position: relative;
+
+  &::before {
+    content: '✂';
+    position: absolute;
+    left: 50%;
+    top: -12px;
+    transform: translateX(-50%);
+    font-size: 1rem;
+    color: var(--color-amber-dark);
+  }
+}
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
@@ -130,13 +247,14 @@
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-slate-800/50;
+  background: var(--color-paper-dark);
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-gradient-to-b from-cyan-500 to-blue-600 rounded-full;
+  background: linear-gradient(to bottom, var(--color-amber), var(--color-amber-dark));
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply from-cyan-400 to-blue-500;
+  background: var(--color-amber-dark);
 }

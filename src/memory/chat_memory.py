@@ -142,4 +142,4 @@ if __name__ == "__main__":
 
     # 清理测试数据
     memory.delete_storage()
-    print("\n✅ 测试完成")
+    print("\n[OK] 测试完成")

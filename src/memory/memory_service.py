@@ -16,8 +16,7 @@ class MemoryService:
         self,
         chat_memory_max_messages: int = 20,
         working_memory_ttl_minutes: int = 30,
-        chat_storage_dir: str = "data/chat-history",
-        profile_storage_dir: str = "data/user-profiles"
+        chat_storage_dir: str = "data/chat-history"
     ):
         # Layer 1: 短期记忆
         self.chat_storage_dir = chat_storage_dir
@@ -27,8 +26,8 @@ class MemoryService:
         # Layer 2: 工作记忆
         self.working_memory_manager = WorkingMemoryManager(ttl_minutes=working_memory_ttl_minutes)
 
-        # Layer 3: 长期记忆
-        self.long_term_memory_manager = LongTermMemoryManager(storage_dir=profile_storage_dir)
+        # Layer 3: 长期记忆（使用PostgreSQL数据库）
+        self.long_term_memory_manager = LongTermMemoryManager()
 
     def get_chat_memory(self, conversation_id: str) -> ChatMemory:
         """获取或创建短期记忆"""
@@ -320,4 +319,4 @@ if __name__ == "__main__":
 
     # 清理测试数据
     service.delete_user_data(user_id)
-    print("\n✅ 测试完成")
+    print("\n[OK] 测试完成")

@@ -131,7 +131,7 @@ class SkillRegistry:
         self.skills.append(skill)
         # 按优先级排序
         self.skills.sort(key=lambda s: s.priority)
-        print(f"✅ 注册Skill: {skill.name} (优先级:{skill.priority})")
+        print(f"[OK] 注册Skill: {skill.name} (优先级:{skill.priority})")
 
     def select_skill(self, query: str) -> Optional[Skill]:
         """
@@ -153,7 +153,7 @@ class SkillRegistry:
                 print(f"[目标] 选中Skill: {skill.name}")
                 return skill
 
-        print(f"⚠️  没有Skill能处理该查询")
+        print(f"[WARNING]  没有Skill能处理该查询")
         return None
 
     def get_all_skills(self) -> List[Skill]:
@@ -227,4 +227,4 @@ if __name__ == "__main__":
         result = skill.execute(query, "test123")
         print(f"\n执行结果: {result}")
 
-    print("\n✅ Skill系统测试完成！")
+    print("\n[OK] Skill系统测试完成！")

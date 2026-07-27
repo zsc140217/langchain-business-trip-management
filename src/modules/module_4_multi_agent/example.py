@@ -46,28 +46,28 @@ def main():
     # Step 1: Initialize LLM
     print("\n[1] Initializing LLM...")
     llm = get_llm(temperature=0.3)
-    print("✓ LLM initialized (qwen-plus)")
+    print("[CHECK] LLM initialized (qwen-plus)")
 
     # Step 2: Create worker agents
     print("\n[2] Creating worker agents...")
 
     # Policy agent (queries company policies)
     policy_agent = PolicyWorkerAgent(llm)
-    print("✓ PolicyWorkerAgent created")
+    print("[CHECK] PolicyWorkerAgent created")
 
     # Weather agent (queries weather information)
     weather_tool = WeatherTool()
     weather_agent = WeatherWorkerAgent(llm, weather_tool)
-    print("✓ WeatherWorkerAgent created")
+    print("[CHECK] WeatherWorkerAgent created")
 
     # Itinerary agent (plans trip itineraries)
     itinerary_agent = ItineraryWorkerAgent(llm)
-    print("✓ ItineraryWorkerAgent created")
+    print("[CHECK] ItineraryWorkerAgent created")
 
     # Step 3: Create supervisor agent
     print("\n[3] Creating supervisor agent...")
     supervisor = SupervisorAgent(llm, temperature=0.3)
-    print("✓ SupervisorAgent created")
+    print("[CHECK] SupervisorAgent created")
     print(f"  Available workers: {supervisor.get_available_workers()}")
 
     # Step 4: Build multi-agent graph
@@ -79,7 +79,7 @@ def main():
         itinerary_agent=itinerary_agent,
         max_iterations=5
     )
-    print("✓ Multi-agent graph compiled")
+    print("[CHECK] Multi-agent graph compiled")
 
     # Step 5: Execute queries
     print("\n[5] Executing queries...")
@@ -136,9 +136,9 @@ def main():
     print("\n" + "="*80)
     print("Summary")
     print("="*80)
-    print(f"✓ {len([query1, query2, query3])} queries executed successfully")
-    print(f"✓ Total agents invoked: {len(set([r for res in [result1, result2, result3] for r in res['results'].keys()]))}")
-    print(f"✓ Multi-agent orchestration working correctly")
+    print(f"[CHECK] {len([query1, query2, query3])} queries executed successfully")
+    print(f"[CHECK] Total agents invoked: {len(set([r for res in [result1, result2, result3] for r in res['results'].keys()]))}")
+    print(f"[CHECK] Multi-agent orchestration working correctly")
 
     print("\n" + "="*80)
     print("Multi-Agent System Architecture")
@@ -160,13 +160,13 @@ Worker     Worker     Worker
           Final Answer
     """)
 
-    print("\n✅ Example completed successfully!")
+    print("\n[OK] Example completed successfully!")
 
 
 if __name__ == "__main__":
     try:
         main()
     except Exception as e:
-        print(f"\n❌ Example failed: {e}")
+        print(f"\n[ERROR] Example failed: {e}")
         import traceback
         traceback.print_exc()

@@ -131,7 +131,7 @@ class FeishuClient:
                 "header": {
                     "title": {
                         "tag": "plain_text",
-                        "content": "📋 待审批：出差报销申请"
+                        "content": "[CLIPBOARD] 待审批：出差报销申请"
                     },
                     "template": "orange"
                 },
@@ -152,7 +152,7 @@ class FeishuClient:
                                 "tag": "button",
                                 "text": {
                                     "tag": "plain_text",
-                                    "content": "✅ 通过"
+                                    "content": "[OK] 通过"
                                 },
                                 "type": "primary",
                                 "value": {
@@ -165,7 +165,7 @@ class FeishuClient:
                                 "tag": "button",
                                 "text": {
                                     "tag": "plain_text",
-                                    "content": "❌ 拒绝"
+                                    "content": "[ERROR] 拒绝"
                                 },
                                 "type": "danger",
                                 "value": {
@@ -218,7 +218,7 @@ class FeishuClient:
             "header": {
                 "title": {
                     "tag": "plain_text",
-                    "content": "📋 待审批：出差报销申请"
+                    "content": "[CLIPBOARD] 待审批：出差报销申请"
                 },
                 "template": "orange"
             },
@@ -239,7 +239,7 @@ class FeishuClient:
                             "tag": "button",
                             "text": {
                                 "tag": "plain_text",
-                                "content": "✅ 通过"
+                                "content": "[OK] 通过"
                             },
                             "type": "primary",
                             "value": {
@@ -252,7 +252,7 @@ class FeishuClient:
                             "tag": "button",
                             "text": {
                                 "tag": "plain_text",
-                                "content": "❌ 拒绝"
+                                "content": "[ERROR] 拒绝"
                             },
                             "type": "danger",
                             "value": {
@@ -336,11 +336,11 @@ def determine_card_type(message: str) -> Literal["info", "success", "warning", "
         卡片类型
     """
     # 先检查拒绝（包含"未通过"），避免"通过"误匹配
-    if "拒绝" in message or "❌" in message or "未通过" in message:
+    if "拒绝" in message or "[ERROR]" in message or "未通过" in message:
         return "error"
-    elif "人工审批" in message or "📋" in message or "待审批" in message:
+    elif "人工审批" in message or "[CLIPBOARD]" in message or "待审批" in message:
         return "warning"
-    elif "通过" in message or "✅" in message or "恭喜" in message:
+    elif "通过" in message or "[OK]" in message or "恭喜" in message:
         return "success"
     else:
         return "info"

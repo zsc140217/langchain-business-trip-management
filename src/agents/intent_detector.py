@@ -347,7 +347,7 @@ if __name__ == "__main__":
         intent = detector.detect(query)
 
         if intent == expected_intent:
-            print(f"✓ {query}")
+            print(f"[CHECK] {query}")
             print(f"  意图: {intent}")
 
             if intent and expected_entities:
@@ -361,7 +361,7 @@ if __name__ == "__main__":
                         for k, v in expected_entities.items()
                     )
                     if match:
-                        print(f"  实体匹配: ✓")
+                        print(f"  实体匹配: [CHECK]")
                     else:
                         print(f"  实体匹配: ✗ (期望: {expected_entities})")
 

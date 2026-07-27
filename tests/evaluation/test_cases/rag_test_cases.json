@@ -1,0 +1,620 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "total_cases": 50,
+    "description": "RAG检索质量测试用例集",
+    "evaluation_metrics": [
+      "precision",
+      "recall",
+      "f1_score",
+      "mrr",
+      "ndcg"
+    ],
+    "categories": {
+      "policy_query": "政策查询类（标准明确）",
+      "procedure_query": "流程查询类（步骤清晰）",
+      "complex_scenario": "复杂场景类（多条件组合）",
+      "exception_handling": "异常处理类（特殊情况）",
+      "multi_city": "多城市出差",
+      "international": "国际出差"
+    },
+    "difficulty_levels": {
+      "easy": "单一条件，直接匹配",
+      "medium": "2-3个条件，需要推理",
+      "hard": "多条件组合，需要深度理解"
+    }
+  },
+  "test_cases": [
+    {
+      "id": "RAG_001",
+      "category": "policy_query",
+      "query": "出差住宿费用标准是多少？",
+      "expected_chunks": [
+        "accommodation_policy_standard",
+        "expense_limits_by_city_tier"
+      ],
+      "ground_truth_answer": "住宿费用标准按城市等级划分：一线城市500元/晚，二线城市400元/晚，三线及以下城市300元/晚",
+      "difficulty": "easy"
+    },
+    {
+      "id": "RAG_002",
+      "category": "policy_query",
+      "query": "总监级别去上海出差可以住多少钱的酒店？",
+      "expected_chunks": [
+        "accommodation_policy_by_level",
+        "city_tier_classification"
+      ],
+      "ground_truth_answer": "总监级别在上海（一线城市）的住宿标准为800元/晚",
+      "difficulty": "medium"
+    },
+    {
+      "id": "RAG_003",
+      "category": "policy_query",
+      "query": "飞机票什么时候可以坐头等舱？",
+      "expected_chunks": [
+        "flight_class_policy",
+        "executive_travel_privileges"
+      ],
+      "ground_truth_answer": "VP及以上级别，或航程超过4小时的国际航班可以乘坐头等舱",
+      "difficulty": "medium"
+    },
+    {
+      "id": "RAG_004",
+      "category": "procedure_query",
+      "query": "出差申请需要提前多久提交？",
+      "expected_chunks": [
+        "trip_application_timeline",
+        "approval_process_overview"
+      ],
+      "ground_truth_answer": "国内出差需提前3个工作日，国际出差需提前7个工作日提交申请",
+      "difficulty": "easy"
+    },
+    {
+      "id": "RAG_005",
+      "category": "procedure_query",
+      "query": "出差报销需要提供哪些材料？",
+      "expected_chunks": [
+        "reimbursement_required_documents",
+        "receipt_requirements"
+      ],
+      "ground_truth_answer": "需提供：出差申请单、交通票据、住宿发票、餐饮发票（如有）、其他费用凭证",
+      "difficulty": "easy"
+    },
+    {
+      "id": "RAG_006",
+      "category": "exception_handling",
+      "query": "出差期间生病了怎么报销医疗费？",
+      "expected_chunks": [
+        "emergency_medical_policy",
+        "exceptional_expense_handling"
+      ],
+      "ground_truth_answer": "出差期间因突发疾病产生的医疗费用，凭医院发票和诊断证明，可按实际费用报销，需部门负责人审批",
+      "difficulty": "hard"
+    },
+    {
+      "id": "RAG_007",
+      "category": "policy_query",
+      "query": "出差补贴怎么算？",
+      "expected_chunks": [
+        "daily_allowance_policy",
+        "subsidy_calculation_rules"
+      ],
+      "ground_truth_answer": "出差补贴按自然日计算：国内100元/天，国际200元/天，不足一天按实际小时计算",
+      "difficulty": "easy"
+    },
+    {
+      "id": "RAG_008",
+      "category": "complex_scenario",
+      "query": "我要从北京出差到上海3天，然后去杭州2天，住宿怎么报销？",
+      "expected_chunks": [
+        "multi_city_trip_policy",
+        "accommodation_policy_standard",
+        "city_tier_classification"
+      ],
+      "ground_truth_answer": "上海按一线城市标准500元/晚×3天，杭州按二线城市标准400元/晚×2天，总计2300元",
+      "difficulty": "hard"
+    },
+    {
+      "id": "RAG_009",
+      "category": "policy_query",
+      "query": "火车票可以买一等座吗？",
+      "expected_chunks": [
+        "train_class_policy",
+        "travel_mode_selection"
+      ],
+      "ground_truth_answer": "经理及以上级别可购买一等座，普通员工购买二等座",
+      "difficulty": "easy"
+    },
+    {
+      "id": "RAG_010",
+      "category": "time_constraint",
+      "query": "出差报销有时间限制吗？",
+      "expected_chunks": [
+        "reimbursement_deadline",
+        "expense_report_timeline"
+      ],
+      "ground_truth_answer": "出差结束后30个自然日内必须提交报销申请，逾期不予受理",
+      "difficulty": "medium"
+    },
+    {
+      "id": "RAG_011",
+      "category": "policy_query",
+      "query": "测试查询_11",
+      "expected_chunks": [
+        "policy_chunk_11",
+        "rule_chunk_11"
+      ],
+      "ground_truth_answer": "这是测试答案_11，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "RAG_012",
+      "category": "policy_query",
+      "query": "测试查询_12",
+      "expected_chunks": [
+        "policy_chunk_12",
+        "rule_chunk_12"
+      ],
+      "ground_truth_answer": "这是测试答案_12，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "RAG_013",
+      "category": "policy_query",
+      "query": "测试查询_13",
+      "expected_chunks": [
+        "policy_chunk_13",
+        "rule_chunk_13"
+      ],
+      "ground_truth_answer": "这是测试答案_13，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "RAG_014",
+      "category": "policy_query",
+      "query": "测试查询_14",
+      "expected_chunks": [
+        "policy_chunk_14",
+        "rule_chunk_14"
+      ],
+      "ground_truth_answer": "这是测试答案_14，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "RAG_015",
+      "category": "policy_query",
+      "query": "测试查询_15",
+      "expected_chunks": [
+        "policy_chunk_15",
+        "rule_chunk_15"
+      ],
+      "ground_truth_answer": "这是测试答案_15，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "RAG_016",
+      "category": "policy_query",
+      "query": "测试查询_16",
+      "expected_chunks": [
+        "policy_chunk_16",
+        "rule_chunk_16"
+      ],
+      "ground_truth_answer": "这是测试答案_16，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "RAG_017",
+      "category": "policy_query",
+      "query": "测试查询_17",
+      "expected_chunks": [
+        "policy_chunk_17",
+        "rule_chunk_17"
+      ],
+      "ground_truth_answer": "这是测试答案_17，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "RAG_018",
+      "category": "policy_query",
+      "query": "测试查询_18",
+      "expected_chunks": [
+        "policy_chunk_18",
+        "rule_chunk_18"
+      ],
+      "ground_truth_answer": "这是测试答案_18，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "RAG_019",
+      "category": "policy_query",
+      "query": "测试查询_19",
+      "expected_chunks": [
+        "policy_chunk_19",
+        "rule_chunk_19"
+      ],
+      "ground_truth_answer": "这是测试答案_19，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "RAG_020",
+      "category": "policy_query",
+      "query": "测试查询_20",
+      "expected_chunks": [
+        "policy_chunk_20",
+        "rule_chunk_20"
+      ],
+      "ground_truth_answer": "这是测试答案_20，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "RAG_021",
+      "category": "policy_query",
+      "query": "测试查询_21",
+      "expected_chunks": [
+        "policy_chunk_21",
+        "rule_chunk_21"
+      ],
+      "ground_truth_answer": "这是测试答案_21，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "RAG_022",
+      "category": "policy_query",
+      "query": "测试查询_22",
+      "expected_chunks": [
+        "policy_chunk_22",
+        "rule_chunk_22"
+      ],
+      "ground_truth_answer": "这是测试答案_22，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "RAG_023",
+      "category": "policy_query",
+      "query": "测试查询_23",
+      "expected_chunks": [
+        "policy_chunk_23",
+        "rule_chunk_23"
+      ],
+      "ground_truth_answer": "这是测试答案_23，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "RAG_024",
+      "category": "policy_query",
+      "query": "测试查询_24",
+      "expected_chunks": [
+        "policy_chunk_24",
+        "rule_chunk_24"
+      ],
+      "ground_truth_answer": "这是测试答案_24，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "RAG_025",
+      "category": "policy_query",
+      "query": "测试查询_25",
+      "expected_chunks": [
+        "policy_chunk_25",
+        "rule_chunk_25"
+      ],
+      "ground_truth_answer": "这是测试答案_25，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "RAG_026",
+      "category": "policy_query",
+      "query": "测试查询_26",
+      "expected_chunks": [
+        "policy_chunk_26",
+        "rule_chunk_26"
+      ],
+      "ground_truth_answer": "这是测试答案_26，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "RAG_027",
+      "category": "policy_query",
+      "query": "测试查询_27",
+      "expected_chunks": [
+        "policy_chunk_27",
+        "rule_chunk_27"
+      ],
+      "ground_truth_answer": "这是测试答案_27，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "RAG_028",
+      "category": "policy_query",
+      "query": "测试查询_28",
+      "expected_chunks": [
+        "policy_chunk_28",
+        "rule_chunk_28"
+      ],
+      "ground_truth_answer": "这是测试答案_28，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "RAG_029",
+      "category": "policy_query",
+      "query": "测试查询_29",
+      "expected_chunks": [
+        "policy_chunk_29",
+        "rule_chunk_29"
+      ],
+      "ground_truth_answer": "这是测试答案_29，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "RAG_030",
+      "category": "policy_query",
+      "query": "测试查询_30",
+      "expected_chunks": [
+        "policy_chunk_30",
+        "rule_chunk_30"
+      ],
+      "ground_truth_answer": "这是测试答案_30，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "RAG_031",
+      "category": "policy_query",
+      "query": "测试查询_31",
+      "expected_chunks": [
+        "policy_chunk_31",
+        "rule_chunk_31"
+      ],
+      "ground_truth_answer": "这是测试答案_31，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "RAG_032",
+      "category": "policy_query",
+      "query": "测试查询_32",
+      "expected_chunks": [
+        "policy_chunk_32",
+        "rule_chunk_32"
+      ],
+      "ground_truth_answer": "这是测试答案_32，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "RAG_033",
+      "category": "policy_query",
+      "query": "测试查询_33",
+      "expected_chunks": [
+        "policy_chunk_33",
+        "rule_chunk_33"
+      ],
+      "ground_truth_answer": "这是测试答案_33，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "RAG_034",
+      "category": "policy_query",
+      "query": "测试查询_34",
+      "expected_chunks": [
+        "policy_chunk_34",
+        "rule_chunk_34"
+      ],
+      "ground_truth_answer": "这是测试答案_34，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "RAG_035",
+      "category": "policy_query",
+      "query": "测试查询_35",
+      "expected_chunks": [
+        "policy_chunk_35",
+        "rule_chunk_35"
+      ],
+      "ground_truth_answer": "这是测试答案_35，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "RAG_036",
+      "category": "policy_query",
+      "query": "测试查询_36",
+      "expected_chunks": [
+        "policy_chunk_36",
+        "rule_chunk_36"
+      ],
+      "ground_truth_answer": "这是测试答案_36，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "RAG_037",
+      "category": "policy_query",
+      "query": "测试查询_37",
+      "expected_chunks": [
+        "policy_chunk_37",
+        "rule_chunk_37"
+      ],
+      "ground_truth_answer": "这是测试答案_37，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "RAG_038",
+      "category": "policy_query",
+      "query": "测试查询_38",
+      "expected_chunks": [
+        "policy_chunk_38",
+        "rule_chunk_38"
+      ],
+      "ground_truth_answer": "这是测试答案_38，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "RAG_039",
+      "category": "policy_query",
+      "query": "测试查询_39",
+      "expected_chunks": [
+        "policy_chunk_39",
+        "rule_chunk_39"
+      ],
+      "ground_truth_answer": "这是测试答案_39，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "RAG_040",
+      "category": "policy_query",
+      "query": "测试查询_40",
+      "expected_chunks": [
+        "policy_chunk_40",
+        "rule_chunk_40"
+      ],
+      "ground_truth_answer": "这是测试答案_40，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "RAG_041",
+      "category": "policy_query",
+      "query": "测试查询_41",
+      "expected_chunks": [
+        "policy_chunk_41",
+        "rule_chunk_41"
+      ],
+      "ground_truth_answer": "这是测试答案_41，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "RAG_042",
+      "category": "policy_query",
+      "query": "测试查询_42",
+      "expected_chunks": [
+        "policy_chunk_42",
+        "rule_chunk_42"
+      ],
+      "ground_truth_answer": "这是测试答案_42，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "RAG_043",
+      "category": "policy_query",
+      "query": "测试查询_43",
+      "expected_chunks": [
+        "policy_chunk_43",
+        "rule_chunk_43"
+      ],
+      "ground_truth_answer": "这是测试答案_43，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "RAG_044",
+      "category": "policy_query",
+      "query": "测试查询_44",
+      "expected_chunks": [
+        "policy_chunk_44",
+        "rule_chunk_44"
+      ],
+      "ground_truth_answer": "这是测试答案_44，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "RAG_045",
+      "category": "policy_query",
+      "query": "测试查询_45",
+      "expected_chunks": [
+        "policy_chunk_45",
+        "rule_chunk_45"
+      ],
+      "ground_truth_answer": "这是测试答案_45，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "RAG_046",
+      "category": "policy_query",
+      "query": "测试查询_46",
+      "expected_chunks": [
+        "policy_chunk_46",
+        "rule_chunk_46"
+      ],
+      "ground_truth_answer": "这是测试答案_46，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "RAG_047",
+      "category": "policy_query",
+      "query": "测试查询_47",
+      "expected_chunks": [
+        "policy_chunk_47",
+        "rule_chunk_47"
+      ],
+      "ground_truth_answer": "这是测试答案_47，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "RAG_048",
+      "category": "policy_query",
+      "query": "测试查询_48",
+      "expected_chunks": [
+        "policy_chunk_48",
+        "rule_chunk_48"
+      ],
+      "ground_truth_answer": "这是测试答案_48，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "RAG_049",
+      "category": "policy_query",
+      "query": "测试查询_49",
+      "expected_chunks": [
+        "policy_chunk_49",
+        "rule_chunk_49"
+      ],
+      "ground_truth_answer": "这是测试答案_49，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    },
+    {
+      "id": "RAG_050",
+      "category": "policy_query",
+      "query": "测试查询_50",
+      "expected_chunks": [
+        "policy_chunk_50",
+        "rule_chunk_50"
+      ],
+      "ground_truth_answer": "这是测试答案_50，需要根据实际业务填充",
+      "difficulty": "medium",
+      "note": "此为模板，需根据实际业务场景填充"
+    }
+  ]
+}

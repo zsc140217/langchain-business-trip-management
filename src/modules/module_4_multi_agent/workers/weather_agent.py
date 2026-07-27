@@ -250,9 +250,9 @@ if __name__ == "__main__":
 
             print(f"Result:\n{result}")
 
-        print("\n✅ WeatherWorkerAgent test completed!")
+        print("\n[OK] WeatherWorkerAgent test completed!")
 
     except Exception as e:
-        print(f"❌ Test failed: {e}")
+        print(f"[ERROR] Test failed: {e}")
         import traceback
         traceback.print_exc()

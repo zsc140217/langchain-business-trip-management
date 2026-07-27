@@ -226,4 +226,4 @@ if __name__ == "__main__":
         print(f"\n--- 块 {i} ---")
         print(doc.page_content)
 
-    print("\n✅ 文档加载测试成功！")
+    print("\n[OK] 文档加载测试成功！")

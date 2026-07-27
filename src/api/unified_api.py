@@ -1,4 +1,4 @@
-"""
+﻿"""
 统一RAG-Agent架构 API入口
 集成架构v2的OrchestratorAgent + ApprovalEngine + 飞书客户端
 
@@ -12,10 +12,14 @@ import logging
 import os
 import sys
 from pathlib import Path
+from dotenv import load_dotenv
 
 # 添加项目根目录到路径
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
+
+# 加载环境变量
+load_dotenv(PROJECT_ROOT / ".env")
 
 from src.models.llm import get_llm
 from src.rag.loader import load_documents
@@ -30,6 +34,21 @@ from src.tools.registry import get_all_tools
 
 # 导入Module 5的审批图
 from src.modules.module_5_langgraph.graphs.approval_graph import create_approval_graph
+
+# 导入通信层
+from src.communication import (
+    CommunicationLayer,
+    event_bus,
+    StandardRequest,
+    StandardResponse,
+    LegacyAPIAdapter,
+    TraceManager
+)
+
+# 导入认证和会话路由
+from src.api.auth_api import router as auth_router
+from src.api.conversation_api import router as conversation_router
+from src.api.reimbursement_api import router as reimbursement_router
 
 # 配置日志
 logging.basicConfig(
@@ -80,6 +99,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# 注册认证和会话路由
+app.include_router(auth_router)
+app.include_router(conversation_router)
+app.include_router(reimbursement_router)
+
 # ==================== 全局变量 ====================
 
 # 在startup事件中初始化
@@ -126,6 +150,7 @@ class StatsResponse(BaseModel):
 orchestrator: Optional[OrchestratorAgent] = None
 memory_service: Optional[MemoryService] = None
 feishu_client: Optional[FeishuClient] = None
+comm_layer: Optional[CommunicationLayer] = None
 
 
 # ==================== 启动事件 ====================
@@ -133,13 +158,17 @@ feishu_client: Optional[FeishuClient] = None
 @app.on_event("startup")
 async def startup_event():
     """应用启动时初始化所有组件"""
-    global orchestrator, memory_service, feishu_client
+    global orchestrator, memory_service, feishu_client, comm_layer
 
     logger.info("=" * 80)
     logger.info("🚀 统一RAG-Agent架构 v2.0 启动中...")
     logger.info("=" * 80)
 
     try:
+        # 0. 初始化通信层
+        logger.info("📡 初始化统一通信层...")
+        comm_layer = CommunicationLayer(event_bus)
+        logger.info("✅ 统一通信层初始化成功")
         # 0. 初始化 LangSmith 追踪
         try:
             from src.monitoring import initialize_langsmith
@@ -284,6 +313,33 @@ async def startup_event():
         )
         logger.info("✅ OrchestratorAgent初始化成功")
 
+        # 9.5. 注册域处理器到通信层
+        logger.info("🔌 注册域处理器...")
+
+        async def chat_domain_handler(request: StandardRequest) -> StandardResponse:
+            """聊天域处理器"""
+            query = request.payload["query"]
+            conversation_id = request.payload.get("conversation_id")
+
+            # 调用原有的 orchestrator（不修改返回值）
+            answer, route = orchestrator.route(
+                query=query,
+                user_id=request.context.user_id,
+                conversation_id=conversation_id
+            )
+
+            return StandardResponse.success_response(
+                data={
+                    "answer": answer,
+                    "route": route,
+                    "user_id": request.context.user_id
+                },
+                trace_id=request.context.trace_id
+            )
+
+        comm_layer.register_domain_handler("chat", chat_domain_handler)
+        logger.info("✅ 域处理器注册成功")
+
         # 10. 启动完成
         logger.info("=" * 80)
         logger.info("✅ 统一RAG-Agent架构 v2.0 启动完成！")
@@ -382,40 +438,35 @@ async def unified_chat(request: ChatRequest):
     飞书通知：
     - 审批通过/拒绝 → 自动发送飞书卡片消息
     """
-    if not orchestrator:
+    if not comm_layer:
         raise HTTPException(
             status_code=503,
             detail="系统未初始化，请检查日志"
         )
 
     try:
-        logger.info(f"[API] 收到请求: user_id={request.user_id}, query={request.query}")
+        # 通过通信层处理请求（内部包含TraceID、中间件）
+        std_response = await comm_layer.handle_request(
+            action="chat.query",
+            payload={
+                "query": request.query,
+                "conversation_id": request.conversation_id
+            },
+            user_id=request.user_id,
+            source="http"
+        )
 
-        # 调用OrchestratorAgent路由
-        answer = orchestrator.route(
-            query=request.query,
+        # 使用适配器转换为旧格式（前端无感知）
+        legacy_response = LegacyAPIAdapter.to_chat_response(
+            std_response,
             user_id=request.user_id,
             conversation_id=request.conversation_id
         )
 
-        # 判断路由路径
-        stats = orchestrator.get_stats()
-        if stats["approval_domain"] > 0:
-            route = "approval_domain"
-        elif stats["fast_path"] > 0:
-            route = "fast_path"
-        else:
-            route = "qa_domain"
+        return ChatResponse(**legacy_response)
 
-        logger.info(f"[API] 响应完成: route={route}")
-
-        return ChatResponse(
-            answer=answer,
-            route=route,
-            user_id=request.user_id,
-            conversation_id=request.conversation_id
-        )
-
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"[API] 处理失败: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"处理失败: {str(e)}")

@@ -47,7 +47,7 @@ def retrieve_node(state: TravelAgentState) -> Dict[str, Any]:
 
     # 检查向量存储是否存在
     if not VECTORSTORE_PATH.exists():
-        logger.warning(f"⚠️  向量存储不存在：{VECTORSTORE_PATH}")
+        logger.warning(f"[WARNING]  向量存储不存在：{VECTORSTORE_PATH}")
         logger.info("   返回空文档列表")
         return {"documents": []}
 
@@ -93,4 +93,4 @@ if __name__ == "__main__":
         print(f"\n第一个文档内容预览：")
         print(result['documents'][0].page_content[:200])
     
-    print("\n✅ 检索节点测试完成！")
+    print("\n[OK] 检索节点测试完成！")

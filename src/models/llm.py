@@ -88,10 +88,10 @@ if __name__ == "__main__":
         response = llm.invoke(messages)
         print(f"\n回答：{response.content}")
 
-        print("\n✅ LLM测试成功！")
+        print("\n[OK] LLM测试成功！")
 
     except Exception as e:
-        print(f"\n❌ LLM测试失败：{e}")
+        print(f"\n[ERROR] LLM测试失败：{e}")
         print("\n请检查：")
         print("1. 是否已安装依赖：pip install -r requirements.txt")
         print("2. 是否已配置.env文件中的DASHSCOPE_API_KEY和DASHSCOPE_BASE_URL")

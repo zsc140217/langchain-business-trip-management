@@ -28,16 +28,16 @@ def process_approval_node(state: TravelAgentState) -> Dict[str, Any]:
     query = state.get("query", "")
 
     if status == "approved":
-        logger.info("✅ 审批通过，继续处理")
-        message = f"✅ 审批通过\n\n触发原因：\n" + "\n".join(f"- {r}" for r in reasons)
+        logger.info("[OK] 审批通过，继续处理")
+        message = f"[OK] 审批通过\n\n触发原因：\n" + "\n".join(f"- {r}" for r in reasons)
         message += f"\n\n您的查询「{query}」将继续处理..."
 
         return {
             "answer": message
         }
     else:
-        logger.warning("❌ 审批被拒绝，终止流程")
-        message = f"❌ 审批被拒绝\n\n触发原因：\n" + "\n".join(f"- {r}" for r in reasons)
+        logger.warning("[ERROR] 审批被拒绝，终止流程")
+        message = f"[ERROR] 审批被拒绝\n\n触发原因：\n" + "\n".join(f"- {r}" for r in reasons)
         message += f"\n\n您的查询「{query}」已终止。"
 
         return {

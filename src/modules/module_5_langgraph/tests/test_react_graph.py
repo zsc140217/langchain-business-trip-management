@@ -14,7 +14,7 @@ class TestReActGraph:
         """测试图创建"""
         graph = create_react_graph()
         assert graph is not None
-        print("✅ ReAct图创建成功")
+        print("[OK] ReAct图创建成功")
     
     def test_basic_flow(self):
         """测试基础流程（无工具调用）"""
@@ -29,7 +29,7 @@ class TestReActGraph:
         assert result["answer"] is not None
         assert result["iteration"] >= 0
         
-        print(f"✅ 基础流程测试通过")
+        print(f"[OK] 基础流程测试通过")
         print(f"   迭代次数：{result['iteration']}")
     
     def test_max_iterations_limit(self):
@@ -44,7 +44,7 @@ class TestReActGraph:
         # 验证不超过最大迭代次数
         assert result["iteration"] <= max_iter
         
-        print(f"✅ 最大迭代限制测试通过")
+        print(f"[OK] 最大迭代限制测试通过")
         print(f"   最大迭代：{max_iter}，实际：{result['iteration']}")
     
     def test_multi_city_comparison(self):
@@ -59,7 +59,7 @@ class TestReActGraph:
         assert "answer" in result
         assert result["answer"] is not None
         
-        print(f"✅ 多城市对比测试通过")
+        print(f"[OK] 多城市对比测试通过")
         print(f"   查询：{query}")
         print(f"   迭代：{result['iteration']}")
     
@@ -81,7 +81,7 @@ class TestReActGraph:
         # 验证查询未被修改
         assert result["query"] == query
         
-        print("✅ 状态流转测试通过")
+        print("[OK] 状态流转测试通过")
     
     def test_conditional_edges(self):
         """测试条件边逻辑"""
@@ -103,7 +103,7 @@ class TestReActGraph:
         state_max_iter["tool_calls"] = [{"name": "test", "args": {}}]
         assert should_continue(state_max_iter) == "end"
         
-        print("✅ 条件边逻辑测试通过")
+        print("[OK] 条件边逻辑测试通过")
 
 
 def test_run_react_graph_helper():
@@ -113,7 +113,7 @@ def test_run_react_graph_helper():
     assert result is not None
     assert "answer" in result
     
-    print("✅ 便捷函数测试通过")
+    print("[OK] 便捷函数测试通过")
 
 
 if __name__ == "__main__":
@@ -146,10 +146,10 @@ if __name__ == "__main__":
         test_run_react_graph_helper()
         
         print("\n" + "=" * 60)
-        print("✅ 所有测试通过！")
+        print("[OK] 所有测试通过！")
         print("=" * 60)
         
     except Exception as e:
-        print(f"\n❌ 测试失败：{e}")
+        print(f"\n[ERROR] 测试失败：{e}")
         import traceback
         traceback.print_exc()

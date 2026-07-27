@@ -8,7 +8,7 @@ Phase 3.2: ApprovalEngine Core
 import json
 import logging
 from src.monitoring import track_approval_metric, track_approval_duration_metric
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 from datetime import datetime
 from src.modules.module_5_langgraph.state import create_initial_state
 from src.agents.approval_db_service import ApprovalDBService
@@ -35,7 +35,8 @@ class ApprovalEngine:
         feishu_client,
         approval_graph,
         auto_approval_threshold: int = 1000,
-        db_service: Optional[ApprovalDBService] = None
+        db_service: Optional[ApprovalDBService] = None,
+        reimbursement_service=None
     ):
         """
         初始化审批引擎
@@ -46,6 +47,7 @@ class ApprovalEngine:
             feishu_client: 飞书客户端实例
             approval_graph: LangGraph 审批工作流
             auto_approval_threshold: 自动审批阈值（元），默认1000
+            reimbursement_service: 报销服务实例（可选，用于发票模式）
         """
         self.llm = llm
         self.memory_service = memory_service
@@ -54,6 +56,10 @@ class ApprovalEngine:
         self.auto_approval_threshold = auto_approval_threshold
         self.db_service = db_service or ApprovalDBService()
 
+        # Phase 4: 集成新报销服务（延迟加载）
+        self._reimbursement_service = reimbursement_service
+        self._reimbursement_service_initialized = False
+
         # 审批单号计数器（简单实现，生产环境应使用数据库）
         self._approval_counter = 0
 
@@ -61,7 +67,9 @@ class ApprovalEngine:
         self,
         query: str,
         user_id: str,
-        conversation_id: str
+        conversation_id: str,
+        invoice_ids: Optional[List[str]] = None,
+        use_invoice_mode: bool = False
     ) -> str:
         """
         执行审批流程
@@ -70,13 +78,23 @@ class ApprovalEngine:
             query: 用户查询（报销申请）
             user_id: 用户ID
             conversation_id: 会话ID
+            invoice_ids: 发票ID列表（可选，用于发票模式）
+            use_invoice_mode: 是否使用发票模式（Phase 4新增）
 
         Returns:
             审批结果消息字符串
         """
-        logger.info(f"[ApprovalEngine] 处理审批请求: user_id={user_id}, query={query}")
+        logger.info(f"[ApprovalEngine] 处理审批请求: user_id={user_id}, query={query}, invoice_mode={use_invoice_mode}")
 
         try:
+            # Phase 4: 判断是否使用发票模式
+            if use_invoice_mode and invoice_ids:
+                logger.info(f"[ApprovalEngine] 使用发票模式，invoice_ids={invoice_ids}")
+                return self._execute_invoice_mode(query, user_id, conversation_id, invoice_ids)
+
+            # 传统模式（向后兼容）
+            logger.info(f"[ApprovalEngine] 使用传统文本模式")
+
             # 1. 提取申请信息
             approval_info = self._extract_application_info(query, user_id)
 
@@ -102,7 +120,7 @@ class ApprovalEngine:
         user_id: str
     ) -> Dict[str, Any]:
         """
-        从用户查询中提取申请信息
+        从用户查询中提取申请信息，并检测缺失字段
 
         Args:
             query: 用户查询
@@ -110,6 +128,9 @@ class ApprovalEngine:
 
         Returns:
             申请信息字典
+
+        Raises:
+            ValueError: 如果缺少必要信息，抛出带提醒的异常
         """
         logger.info(f"[ApprovalEngine] 提取申请信息: {query}")
 
@@ -122,9 +143,10 @@ class ApprovalEngine:
 - destination: 出差目的地（城市名）
 - days: 出差天数（整数）
 - estimated_amount: 报销金额（整数，单位：元）
+- purpose: 出差事由（简短描述）
 
 只返回JSON，不要其他内容。
-格式示例：{{"destination": "北京", "days": 3, "estimated_amount": 800}}
+格式示例：{{"destination": "北京", "days": 3, "estimated_amount": 800, "purpose": "客户拜访"}}
 """
 
         try:
@@ -148,11 +170,21 @@ class ApprovalEngine:
                 "destination": extracted.get("destination"),
                 "days": extracted.get("days"),
                 "estimated_amount": extracted.get("estimated_amount"),
+                "purpose": extracted.get("purpose"),
                 "query": query,
                 "submit_time": datetime.now().isoformat(),
             }
 
-            # 如果金额为空，尝试估算
+            # 检测缺失信息并生成智能提醒
+            missing_fields = self._check_missing_fields(approval_info)
+
+            if missing_fields:
+                # 生成友好的提醒消息
+                reminder = self._generate_missing_fields_reminder(missing_fields, approval_info)
+                logger.info(f"[ApprovalEngine] 检测到缺失字段: {missing_fields}")
+                raise ValueError(reminder)
+
+            # 如果金额为空但有目的地和天数，尝试估算
             if approval_info["estimated_amount"] is None:
                 logger.info("[ApprovalEngine] 金额未提供，尝试估算")
                 approval_info["estimated_amount"] = self._estimate_amount(
@@ -166,9 +198,116 @@ class ApprovalEngine:
         except json.JSONDecodeError as e:
             logger.error(f"[ApprovalEngine] JSON解析失败: {e}, content={content}")
             raise ValueError(f"无法解析申请信息: {e}")
+        except ValueError:
+            # 重新抛出缺失字段的提醒
+            raise
         except Exception as e:
             logger.error(f"[ApprovalEngine] 信息提取失败: {e}", exc_info=True)
             raise ValueError(f"申请信息提取失败: {e}")
+
+    def _check_missing_fields(self, approval_info: Dict[str, Any]) -> List[str]:
+        """
+        检查缺失的必要字段
+
+        Args:
+            approval_info: 申请信息字典
+
+        Returns:
+            缺失字段列表
+        """
+        missing = []
+
+        # 必填字段检查
+        if not approval_info.get("destination"):
+            missing.append("destination")
+
+        if not approval_info.get("days"):
+            missing.append("days")
+
+        if not approval_info.get("estimated_amount"):
+            missing.append("amount")
+
+        # 可选但建议填写的字段
+        if not approval_info.get("purpose"):
+            missing.append("purpose")
+
+        return missing
+
+    def _generate_missing_fields_reminder(
+        self,
+        missing_fields: List[str],
+        approval_info: Dict[str, Any]
+    ) -> str:
+        """
+        生成缺失字段的智能提醒消息
+
+        Args:
+            missing_fields: 缺失字段列表
+            approval_info: 已提取的部分信息
+
+        Returns:
+            友好的提醒消息
+        """
+        field_names = {
+            "destination": "出差目的地",
+            "days": "出差天数",
+            "amount": "报销金额",
+            "purpose": "出差事由"
+        }
+
+        # 构建已提取信息摘要
+        extracted_summary = []
+        if approval_info.get("destination"):
+            extracted_summary.append(f"目的地：{approval_info['destination']}")
+        if approval_info.get("days"):
+            extracted_summary.append(f"天数：{approval_info['days']}天")
+        if approval_info.get("estimated_amount"):
+            extracted_summary.append(f"金额：¥{approval_info['estimated_amount']}")
+        if approval_info.get("purpose"):
+            extracted_summary.append(f"事由：{approval_info['purpose']}")
+
+        # 构建缺失信息提醒
+        missing_list = [field_names[f] for f in missing_fields if f in field_names]
+
+        reminder_parts = []
+
+        if extracted_summary:
+            reminder_parts.append(
+                f"✅ 我已理解以下信息：\n" + "\n".join(f"  • {item}" for item in extracted_summary)
+            )
+
+        if missing_list:
+            reminder_parts.append(
+                f"\n⚠️ 还需要补充以下信息才能提交审批：\n" +
+                "\n".join(f"  • {item}" for item in missing_list)
+            )
+
+        # 生成智能提示
+        suggestions = []
+        if "destination" in missing_fields:
+            suggestions.append("• 请告诉我您出差的目的地城市")
+        if "days" in missing_fields:
+            suggestions.append("• 请告诉我出差几天")
+        if "amount" in missing_fields:
+            if approval_info.get("destination") and approval_info.get("days"):
+                # 可以估算金额
+                suggestions.append(
+                    f"• 请告诉我报销金额，或者我可以按照 {approval_info['destination']} "
+                    f"{approval_info['days']}天 的标准帮您估算"
+                )
+            else:
+                suggestions.append("• 请告诉我报销金额")
+        if "purpose" in missing_fields:
+            suggestions.append("• 建议补充出差事由（如：客户拜访、会议、培训等）")
+
+        if suggestions:
+            reminder_parts.append("\n💡 建议：\n" + "\n".join(suggestions))
+
+        reminder_parts.append(
+            "\n请补充完整信息后重新提交，或者说\"帮我估算金额\"。"
+        )
+
+        return "\n".join(reminder_parts)
 
     def _auto_approve(self, approval_info: Dict[str, Any]) -> Dict[str, Any]:
         """
@@ -562,4 +701,174 @@ class ApprovalEngine:
         except Exception as e:
             logger.error(f"[ApprovalEngine] 飞书通知失败: {e}")
 
+    def _execute_invoice_mode(
+        self,
+        query: str,
+        user_id: str,
+        conversation_id: str,
+        invoice_ids: List[str]
+    ) -> str:
+        """
+        执行发票模式的审批流程（Phase 4新增）
+
+        Args:
+            query: 用户查询（报销申请描述）
+            user_id: 用户ID
+            conversation_id: 会话ID
+            invoice_ids: 发票ID列表
+
+        Returns:
+            审批结果消息字符串
+        """
+        logger.info(f"[ApprovalEngine] 发票模式审批: invoice_ids={invoice_ids}")
+
+        try:
+            # 1. 延迟初始化 ReimbursementService
+            if not self._reimbursement_service_initialized:
+                self._lazy_init_reimbursement_service()
+
+            # 2. 从查询中提取出差信息
+            trip_info = self._extract_trip_info_from_query(query)
+
+            # 3. 创建报销申请
+            application_result = self._reimbursement_service.create_application(
+                user_id=user_id,
+                title=trip_info.get("title", f"{user_id}的报销申请"),
+                invoice_ids=invoice_ids,
+                trip_destination=trip_info.get("destination"),
+                trip_days=trip_info.get("days"),
+                trip_purpose=trip_info.get("purpose"),
+                remarks=trip_info.get("remarks")
+            )
+
+            if not application_result.get("success"):
+                error_msg = application_result.get("error", "创建报销申请失败")
+                logger.error(f"[ApprovalEngine] 创建申请失败: {error_msg}")
+                return f"报销申请创建失败: {error_msg}"
+
+            application_id = application_result["application_id"]
+            total_amount = application_result.get("total_amount", 0)
+
+            logger.info(f"[ApprovalEngine] 报销申请已创建: {application_id}, 金额: {total_amount}")
+
+            # 4. 提交审批（自动匹配审批链）
+            submit_result = self._reimbursement_service.submit_application(
+                application_id=application_id,
+                user_id=user_id,
+                department=trip_info.get("department", "未知部门")
+            )
+
+            if not submit_result.get("success"):
+                error_msg = submit_result.get("error", "提交审批失败")
+                logger.error(f"[ApprovalEngine] 提交审批失败: {error_msg}")
+                return f"提交审批失败: {error_msg}"
+
+            # 5. 构建返回消息
+            status = submit_result.get("status")
+            chain_config = submit_result.get("chain_config", {})
+            current_approver = submit_result.get("current_approver", {})
+
+            if status == "submitted":
+                message = (
+                    f"✅ 报销申请已提交\n\n"
+                    f"📋 申请单号: {application_id}\n"
+                    f"💰 报销总额: ¥{total_amount}\n"
+                    f"📝 审批链: {chain_config.get('rule_name', '未知')}\n"
+                    f"👤 当前审批人: {current_approver.get('approver_name', '待分配')}\n"
+                    f"⏰ 审批期限: {current_approver.get('deadline', '未知')}\n\n"
+                    f"请等待审批人处理。"
+                )
+            else:
+                message = f"报销申请状态: {status}"
+
+            # 6. 更新工作记忆（兼容旧逻辑）
+            approval_record = {
+                "approval_id": application_id,
+                "user_id": user_id,
+                "status": status,
+                "estimated_amount": total_amount,
+                "query": query,
+                "invoice_ids": invoice_ids,
+                "mode": "invoice",
+                "submit_time": datetime.now().isoformat()
+            }
+            working_memory = self.memory_service.working_memory_manager.get_or_create(user_id)
+            working_memory.add_approval(approval_record)
+
+            logger.info(f"[ApprovalEngine] 发票模式审批完成: {application_id}")
+            return message
+
+        except Exception as e:
+            logger.error(f"[ApprovalEngine] 发票模式审批失败: {e}", exc_info=True)
+            return f"发票模式审批失败: {str(e)}"
+
+    def _lazy_init_reimbursement_service(self):
+        """延迟初始化 ReimbursementService"""
+        if self._reimbursement_service is None:
+            logger.info("[ApprovalEngine] 延迟初始化 ReimbursementService")
+            try:
+                from src.reimbursement.reimbursement_service import ReimbursementService
+                self._reimbursement_service = ReimbursementService()
+                logger.info("[ApprovalEngine] ReimbursementService 初始化成功")
+            except Exception as e:
+                logger.error(f"[ApprovalEngine] ReimbursementService 初始化失败: {e}")
+                raise RuntimeError(f"ReimbursementService 初始化失败: {e}")
+
+        self._reimbursement_service_initialized = True
+
+    def _extract_trip_info_from_query(self, query: str) -> Dict[str, Any]:
+        """
+        从查询中提取出差信息
+
+        Args:
+            query: 用户查询
+
+        Returns:
+            出差信息字典
+        """
+        logger.info(f"[ApprovalEngine] 从查询提取出差信息: {query}")
+
+        extraction_prompt = f"""从以下报销申请中提取信息，返回JSON格式：
+
+用户申请：{query}
+
+请提取以下字段（如果没有则为null）：
+- title: 报销标题（简短描述）
+- destination: 出差目的地（城市名）
+- days: 出差天数（整数）
+- purpose: 出差事由
+- department: 所属部门
+- remarks: 备注
+
+只返回JSON，不要其他内容。
+格式示例：{{"title": "北京差旅报销", "destination": "北京", "days": 3, "purpose": "参加会议", "department": "技术部", "remarks": null}}
+"""
+
+        try:
+            response = self.llm.invoke(extraction_prompt)
+            content = response.content.strip()
+
+            # 移除可能的代码块标记
+            if content.startswith("```json"):
+                content = content[7:]
+            if content.startswith("```"):
+                content = content[3:]
+            if content.endswith("```"):
+                content = content[:-3]
+
+            trip_info = json.loads(content.strip())
+            logger.info(f"[ApprovalEngine] 出差信息提取成功: {trip_info}")
+            return trip_info
+
+        except Exception as e:
+            logger.error(f"[ApprovalEngine] 出差信息提取失败: {e}")
+            # 返回默认值
+            return {
+                "title": "报销申请",
+                "destination": None,
+                "days": None,
+                "purpose": query[:50],
+                "department": "未知部门",
+                "remarks": None
+            }
 

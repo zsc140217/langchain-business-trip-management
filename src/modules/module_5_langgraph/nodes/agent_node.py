@@ -108,7 +108,7 @@ def agent_node(state: TravelAgentState) -> Dict[str, Any]:
         # 提取tool_calls
         tool_calls = extract_tool_calls(response)
 
-        logger.info(f"✅ Agent决策完成：{'生成答案' if not tool_calls else f'{len(tool_calls)}个工具调用'}")
+        logger.info(f"[OK] Agent决策完成：{'生成答案' if not tool_calls else f'{len(tool_calls)}个工具调用'}")
 
         return {
             "messages": [response],
@@ -117,7 +117,7 @@ def agent_node(state: TravelAgentState) -> Dict[str, Any]:
         }
 
     except Exception as e:
-        logger.error(f"❌ Agent节点执行失败：{e}")
+        logger.error(f"[ERROR] Agent节点执行失败：{e}")
         # 降级处理：返回Mock响应
         mock_response = AIMessage(content=f"抱歉，我遇到了一些技术问题。基于已有信息回答您的问题：{state.get('query', '')}")
 

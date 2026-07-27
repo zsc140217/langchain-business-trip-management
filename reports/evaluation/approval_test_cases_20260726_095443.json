@@ -1,0 +1,373 @@
+{
+  "version": "1.0.0",
+  "description": "审批流程测试用例模板",
+  "auto_approval_threshold": 1000,
+  "test_cases": [
+    {
+      "test_id": "TC_001",
+      "category": "amount",
+      "description": "边界值: 0元",
+      "input": {
+        "destination": "北京",
+        "days": 3,
+        "estimated_amount": 0,
+        "purpose": "客户拜访"
+      },
+      "expected": {
+        "approval_path": "auto",
+        "status": "approved",
+        "validation": "pass"
+      }
+    },
+    {
+      "test_id": "TC_002",
+      "category": "amount",
+      "description": "自动审批: 500元",
+      "input": {
+        "destination": "北京",
+        "days": 3,
+        "estimated_amount": 500,
+        "purpose": "客户拜访"
+      },
+      "expected": {
+        "approval_path": "auto",
+        "status": "approved",
+        "validation": "pass"
+      }
+    },
+    {
+      "test_id": "TC_003",
+      "category": "amount",
+      "description": "边界值: 999元(阈值-1)",
+      "input": {
+        "destination": "北京",
+        "days": 3,
+        "estimated_amount": 999,
+        "purpose": "客户拜访"
+      },
+      "expected": {
+        "approval_path": "auto",
+        "status": "approved",
+        "validation": "pass"
+      }
+    },
+    {
+      "test_id": "TC_004",
+      "category": "amount",
+      "description": "边界值: 1000元(阈值)",
+      "input": {
+        "destination": "北京",
+        "days": 3,
+        "estimated_amount": 1000,
+        "purpose": "客户拜访"
+      },
+      "expected": {
+        "approval_path": "manual",
+        "status": "pending",
+        "validation": "pass"
+      }
+    },
+    {
+      "test_id": "TC_005",
+      "category": "amount",
+      "description": "边界值: 1001元(阈值+1)",
+      "input": {
+        "destination": "北京",
+        "days": 3,
+        "estimated_amount": 1001,
+        "purpose": "客户拜访"
+      },
+      "expected": {
+        "approval_path": "manual",
+        "status": "pending",
+        "validation": "pass"
+      }
+    },
+    {
+      "test_id": "TC_006",
+      "category": "amount",
+      "description": "人工审批: 5000元",
+      "input": {
+        "destination": "北京",
+        "days": 3,
+        "estimated_amount": 5000,
+        "purpose": "客户拜访"
+      },
+      "expected": {
+        "approval_path": "manual",
+        "status": "pending",
+        "validation": "pass"
+      }
+    },
+    {
+      "test_id": "TC_007",
+      "category": "amount",
+      "description": "人工审批: 10000元",
+      "input": {
+        "destination": "北京",
+        "days": 3,
+        "estimated_amount": 10000,
+        "purpose": "客户拜访"
+      },
+      "expected": {
+        "approval_path": "manual",
+        "status": "pending",
+        "validation": "pass"
+      }
+    },
+    {
+      "test_id": "TC_008",
+      "category": "missing_field",
+      "description": "缺失目的地",
+      "input": {
+        "days": 2,
+        "estimated_amount": 800,
+        "purpose": "会议"
+      },
+      "expected": {
+        "validation": "fail",
+        "missing_fields": [
+          "destination"
+        ],
+        "error_type": "missing_required_field"
+      }
+    },
+    {
+      "test_id": "TC_009",
+      "category": "missing_field",
+      "description": "缺失天数",
+      "input": {
+        "destination": "上海",
+        "estimated_amount": 800,
+        "purpose": "会议"
+      },
+      "expected": {
+        "validation": "fail",
+        "missing_fields": [
+          "days"
+        ],
+        "error_type": "missing_required_field"
+      }
+    },
+    {
+      "test_id": "TC_010",
+      "category": "missing_field",
+      "description": "缺失金额",
+      "input": {
+        "destination": "上海",
+        "days": 2,
+        "purpose": "会议"
+      },
+      "expected": {
+        "validation": "fail",
+        "missing_fields": [
+          "estimated_amount"
+        ],
+        "error_type": "missing_required_field"
+      }
+    },
+    {
+      "test_id": "TC_011",
+      "category": "missing_field",
+      "description": "缺失事由（可选）",
+      "input": {
+        "destination": "上海",
+        "days": 2,
+        "estimated_amount": 800
+      },
+      "expected": {
+        "validation": "fail",
+        "missing_fields": [
+          "purpose"
+        ],
+        "error_type": "missing_required_field"
+      }
+    },
+    {
+      "test_id": "TC_012",
+      "category": "missing_field",
+      "description": "缺失目的地和天数",
+      "input": {
+        "estimated_amount": 800,
+        "purpose": "会议"
+      },
+      "expected": {
+        "validation": "fail",
+        "missing_fields": [
+          "destination",
+          "days"
+        ],
+        "error_type": "missing_required_field"
+      }
+    },
+    {
+      "test_id": "TC_013",
+      "category": "missing_field",
+      "description": "缺失所有必填字段",
+      "input": {
+        "purpose": "会议"
+      },
+      "expected": {
+        "validation": "fail",
+        "missing_fields": [
+          "destination",
+          "days",
+          "estimated_amount"
+        ],
+        "error_type": "missing_required_field"
+      }
+    },
+    {
+      "test_id": "TC_014",
+      "category": "boundary",
+      "description": "最小天数: 1天",
+      "input": {
+        "destination": "杭州",
+        "days": 1,
+        "estimated_amount": 800,
+        "purpose": "培训"
+      },
+      "expected": {
+        "validation": "pass",
+        "approval_path": "auto"
+      }
+    },
+    {
+      "test_id": "TC_015",
+      "category": "boundary",
+      "description": "正常天数: 30天",
+      "input": {
+        "destination": "杭州",
+        "days": 30,
+        "estimated_amount": 800,
+        "purpose": "培训"
+      },
+      "expected": {
+        "validation": "pass",
+        "approval_path": "auto"
+      }
+    },
+    {
+      "test_id": "TC_016",
+      "category": "boundary",
+      "description": "异常天数: 0天（无效）",
+      "input": {
+        "destination": "杭州",
+        "days": 0,
+        "estimated_amount": 800,
+        "purpose": "培训"
+      },
+      "expected": {
+        "validation": "fail",
+        "approval_path": null
+      }
+    },
+    {
+      "test_id": "TC_017",
+      "category": "boundary",
+      "description": "异常天数: -1天（无效）",
+      "input": {
+        "destination": "杭州",
+        "days": -1,
+        "estimated_amount": 800,
+        "purpose": "培训"
+      },
+      "expected": {
+        "validation": "fail",
+        "approval_path": null
+      }
+    },
+    {
+      "test_id": "TC_018",
+      "category": "boundary",
+      "description": "异常金额: 负数（无效）",
+      "input": {
+        "destination": "杭州",
+        "days": 3,
+        "estimated_amount": -100,
+        "purpose": "培训"
+      },
+      "expected": {
+        "validation": "fail",
+        "approval_path": null
+      }
+    },
+    {
+      "test_id": "TC_019",
+      "category": "boundary",
+      "description": "超大金额: 999999元",
+      "input": {
+        "destination": "杭州",
+        "days": 3,
+        "estimated_amount": 999999,
+        "purpose": "培训"
+      },
+      "expected": {
+        "validation": "pass",
+        "approval_path": "manual"
+      }
+    },
+    {
+      "test_id": "TC_020",
+      "category": "boundary",
+      "description": "空目的地（无效）",
+      "input": {
+        "destination": "",
+        "days": 3,
+        "estimated_amount": 800,
+        "purpose": "培训"
+      },
+      "expected": {
+        "validation": "fail",
+        "approval_path": null
+      }
+    },
+    {
+      "test_id": "TC_021",
+      "category": "boundary",
+      "description": "超长目的地: 100字符",
+      "input": {
+        "destination": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "days": 3,
+        "estimated_amount": 800,
+        "purpose": "培训"
+      },
+      "expected": {
+        "validation": "pass",
+        "approval_path": "auto"
+      }
+    },
+    {
+      "test_id": "TC_022",
+      "category": "approval_path",
+      "description": "自动审批路径: 金额<阈值",
+      "input": {
+        "destination": "成都",
+        "days": 2,
+        "estimated_amount": 600,
+        "purpose": "客户拜访"
+      },
+      "expected": {
+        "approval_path": "auto",
+        "status": "approved",
+        "validation": "pass"
+      }
+    },
+    {
+      "test_id": "TC_023",
+      "category": "approval_path",
+      "description": "人工审批路径: 金额>=阈值",
+      "input": {
+        "destination": "深圳",
+        "days": 5,
+        "estimated_amount": 3000,
+        "purpose": "项目实施"
+      },
+      "expected": {
+        "approval_path": "manual",
+        "status": "pending",
+        "validation": "pass"
+      }
+    }
+  ]
+}

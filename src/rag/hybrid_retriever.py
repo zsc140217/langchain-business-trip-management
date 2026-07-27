@@ -436,9 +436,9 @@ if __name__ == "__main__":
 
             print(f"\n{'-'*60}\n")
 
-        print("✅ 混合检索器测试完成！")
+        print("[OK] 混合检索器测试完成！")
 
     except Exception as e:
-        print(f"❌ 测试失败：{e}")
+        print(f"[ERROR] 测试失败：{e}")
         import traceback
         traceback.print_exc()

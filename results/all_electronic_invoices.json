@@ -1,0 +1,75 @@
+[
+  {
+    "invoice_code": "24512000000202537619",
+    "invoice_number": "24512000000202537619",
+    "date": "2024-09-25",
+    "amount": 113855.15,
+    "tax": 14801.17,
+    "tax_rate": 0.13,
+    "total": 128656.32,
+    "seller_name": "四川川海工程管理咨询有限公司",
+    "seller_tax_id": "91511002572793472P",
+    "buyer_name": "内江市天润商贸有限公司",
+    "confidence": 1.0,
+    "warnings": [],
+    "need_review": false,
+    "model": "qianfan-ocr",
+    "enable_thinking": true
+  },
+  {
+    "invoice_code": "25502000000008817662",
+    "invoice_number": "25502000000008817662",
+    "date": "2025-01-21",
+    "amount": 2566198.39,
+    "tax": 333605.79,
+    "tax_rate": 0.13,
+    "total": 2899804.18,
+    "seller_name": "重庆东输石油有限公司",
+    "seller_tax_id": "91500152MA7KBGLD1Y",
+    "buyer_name": "四川川海工程管理咨询有限公司",
+    "confidence": 1.0,
+    "warnings": [],
+    "need_review": false,
+    "model": "qianfan-ocr",
+    "enable_thinking": true
+  },
+  {
+    "invoice_code": "26512000002169470581",
+    "invoice_number": "26512000002169470581",
+    "date": "2026-05-25",
+    "amount": 600.0,
+    "tax": 0.0,
+    "tax_rate": 0.0,
+    "total": 600.0,
+    "seller_name": "刘亚莉",
+    "seller_tax_id": "511028197209170043",
+    "buyer_name": "国家税务总局威远县税务局",
+    "confidence": 0.865,
+    "warnings": [
+      "非标准税率: 0.0% (标准税率: 3%, 6%, 9%, 13%, 17%)",
+      "缺失字段: tax"
+    ],
+    "need_review": false,
+    "model": "qianfan-ocr",
+    "enable_thinking": true
+  },
+  {
+    "invoice_code": "26512000002252004931",
+    "invoice_number": "26512000002252004931",
+    "date": "2026-05-29",
+    "amount": 118.81,
+    "tax": 1.19,
+    "tax_rate": 0.01,
+    "total": 120.0,
+    "seller_name": "内江市民江药房",
+    "seller_tax_id": "91511011MA64XJHW3F",
+    "buyer_name": "刘亚莉",
+    "confidence": 0.93,
+    "warnings": [
+      "非标准税率: 1.0% (标准税率: 3%, 6%, 9%, 13%, 17%)"
+    ],
+    "need_review": false,
+    "model": "qianfan-ocr",
+    "enable_thinking": true
+  }
+]

@@ -1,0 +1,173 @@
+C:\Users\Lenovo\AppData\Local\Programs\Python\Python312\Lib\site-packages\lark_oapi\ws\pb\google\__init__.py:2: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  __import__('pkg_resources').declare_namespace(__name__)
+INFO:     Started server process [27144]
+INFO:     Waiting for application startup.
+2026-07-17 16:05:06 - src.api.unified_api - INFO - ================================================================================
+2026-07-17 16:05:06 - src.api.unified_api - INFO - [ROCKET] 统一RAG-Agent架构 v2.0 启动中...
+2026-07-17 16:05:06 - src.api.unified_api - INFO - ================================================================================
+2026-07-17 16:05:06 - src.modules.module_7_production.langsmith_config - INFO - LangSmith tracing enabled for project: business-trip-management
+2026-07-17 16:05:06 - src.api.unified_api - INFO - LangSmith tracing: True
+2026-07-17 16:05:06 - src.api.unified_api - INFO - [ROBOT] 初始化LLM...
+2026-07-17 16:05:06 - langchain_openai.chat_models._client_utils - INFO - langchain-openai detected system proxy configuration and no explicit `http_socket_options` / `http_client` / `http_async_client` / `openai_proxy`; skipping the custom `httpx` transport so httpx's env-proxy auto-detection applies. Pass `http_socket_options=[...]` to opt back into kernel-level TCP keepalive tuning on top of the env proxy.
+2026-07-17 16:05:08 - src.api.unified_api - INFO - [PHONE] 初始化飞书客户端...
+2026-07-17 16:05:08 - src.api.unified_api - INFO - [OK] 飞书客户端初始化成功
+2026-07-17 16:05:08 - src.api.unified_api - INFO - [BRAIN] 初始化记忆服务...
+2026-07-17 16:05:08 - src.api.unified_api - INFO - [OK] 记忆服务初始化成功
+2026-07-17 16:05:08 - src.api.unified_api - INFO - [BOOKS] 加载预生成的向量存储...
+2026-07-17 16:05:09 - faiss.loader - INFO - Loading faiss with AVX2 support.
+2026-07-17 16:05:09 - faiss.loader - INFO - Successfully loaded faiss with AVX2 support.
+2026-07-17 16:05:09 - src.api.unified_api - INFO - [OK] 向量存储加载成功（从缓存）
+2026-07-17 16:05:09 - src.api.unified_api - INFO - [TOOL] 注册工具...
+2026-07-17 16:05:09 - src.tools.registry - INFO - [ToolRegistry] 创建工具注册表单例
+2026-07-17 16:05:09 - src.tools.registry - INFO - [ToolRegistry] 开始初始化所有工具
+2026-07-17 16:05:09 - src.tools.registry - INFO - [ToolRegistry] 注册工具: search_policy
+2026-07-17 16:05:09 - src.tools.registry - INFO - [ToolRegistry] 注册工具: query_graph
+2026-07-17 16:05:09 - src.tools.registry - INFO - [ToolRegistry] 注册工具: query_weather
+2026-07-17 16:05:09 - src.tools.registry - INFO - [ToolRegistry] 注册工具: search_hotels
+2026-07-17 16:05:09 - src.tools.registry - INFO - [ToolRegistry] 注册工具: search_flights
+2026-07-17 16:05:09 - src.tools.registry - INFO - [ToolRegistry] 注册工具: check_approval_status
+2026-07-17 16:05:09 - src.tools.registry - INFO - [ToolRegistry] 注册工具: cancel_approval
+2026-07-17 16:05:09 - src.tools.registry - INFO - [ToolRegistry] 注册工具: query_memory
+2026-07-17 16:05:09 - src.tools.registry - INFO - [ToolRegistry] 工具初始化完成，共 8 个工具
+2026-07-17 16:05:09 - src.api.unified_api - INFO - [OK] 工具注册完成，共 8 个工具
+2026-07-17 16:05:09 - src.api.unified_api - INFO -    - search_policy
+2026-07-17 16:05:09 - src.api.unified_api - INFO -    - query_graph
+2026-07-17 16:05:09 - src.api.unified_api - INFO -    - query_weather
+2026-07-17 16:05:09 - src.api.unified_api - INFO -    - search_hotels
+2026-07-17 16:05:09 - src.api.unified_api - INFO -    - search_flights
+2026-07-17 16:05:09 - src.api.unified_api - INFO -    - check_approval_status
+2026-07-17 16:05:09 - src.api.unified_api - INFO -    - cancel_approval
+2026-07-17 16:05:09 - src.api.unified_api - INFO -    - query_memory
+2026-07-17 16:05:09 - src.api.unified_api - INFO - [CHART] 创建审批工作流...
+2026-07-17 16:05:09 - src.api.unified_api - INFO - [OK] 审批工作流创建成功
+2026-07-17 16:05:09 - src.api.unified_api - INFO - [BALANCE]  初始化审批引擎...
+2026-07-17 16:05:09 - src.api.unified_api - INFO - [OK] 审批引擎初始化成功（飞书通知已启用）
+2026-07-17 16:05:09 - src.api.unified_api - INFO - [LINK] 启动飞书长连接客户端...
+2026-07-17 16:05:09 - src.harness.feishu_ws_client - INFO - [FeishuWS] 初始化飞书长连接客户端
+2026-07-17 16:05:09 - src.api.unified_api - INFO - [OK] 飞书长连接客户端已在后台启动
+2026-07-17 16:05:09 - src.harness.feishu_ws_client - INFO - [FeishuWS] 创建事件处理器（长连接模式使用空字符串作为 token 和 encrypt_key）
+2026-07-17 16:05:09 - src.api.unified_api - INFO -    - 审批回调功能已启用
+2026-07-17 16:05:09 - src.harness.feishu_ws_client - INFO - [FeishuWS] 事件处理器创建完成，已注册 card_action_trigger 回调
+2026-07-17 16:05:09 - src.api.unified_api - INFO - [TARGET] 初始化OrchestratorAgent...
+2026-07-17 16:05:09 - src.api.unified_api - INFO - [OK] OrchestratorAgent初始化成功
+2026-07-17 16:05:09 - src.api.unified_api - INFO - ================================================================================
+2026-07-17 16:05:09 - src.api.unified_api - INFO - [OK] 统一RAG-Agent架构 v2.0 启动完成！
+2026-07-17 16:05:09 - src.api.unified_api - INFO - ================================================================================
+2026-07-17 16:05:09 - src.api.unified_api - INFO - [PIN] 服务地址: http://0.0.0.0:8001
+2026-07-17 16:05:09 - src.api.unified_api - INFO - [BOOK] API文档: http://0.0.0.0:8001/docs
+2026-07-17 16:05:09 - src.api.unified_api - INFO - [HOSPITAL] 健康检查: http://0.0.0.0:8001/health
+2026-07-17 16:05:09 - src.api.unified_api - INFO - ================================================================================
+2026-07-17 16:05:09 - src.harness.feishu_ws_client - INFO - [FeishuWS] 启动长连接，等待回调...
+ 向量存储已加载E:\Desktop\langchain-business-trip-management\src\data\vectorstore
+ 创建检索器Top-K=3
+[Lark] [2026-07-17 16:05:09,645] [ERROR] connect failed, err: This event loop is already running
+2026-07-17 16:05:09 - Lark - ERROR - connect failed, err: This event loop is already running
+2026-07-17 16:05:09 - src.harness.feishu_ws_client - ERROR - [FeishuWS] 启动失败: This event loop is already running
+Traceback (most recent call last):
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python312\Lib\site-packages\lark_oapi\ws\client.py", line 166, in start
+    loop.run_until_complete(self._connect())
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 663, in run_until_complete
+    self._check_running()
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 622, in _check_running
+    raise RuntimeError('This event loop is already running')
+RuntimeError: This event loop is already running
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\Desktop\langchain-business-trip-management\src\harness\feishu_ws_client.py", line 90, in start
+    self.ws_client.start()
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python312\Lib\site-packages\lark_oapi\ws\client.py", line 172, in start
+    loop.run_until_complete(self._disconnect())
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 663, in run_until_complete
+    self._check_running()
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 622, in _check_running
+    raise RuntimeError('This event loop is already running')
+RuntimeError: This event loop is already running
+2026-07-17 16:05:09 - src.api.unified_api - ERROR - [ERROR] 飞书长连接客户端启动失败: This event loop is already running
+Traceback (most recent call last):
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python312\Lib\site-packages\lark_oapi\ws\client.py", line 166, in start
+    loop.run_until_complete(self._connect())
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 663, in run_until_complete
+    self._check_running()
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 622, in _check_running
+    raise RuntimeError('This event loop is already running')
+RuntimeError: This event loop is already running
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\Desktop\langchain-business-trip-management\src\api\unified_api.py", line 286, in start_ws_client
+    ws_client.start()
+  File "E:\Desktop\langchain-business-trip-management\src\harness\feishu_ws_client.py", line 90, in start
+    self.ws_client.start()
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python312\Lib\site-packages\lark_oapi\ws\client.py", line 172, in start
+    loop.run_until_complete(self._disconnect())
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 663, in run_until_complete
+    self._check_running()
+  File "C:\Users\Lenovo\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 622, in _check_running
+    raise RuntimeError('This event loop is already running')
+RuntimeError: This event loop is already running
+E:\Desktop\langchain-business-trip-management\src\api\unified_api.py:288: RuntimeWarning: coroutine 'Client._disconnect' was never awaited
+  logger.error(f"[ERROR] 飞书长连接客户端启动失败: {e}", exc_info=True)
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+E:\Desktop\langchain-business-trip-management\src\api\unified_api.py:288: RuntimeWarning: coroutine 'Client._connect' was never awaited
+  logger.error(f"[ERROR] 飞书长连接客户端启动失败: {e}", exc_info=True)
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+2026-07-17 16:05:10 - httpx - INFO - HTTP Request: POST https://open.feishu.cn/open-apis/bot/v2/hook/557e5b9b-e431-486f-a26c-2b0509b73437 "HTTP/1.1 200 OK"
+2026-07-17 16:05:10 - src.api.unified_api - INFO - [OK] 飞书启动通知已发送
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:55435 - "GET /health HTTP/1.1" 200 OK
+2026-07-17 16:06:15 - src.api.unified_api - INFO - [API] 收到请求: user_id=test_user, query=北京的酒店
+2026-07-17 16:06:15 - src.agents.orchestrator_agent - INFO - [OrchestratorAgent] 收到查询: 北京的酒店
+2026-07-17 16:06:15 - src.agents.orchestrator_agent - INFO - [OrchestratorAgent] 加载上下文，长度 0 字符
+2026-07-17 16:06:15 - src.agents.orchestrator_agent - INFO - [OrchestratorAgent] 命中快路径: hotel
+C:\Users\Lenovo\AppData\Local\Programs\Python\Python312\Lib\importlib\__init__.py:90: RuntimeWarning: coroutine 'ExpiringCache._start_clear_cron' was never awaited
+  return _bootstrap._gcd_import(name[level:], package, level)
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+2026-07-17 16:06:15 - asyncio - ERROR - Task was destroyed but it is pending!
+task: <Task cancelling name='Task-3' coro=<ExpiringCache._start_clear_cron() running at C:\Users\Lenovo\AppData\Local\Programs\Python\Python312\Lib\site-packages\lark_oapi\core\cache\expiring_cache.py:44>>
+[07/17/26 16:06:16] ERROR    flyai CLI not found. Please    fliggy_client.py:50
+                             install: npm install -g                           
+                             @clawhub/cli && clawhub                           
+                             install flyai                                     
+2026-07-17 16:06:16 - src.tools.base_tool - INFO - search_hotels executed in 1202.09ms
+2026-07-17 16:06:16 - src.agents.orchestrator_agent - INFO - [OrchestratorAgent] 快路径完成，耗时 1.20s
+2026-07-17 16:06:16 - src.api.unified_api - INFO - [API] 响应完成: route=fast_path
+INFO:     127.0.0.1:55269 - "POST /api/unified/chat HTTP/1.1" 200 OK
+2026-07-17 16:07:30 - src.api.unified_api - INFO - [API] 收到请求: user_id=test_user, query=我去北京3天花了800
+2026-07-17 16:07:30 - src.agents.orchestrator_agent - INFO - [OrchestratorAgent] 收到查询: 我去北京3天花了800
+2026-07-17 16:07:30 - src.agents.orchestrator_agent - INFO - [OrchestratorAgent] 加载上下文，长度 0 字符
+2026-07-17 16:07:30 - src.agents.orchestrator_agent - INFO - [OrchestratorAgent] 路由到 Q&A 域
+2026-07-17 16:07:30 - src.agents.orchestrator_agent - INFO - [OrchestratorAgent] QAEngine 延迟初始化完成
+2026-07-17 16:07:30 - src.agents.qa_engine - INFO - [QAEngine] 开始执行: 我去北京3天花了800
+2026-07-17 16:07:38 - httpx - INFO - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-17 16:07:38 - src.agents.qa_engine - INFO - [QAEngine] 路由决策: simple - 用户陈述了出差天数和花费金额，隐含意图是查询该花费是否符合企业的差旅报销政策或标准，属于单一意图，可通过查询差旅政策工具解答。
+2026-07-17 16:07:38 - src.agents.qa_engine - INFO - [QAEngine] 调用工具: search_policy
+2026-07-17 16:07:38 - src.tools.search_policy_tool - INFO - [SearchPolicyTool] 延迟初始化检索器
+2026-07-17 16:07:38 - src.tools.search_policy_tool - INFO - [SearchPolicyTool] 加载文档: 78个
+2026-07-17 16:07:43 - src.tools.search_policy_tool - INFO - [SearchPolicyTool] 检索器初始化完成（Vector-only）
+2026-07-17 16:07:43 - src.tools.search_policy_tool - INFO - [SearchPolicyTool] 延迟初始化 LLM
+2026-07-17 16:07:43 - src.tools.search_policy_tool - INFO - [SearchPolicyTool] LLM 初始化完成
+2026-07-17 16:07:43 - src.tools.search_policy_tool - INFO - [SearchPolicyTool] 查询: 我去北京3天花了800
+2026-07-17 16:07:44 - src.tools.search_policy_tool - INFO - [SearchPolicyTool] 检索到 5 个相关文档
+2026-07-17 16:07:44 - src.tools.search_policy_tool - INFO - [SearchPolicyTool] 调用 LLM 生成回答
+2026-07-17 16:08:03 - httpx - INFO - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-17 16:08:03 - src.tools.search_policy_tool - INFO - [SearchPolicyTool] LLM 回答长度: 341 字符
+2026-07-17 16:08:03 - src.tools.base_tool - INFO - search_policy executed in 24962.92ms
+2026-07-17 16:08:20 - httpx - INFO - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-17 16:08:20 - src.agents.orchestrator_agent - WARNING - [OrchestratorAgent] 记忆更新失败: MemoryService.process_user_message() got an unexpected keyword argument 'message'
+2026-07-17 16:08:20 - src.agents.orchestrator_agent - INFO - [OrchestratorAgent] 完成，耗时 49.91s
+2026-07-17 16:08:20 - src.api.unified_api - INFO - [API] 响应完成: route=fast_path
+加载目录: data\knowledge_base
+   原始文档数量：4
+   使用Markdown优化切分策略
+   切分后文档数量：78
+   平均块大小：320 字符
+ 创建向量存储 (embedding_type=cloud)...
+   使用DashScope API: text-embedding-v2
+   文档数量: 78
+ 向量存储创建成功
+ 创建检索器Top-K=5
+INFO:     127.0.0.1:54819 - "POST /api/unified/chat HTTP/1.1" 200 OK

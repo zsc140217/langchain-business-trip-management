@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 图谱查询工具 - 封装 GraphRAG 检索能力
 
@@ -48,9 +49,10 @@ class QueryGraphTool(BaseTool):
         # 使用私有属性避免 Pydantic 验证
         self._graph_retriever = graph_retriever
         self._initialized = False
+        self._neo4j_available = False  # 标记Neo4j是否可用
 
     def _lazy_init(self):
-        """延迟初始化图谱检索器"""
+        """延迟初始化图谱检索器（带降级处理）"""
         if self._initialized:
             return
 
@@ -59,15 +61,19 @@ class QueryGraphTool(BaseTool):
             try:
                 from src.rag.graph_retriever import GraphRetriever
 
-                # 创建图谱检索器（带降级方案）
+                # 尝试创建图谱检索器
                 self._graph_retriever = GraphRetriever(
                     fallback_retriever=None  # 图谱专用工具，不需要降级
                 )
-                logger.info("[QueryGraphTool] 图谱检索器初始化完成")
+                self._neo4j_available = True
+                logger.info("[QueryGraphTool] 图谱检索器初始化完成，Neo4j 可用")
 
             except Exception as e:
-                logger.error(f"[QueryGraphTool] 图谱检索器初始化失败: {e}")
-                raise RuntimeError(f"图谱检索器初始化失败: {e}")
+                # Neo4j 连接失败，记录警告但不抛出异常
+                logger.warning(f"[QueryGraphTool] Neo4j 不可用: {e}")
+                self._neo4j_available = False
+                self._graph_retriever = None
+                # 不抛出异常，允许工具初始化成功
 
         self._initialized = True
 
@@ -89,6 +95,15 @@ class QueryGraphTool(BaseTool):
             raise ValueError("查询不能为空")
 
         logger.info(f"[QueryGraphTool] 查询: {query}")
+
+        # 检查 Neo4j 是否可用
+        if not self._neo4j_available or self._graph_retriever is None:
+            return (
+                "图谱查询服务暂时不可用（Neo4j 未连接）。\n"
+                "该查询需要知识图谱支持，请：\n"
+                "1. 启动 Neo4j 服务（docker-compose up neo4j -d）\n"
+                "2. 或使用其他查询方式（如政策文档检索）"
+            )
 
         try:
             # 使用图谱检索器查询
@@ -132,17 +147,17 @@ class QueryGraphTool(BaseTool):
             return result
 
         except Exception as e:
-            logger.error(f"[QueryGraphTool] 图谱查询失败: {e}")
+            logger.error(f"[QueryGraphTool] 图谱查询失败: {e}", exc_info=True)
 
             # 友好的错误提示
             if "Neo4j" in str(e) or "connection" in str(e).lower():
                 return (
-                    f"图谱查询暂时不可用（Neo4j 连接失败）。\n"
-                    f"请检查 Neo4j 服务是否启动。\n"
-                    f"错误详情: {e}"
+                    f"图谱查询失败（Neo4j 连接错误）。\n"
+                    f"请确认 Neo4j 服务运行正常。\n"
+                    f"错误详情: {str(e)[:200]}"
                 )
             else:
-                raise RuntimeError(f"图谱查询失败: {e}")
+                return f"图谱查询执行失败: {str(e)[:200]}"
 
     def close(self):
         """关闭图谱连接"""

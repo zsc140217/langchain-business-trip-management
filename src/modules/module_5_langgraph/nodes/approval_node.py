@@ -41,7 +41,7 @@ def approval_node(state: TravelAgentState) -> Dict[str, Any]:
     approved = decision in ["approve", "approved", "yes", True]
 
     status = "approved" if approved else "rejected"
-    logger.info(f"{'✅' if approved else '❌'} 审批结果：{status}")
+    logger.info(f"{'[OK]' if approved else '[ERROR]'} 审批结果：{status}")
 
     return {
         "approval_status": status

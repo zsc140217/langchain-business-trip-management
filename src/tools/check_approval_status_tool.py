@@ -125,15 +125,9 @@ class CheckApprovalStatusTool(BaseTool):
             审批状态字典，如果不存在返回 None
         """
         # 从工作记忆中获取审批状态
-        # 工作记忆格式：{"approval_id": {...}}
-        working_memory = self._memory_service.working_memory.get_context(user_id)
-
-        # 查找审批记录
-        approvals = working_memory.get("approvals", {})
-        if approval_id in approvals:
-            return approvals[approval_id]
-
-        return None
+        working_memory = self._memory_service.working_memory_manager.get_or_create(user_id)
+        approval = working_memory.get_approval(approval_id)
+        return approval
 
     def _get_all_approvals(self, user_id: str) -> Dict[str, Any]:
         """
@@ -146,9 +140,8 @@ class CheckApprovalStatusTool(BaseTool):
             审批状态字典 {approval_id: {...}}
         """
         # 从工作记忆中获取所有审批记录
-        working_memory = self._memory_service.working_memory.get_context(user_id)
-        approvals = working_memory.get("approvals", {})
-
+        working_memory = self._memory_service.working_memory_manager.get_or_create(user_id)
+        approvals = working_memory.get_all_approvals()
         return approvals
 
     def _format_status(self, status: Dict[str, Any]) -> str:
@@ -190,8 +183,8 @@ class CheckApprovalStatusTool(BaseTool):
         """
         status_map = {
             "pending": "⏳ 待审批",
-            "approved": "✅ 已通过",
-            "rejected": "❌ 已拒绝",
+            "approved": "[OK] 已通过",
+            "rejected": "[ERROR] 已拒绝",
             "cancelled": "🚫 已取消",
         }
 
