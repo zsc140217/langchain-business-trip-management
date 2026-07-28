@@ -191,7 +191,10 @@ def main():
     """主测试流程"""
 
     # API Key
-    API_KEY = "bce-v3/ALTAK-bb5n0uwwEtylRfFVWBnrz/ac8b75364bcb7016af82a0789335a0c8d4ce594e"
+    API_KEY = os.getenv("QIANFAN_API_KEY")
+    if not API_KEY:
+        print("错误: 请设置 QIANFAN_API_KEY 环境变量")
+        return
 
     # 路径配置
     train_json_path = project_root / "train_data" / "zzsfp" / "train.json"
