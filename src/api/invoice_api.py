@@ -35,7 +35,7 @@ def get_recognizer() -> DualEngineInvoiceRecognizer:
     if _recognizer_instance is None:
         api_key = os.getenv(
             "QIANFAN_API_KEY",
-            "bce-v3/ALTAK-bb5n0uwwEtylRfFVWBnrz/ac8b75364bcb7016af82a0789335a0c8d4ce594e"
+            "REPLACE_WITH_ENV_VAR"
         )
         _recognizer_instance = DualEngineInvoiceRecognizer(
             api_key=api_key,
