@@ -20,6 +20,8 @@ import sys
 from pathlib import Path
 from pydantic import BaseModel
 
+from src.monitoring.prometheus_exporter import setup_metrics_endpoint, PrometheusMiddleware
+
 # 添加项目根目录和 src 目录到 sys.path（修复导入路径）
 _PROJECT_ROOT = str(Path(__file__).resolve().parent.parent.parent)
 _SRC_DIR = str(Path(__file__).resolve().parent.parent)
@@ -119,6 +121,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Prometheus监控中间件与/metrics端点
+app.add_middleware(PrometheusMiddleware)
+setup_metrics_endpoint(app)
 
 
 # 根路径重定向到文档
@@ -350,7 +356,7 @@ def main():
     print(f"[PIN] 服务地址: http://{host}:{port}")
     print(f"[BOOK] API文档: http://{host}:{port}/docs")
     print(f"[HOSPITAL] 健康检查: http://{host}:{port}/health")
-    print(f"📦 模块列表: http://{host}:{port}/modules")
+    print(f"[BOX] 模块列表: http://{host}:{port}/modules")
     print("=" * 80)
     print("\n[新功能] 已部署的模块:")
     print("  1. Simple RAG       → /simple-rag/playground")

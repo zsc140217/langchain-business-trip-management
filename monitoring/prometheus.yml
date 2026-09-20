@@ -27,7 +27,7 @@ scrape_configs:
   # 监控FastAPI应用
   - job_name: 'travel-agent-api'
     static_configs:
-      - targets: ['host.docker.internal:8000']
+      - targets: ['host.docker.internal:8001']
         labels:
           service: 'travel-agent'
           app: 'api'

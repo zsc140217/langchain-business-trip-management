@@ -110,7 +110,9 @@ async def upload_invoice(
 
     - 支持格式：JPG, PNG, PDF
     - 文件大小：< 10MB
-    - 返回：发票识别结果
+    - 返回：发票识别结果（不包含验真）
+
+    修改记录 (2026-07-28): 移除发票验真步骤，直接返回OCR识别结果
     """
     try:
         # 验证文件类型
@@ -142,55 +144,7 @@ async def upload_invoice(
             pass
 
         if result.get('success'):
-            # OCR识别成功后，自动调用发票验真
-            invoice_data = result.get('invoice_data', {})
-            verification_result = None
-
-            # 提取必要的验证参数
-            invoice_number = invoice_data.get('invoice_number') or invoice_data.get('InvoiceNum')
-            invoice_date = invoice_data.get('invoice_date') or invoice_data.get('InvoiceDate')
-            invoice_code = invoice_data.get('invoice_code') or invoice_data.get('InvoiceCode')
-            invoice_sum = invoice_data.get('total') or invoice_data.get('TotalAmount')
-            verify_code = invoice_data.get('check_code') or invoice_data.get('CheckCode')
-
-            # 如果有必填字段，则调用验证服务
-            if invoice_number and invoice_date:
-                try:
-                    verification_service = get_verification_service()
-                    verification_result = verification_service.verify_invoice(
-                        invoice_number=invoice_number,
-                        invoice_date=invoice_date,
-                        invoice_code=invoice_code,
-                        invoice_sum=float(invoice_sum) if invoice_sum else None,
-                        verify_code=verify_code
-                    )
-
-                    logger.info(
-                        f"[API] 发票验真完成: "
-                        f"号码={invoice_number}, "
-                        f"状态={verification_result.get('status')}"
-                    )
-                except Exception as e:
-                    logger.error(f"[API] 发票验真失败: {e}", exc_info=True)
-                    verification_result = {
-                        "success": False,
-                        "status": "error",
-                        "message": f"验真服务异常: {str(e)}"
-                    }
-            else:
-                logger.warning(
-                    f"[API] OCR未识别到必要字段，跳过验真: "
-                    f"invoice_number={invoice_number}, invoice_date={invoice_date}"
-                )
-                verification_result = {
-                    "success": False,
-                    "status": "skipped",
-                    "message": "OCR未识别到发票号码或日期，无法验真"
-                }
-
-            # 将验真结果添加到响应中
-            result['verification'] = verification_result
-
+            # 直接返回识别结果，不进行验真
             return InvoiceRecognitionResponse(
                 success=True,
                 invoice_id=result.get('invoice_id'),

@@ -40,75 +40,8 @@ export default function InvoiceResultCard({ invoiceData, warnings = [] }: Invoic
         )}
       </div>
 
-      {/* 发票验真状态 */}
-      {verification && (
-        <div className={`p-3 rounded-lg border ${
-          verification.status === 'verified'
-            ? 'bg-green-50 border-green-200'
-            : verification.status === 'failed'
-            ? 'bg-red-50 border-red-200'
-            : verification.status === 'error'
-            ? 'bg-orange-50 border-orange-200'
-            : 'bg-gray-50 border-gray-200'
-        }`}>
-          <div className="flex items-center gap-2">
-            <Shield size={16} className={
-              verification.status === 'verified'
-                ? 'text-green-600'
-                : verification.status === 'failed'
-                ? 'text-red-600'
-                : verification.status === 'error'
-                ? 'text-orange-600'
-                : 'text-gray-500'
-            } />
-            <span className={`text-sm font-medium ${
-              verification.status === 'verified'
-                ? 'text-green-700'
-                : verification.status === 'failed'
-                ? 'text-red-700'
-                : verification.status === 'error'
-                ? 'text-orange-700'
-                : 'text-gray-600'
-            }`}>
-              {verification.status === 'verified' && (
-                <span className="flex items-center gap-1">
-                  <CheckCircle size={14} />
-                  发票验真通过
-                </span>
-              )}
-              {verification.status === 'failed' && (
-                <span className="flex items-center gap-1">
-                  <XCircle size={14} />
-                  发票验真失败
-                </span>
-              )}
-              {verification.status === 'error' && (
-                <span className="flex items-center gap-1">
-                  <AlertCircle size={14} />
-                  验真服务异常
-                </span>
-              )}
-              {verification.status === 'skipped' && (
-                <span className="flex items-center gap-1">
-                  <HelpCircle size={14} />
-                  未验真
-                </span>
-              )}
-            </span>
-          </div>
-          <p className={`text-xs mt-1 ${
-            verification.status === 'verified'
-              ? 'text-green-600'
-              : verification.status === 'failed'
-              ? 'text-red-600'
-              : verification.status === 'error'
-              ? 'text-orange-600'
-              : 'text-gray-500'
-          }`}>
-            {verification.message}
-          </p>
-        </div>
-      )}
+      {/* 发票验真状态 - 已隐藏 (2026-07-28) */}
+      {/* 原因: 用户不需要看到验真信息，只需要OCR识别结果 */}
 
       {/* 发票信息 */}
       <div className="space-y-2 text-sm">

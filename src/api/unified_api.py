@@ -99,6 +99,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Prometheus监控中间件与/metrics端点
+app.add_middleware(PrometheusMiddleware)
+setup_metrics_endpoint(app)
+
 # 注册认证和会话路由
 app.include_router(auth_router)
 app.include_router(conversation_router)

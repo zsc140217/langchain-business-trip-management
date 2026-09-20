@@ -98,5 +98,5 @@ groups:
           category: approval
         annotations:
           summary: "审批超时检测"
-          description: "手动审批单待处理超过 {{  }}小时，阈值24小时"
+          description: "手动审批单待处理超过 {{ $value }}小时，阈值24小时"
 
